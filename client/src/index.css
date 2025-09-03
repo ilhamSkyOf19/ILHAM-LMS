@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import "tailwindcss";
+
+
+@theme {
+    --font-poppins: 'Poppins';
+    --text-to-small: 0.6rem;
+    --color-blue-primary: #662FFF;
+    --color-border-color-primary: #262A56;
+    --color-white-primary: #6B6C7F;
+}
+
+
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* untuk Chrome, Edge, Safari */
+.scroll-transparent::-webkit-scrollbar {
+  width: 8px; /* lebar scrollbar */
+}
+
+.scroll-transparent::-webkit-scrollbar-track {
+  background: transparent; /* track transparan */
+}
+
+.scroll-transparent::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3); /* warna thumb semi transparan */
+  border-radius: 4px;
+}
+
+/* untuk Firefox */
+.scroll-transparent {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.3) transparent;
+}
