@@ -4,6 +4,8 @@ import SignUp from "../pages/auth/SignUp";
 import Welcome from "../pages/Welcome";
 import LayoutGlobal from "../layouts/LayoutGlobal";
 import SignIn from "../pages/auth/SignIn";
+import BundlePage from "../pages/BundlePage";
+import useLoaderBundle from "../contexts/loaders/useLoaderBundle";
 
 const router = createBrowserRouter([
     {
@@ -33,7 +35,14 @@ const router = createBrowserRouter([
             {
                 path: '/student/sign-in',
                 element: <SignIn type="student" />
-            }
+            },
+            {
+                path: '/bundle',
+                loader: () => {
+                    return useLoaderBundle()
+                },
+                element: <BundlePage />
+            },
         ]
 
     }

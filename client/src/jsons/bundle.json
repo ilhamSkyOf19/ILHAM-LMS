@@ -1,0 +1,44 @@
+[
+    {
+        "id": 1,
+        "price": 1200000,
+        "decription": "Billed every single month",
+        "benefits": [
+            {
+                "id": 1,
+                "name": "Access gigantic features company"
+            },
+            {
+                "id": 2,
+                "name": "Students analytics and export"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "price": 4800000,
+        "decription": "Billed every single month",
+        "benefits": [
+            {
+                "id": 1,
+                "name": "Access gigantic features company"
+            },
+            {
+                "id": 2,
+                "name": "Students analytics and export"
+            },
+            {
+                "id": 3,
+                "name": "Life support 24/7 maintenances"
+            },
+            {
+                "id": 4,
+                "name": "Export and analyze data real time"
+            },
+            {
+                "id": 5,
+                "name": "More big features coming soon"
+            }
+        ]
+    }
+]

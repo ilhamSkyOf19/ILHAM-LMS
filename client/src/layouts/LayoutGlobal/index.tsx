@@ -9,7 +9,7 @@ import Navbar from '../../components/Navbar'
 const LayoutGlobal: FC = () => {
     return (
         <div className='w-full h-[100vh] flex flex-row justify-center items-center'>
-            <div className='w-[99%] h-[96vh] bg-[#060A23] flex flex-col items-start justify-start rounded-2xl overflow-hidden relative pt-10'>
+            <div className='w-[99.5%] h-[98.5vh] bg-[#060A23] flex flex-col items-start justify-start rounded-2xl overflow-hidden relative pt-10'>
                 {/* bg glow */}
                 <img
                     src={bgGlow}
