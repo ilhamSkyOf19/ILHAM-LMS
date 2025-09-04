@@ -23,7 +23,7 @@ button {
 }
 
 
-/* untuk Chrome, Edge, Safari */
+/*  Chrome, Edge, Safari */
 .scroll-transparent::-webkit-scrollbar {
   width: 8px; /* lebar scrollbar */
 }
@@ -33,12 +33,26 @@ button {
 }
 
 .scroll-transparent::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3); /* warna thumb semi transparan */
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
 }
 
-/* untuk Firefox */
+/*  Firefox */
 .scroll-transparent {
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.3) transparent;
+}
+
+
+
+/* scroll none */
+/* Chrome, Safari, Edge */
+.no-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox */
+.no-scroll {
+  scrollbar-width: none; 
+  -ms-overflow-style: none; /* IE/Edge lama */
 }

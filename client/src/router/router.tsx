@@ -6,6 +6,9 @@ import LayoutGlobal from "../layouts/LayoutGlobal";
 import SignIn from "../pages/auth/SignIn";
 import BundlePage from "../pages/BundlePage";
 import useLoaderBundle from "../contexts/loaders/useLoaderBundle";
+import DashboardHome from "../pages/dashboard/DashboardHome";
+import LayoutDashboard from "../layouts/LayoutDashboard";
+import DashboardCourses from "../pages/dashboard/DashboardCourses";
 
 const router = createBrowserRouter([
     {
@@ -44,7 +47,20 @@ const router = createBrowserRouter([
                 element: <BundlePage />
             },
         ]
-
+    },
+    {
+        path: '/dashboard',
+        element: <LayoutDashboard />,
+        children: [
+            {
+                index: true,
+                element: <DashboardHome />
+            },
+            {
+                path: '/dashboard/courses',
+                element: <DashboardCourses />
+            }
+        ]
     }
 ])
 
