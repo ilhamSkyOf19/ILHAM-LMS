@@ -1,7 +1,6 @@
 import { type FC } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import LinkButtonBorderInset from '../LinkButtonBorderInset';
-import LinkButtonBlue from '../LinkButtonBlue';
 
 
 type Menu = {
@@ -9,12 +8,14 @@ type Menu = {
     label: string;
 }
 
+
+
 const Navbar: FC = () => {
 
     // navbar 
     const menu: Menu[] = [
         {
-            link: '/',
+            link: '/welcome',
             label: 'Home'
         },
         {
@@ -32,8 +33,15 @@ const Navbar: FC = () => {
     ]
 
 
+    // pathname 
+    const pathname = useLocation().pathname;
+
+
+
+
     return (
-        <nav className='w-full flex flex-row justify-between items-center px-12 py-8 fixed z-50 top-0'>
+        <nav className='absolute flex flex-row justify-between items-center px-12 py-4 z-50 top-0 w-[99%] backdrop-blur-lg'>
+
             {/* title */}
             <h1 className='flex-1 font-bold text-white text-2xl'>Ilham | LMS</h1>
 
@@ -52,11 +60,12 @@ const Navbar: FC = () => {
             {/* button sign up or button sign in  */}
             <div className='flex-2 flex flex-row justify-end items-center gap-6'>
                 {/* button manager */}
-                <LinkButtonBorderInset link='/manager/sign-in' label='manager' />
+                <LinkButtonBorderInset link='/manager/sign-in' label='manager' active={pathname.includes('/manager')} />
 
 
-                {/* student */}
-                <LinkButtonBlue link='/student/sign-in' label='student' />
+                {/* button student */}
+                <LinkButtonBorderInset link='/student/sign-in' label='student' active={pathname.includes('/student')} />
+
             </div>
         </nav>
     )

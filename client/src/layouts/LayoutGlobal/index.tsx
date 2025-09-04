@@ -8,8 +8,8 @@ import Navbar from '../../components/Navbar'
 
 const LayoutGlobal: FC = () => {
     return (
-        <div className='w-full h-[100vh] p-2'>
-            <div className='w-full h-[97vh] bg-[#060A23] relative flex flex-col items-start justify-start py-4 rounded-2xl'>
+        <div className='w-full h-[100vh] flex flex-row justify-center items-center'>
+            <div className='w-[99%] h-[96vh] bg-[#060A23] flex flex-col items-start justify-start rounded-2xl overflow-hidden relative pt-10'>
                 {/* bg glow */}
                 <img
                     src={bgGlow}
@@ -21,7 +21,7 @@ const LayoutGlobal: FC = () => {
 
 
                 {/* content */}
-                <div className='w-full h-full overflow-y-auto z-10 scroll-transparent pt-12'>
+                <div className='flex-6 w-full h-full overflow-y-auto z-10 scroll-transparent overflow-x-hidden'>
                     <Outlet />
                 </div>
             </div>

@@ -5,7 +5,9 @@
 @theme {
     --font-poppins: 'Poppins';
     --text-to-small: 0.6rem;
+    --color-purple-primary: #8661EE;
     --color-blue-primary: #662FFF;
+    --color-blue-secondary: #080A2A;
     --color-border-color-primary: #262A56;
     --color-white-primary: #6B6C7F;
 }
@@ -14,6 +16,12 @@
 * {
     font-family: 'Poppins', sans-serif;
 }
+
+
+button {
+  cursor: pointer;
+}
+
 
 /* untuk Chrome, Edge, Safari */
 .scroll-transparent::-webkit-scrollbar {
