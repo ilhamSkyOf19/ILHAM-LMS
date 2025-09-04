@@ -5,7 +5,7 @@ import searchNormal from '../../assets/images/icons/search-normal.svg'
 
 const BoxSearch: FC = () => {
     return (
-        <div className='border border-slate-300 py-3 px-6 flex flex-row justify-between items-center rounded-full focus-within:ring-2 focus-within:ring-blue-primary transition-all duration-300'>
+        <div className='w-full border border-slate-300 py-3 px-6 flex flex-row justify-between items-center rounded-full focus-within:ring-2 focus-within:ring-blue-primary transition-all duration-300'>
             {/* input search */}
             <input
                 type='text'

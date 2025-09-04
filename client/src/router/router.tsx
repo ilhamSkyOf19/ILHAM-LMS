@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "../pages/Home";
 import SignUp from "../pages/auth/SignUp";
 import Welcome from "../pages/Welcome";
 import LayoutGlobal from "../layouts/LayoutGlobal";
@@ -10,17 +9,18 @@ import DashboardHome from "../pages/dashboard/DashboardHome";
 import LayoutDashboard from "../layouts/LayoutDashboard";
 import DashboardCourses from "../pages/dashboard/DashboardCourses";
 
+
+
+import user from "../jsons/user.json";
+import statistik from "../jsons/statistik.json";
+
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Home />
-    },
     {
         path: '/',
         element: <LayoutGlobal />,
         children: [
             {
-                path: '/welcome',
+                index: true,
                 element: <Welcome />
             },
             {
@@ -50,10 +50,16 @@ const router = createBrowserRouter([
     },
     {
         path: '/dashboard',
+        loader: () => {
+            return user;
+        },
         element: <LayoutDashboard />,
         children: [
             {
                 index: true,
+                loader: () => {
+                    return statistik;
+                },
                 element: <DashboardHome />
             },
             {
