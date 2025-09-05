@@ -3,7 +3,7 @@ import type { FC, ReactNode } from 'react'
 
 type Props = {
     title: string;
-    desc: string;
+    desc?: string;
     children: ReactNode;
 }
 

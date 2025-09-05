@@ -111,7 +111,7 @@ type PropsMenuComponent = {
 const MenuComponent: FC<PropsMenuComponent> = ({ title, menu }) => {
 
     // use location
-    const pathname = useLocation().pathname;
+    const pathname: string = useLocation().pathname;
 
 
     return (
@@ -124,7 +124,7 @@ const MenuComponent: FC<PropsMenuComponent> = ({ title, menu }) => {
 
                 {
                     menu.map((menu: Menu, i: number) => (
-                        <BoxMenu key={i} link={menu.link} label={menu.label} icon={menu.icon} active={pathname === menu.link} />
+                        <BoxMenu key={i} link={menu.link} label={menu.label} icon={menu.icon} active={menu.link === '/dashboard' ? pathname === '/dashboard' : pathname.startsWith(menu.link)} />
                     ))
                 }
             </div>

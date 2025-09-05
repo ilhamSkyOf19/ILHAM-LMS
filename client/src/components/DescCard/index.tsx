@@ -7,7 +7,7 @@ type Props = {
 
 const DescCard: FC<Props> = ({ icon, label }) => {
     return (
-        <div className='flex flex-row justify-start items-start gap-2'>
+        <div className='flex flex-row justify-start items-center gap-2'>
 
             {/* icon */}
             <img src={icon} alt='icon' className='w-5' loading='lazy' />

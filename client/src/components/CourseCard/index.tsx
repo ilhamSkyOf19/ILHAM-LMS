@@ -11,10 +11,14 @@ import thumb from '../../assets/images/thumbnails/th-1.png'
 // icons
 import user from '../../assets/images/icons/profile-2user-purple.svg'
 import crownPurple from '../../assets/images/icons/crown-purple.svg'
-import ButtonBorderHoverBlue from '../ButtonBorderHoverBlue'
+import LinkButtonBorderHoverBlue from '../LinkButtonBorderHoverBlue'
 
 
-const CourseCard: FC = () => {
+
+type Props = {
+    course: any;
+}
+const CourseCard: FC<Props> = ({ course }) => {
     return (
         <div className='w-full flex flex-row justify-between items-center'>
             {/* thumbnail */}
@@ -26,23 +30,23 @@ const CourseCard: FC = () => {
                 {/* label */}
                 <div className='flex flex-col justify-center items-start gap-1.5'>
                     {/* name */}
-                    <h2 className='text-black text-xl font-bold'>{(`Responsive Design Triclorem lorem ipsum`).slice(0, 35).concat('...')}</h2>
+                    <h2 className='text-black text-xl font-bold'>{(course.name).slice(0, 35).concat('...')}</h2>
 
                     {/* total student & category */}
                     <div className='flex flex-row justify-start items-start gap-4'>
 
                         {/* total student */}
-                        <DescCard icon={user} label={`${500} students`} />
+                        <DescCard icon={user} label={`${(course.total_students).toLocaleString('en-US')} students`} />
 
                         {/* category */}
-                        <DescCard icon={crownPurple} label={`${'programming'}`} />
+                        <DescCard icon={crownPurple} label={`${course.category}`} />
 
                     </div>
                 </div>
             </div>
 
             {/* button */}
-            <ButtonBorderHoverBlue type='button' label='manage' />
+            <LinkButtonBorderHoverBlue link={`/dashboard/courses/course-detail/${course.id}`} label='manage' />
         </div>
     )
 }

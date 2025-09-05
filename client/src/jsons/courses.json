@@ -1,0 +1,187 @@
+[
+    {
+        "id": 1,
+        "name": "Mastering React TypeScript 7 Website Development",
+        "overviewThumb": "",
+        "total_students": 189897,
+        "category": "Programming",
+        "certificate": true,
+        "content": [
+            {
+                "id": 1,
+                "name": "Install VS Code",
+                "type": "video"
+            },
+            {
+                "id": 2,
+                "name": "Intro to HTML",
+                "type": "text"
+            },
+            {
+                "id": 3,
+                "name": "JavaScript Basics",
+                "type": "video"
+            },
+            {
+                "id": 4,
+                "name": "Git & GitHub Setup",
+                "type": "text"
+            },
+            {
+                "id": 5,
+                "name": "CSS Flexbox",
+                "type": "video"
+            },
+            {
+                "id": 6,
+                "name": "React Components",
+                "type": "text"
+            },
+            {
+                "id": 7,
+                "name": "Node.js Install",
+                "type": "video"
+            },
+            {
+                "id": 8,
+                "name": "TypeScript Intro",
+                "type": "text"
+            },
+            {
+                "id": 9,
+                "name": "API with Express",
+                "type": "video"
+            },
+            {
+                "id": 10,
+                "name": "MongoDB Basics",
+                "type": "text"
+            },
+            {
+                "id": 11,
+                "name": "CSS Grid Layout",
+                "type": "video"
+            },
+            {
+                "id": 12,
+                "name": "Tailwind Setup",
+                "type": "text"
+            },
+            {
+                "id": 13,
+                "name": "Authentication Basics",
+                "type": "video"
+            },
+            {
+                "id": 14,
+                "name": "Authorization",
+                "type": "text"
+            },
+            {
+                "id": 15,
+                "name": "Docker Intro",
+                "type": "video"
+            },
+            {
+                "id": 16,
+                "name": "REST API Design",
+                "type": "text"
+            },
+            {
+                "id": 17,
+                "name": "Next.js Routing",
+                "type": "video"
+            },
+            {
+                "id": 18,
+                "name": "GraphQL Basics",
+                "type": "text"
+            },
+            {
+                "id": 19,
+                "name": "Testing with Jest",
+                "type": "video"
+            },
+            {
+                "id": 20,
+                "name": "Deploy to Vercel",
+                "type": "text"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Mastering React TypeScript 7 Website Development",
+        "overviewThumb": "",
+        "total_students": 189897,
+        "category": "Programming",
+        "certificate": true,
+        "content": [
+            {
+                "id": 1,
+                "name": "Install VS Code",
+                "type": "video"
+            },
+            {
+                "id": 2,
+                "name": "Intro to HTML",
+                "type": "text"
+            },
+            {
+                "id": 3,
+                "name": "JavaScript Basics",
+                "type": "video"
+            },
+            {
+                "id": 4,
+                "name": "Git & GitHub Setup",
+                "type": "text"
+            },
+            {
+                "id": 5,
+                "name": "CSS Flexbox",
+                "type": "video"
+            },
+            {
+                "id": 6,
+                "name": "React Components",
+                "type": "text"
+            },
+            {
+                "id": 7,
+                "name": "Node.js Install",
+                "type": "video"
+            },
+            {
+                "id": 8,
+                "name": "TypeScript Intro",
+                "type": "text"
+            },
+            {
+                "id": 9,
+                "name": "API with Express",
+                "type": "video"
+            },
+            {
+                "id": 10,
+                "name": "MongoDB Basics",
+                "type": "text"
+            },
+            {
+                "id": 11,
+                "name": "CSS Grid Layout",
+                "type": "video"
+            },
+            {
+                "id": 12,
+                "name": "Tailwind Setup",
+                "type": "text"
+            },
+            {
+                "id": 13,
+                "name": "Authentication Basics",
+                "type": "video"
+            }
+        ]
+    }
+]

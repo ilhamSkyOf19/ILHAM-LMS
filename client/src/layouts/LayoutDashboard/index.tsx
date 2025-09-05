@@ -20,7 +20,7 @@ const LayoutDashboard: FC = () => {
     return (
         <div className="w-full min-h-[100vh] flex flex-row justify-start items-start py-2 px-2 relative">
             {/* side bar */}
-            <div className="w-[27rem]">
+            <div className="w-[27rem] z-50">
                 <SideBar />
             </div>
 

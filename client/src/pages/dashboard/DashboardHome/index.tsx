@@ -1,6 +1,4 @@
 import type { FC } from "react"
-import ButtonBlue from "../../../components/ButtonBlue"
-import ButtonBorder from "../../../components/ButtonBorder"
 import TitleContentDashboard from "../../../fragments/TitleContentDashboard"
 import StatistikCard from "../../../components/StatistikCard"
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts'
@@ -22,6 +20,8 @@ import th1 from '../../../assets/images/thumbnails/th-1.png'
 
 // photo
 import avatar from '../../../assets/images/photos/photo-2.png'
+import LinkButtonBorder from "../../../components/LinkButtonBorder"
+import LinkButtonBlue from "../../../components/LinkButtonBlue"
 
 
 const DashboardHome: FC = () => {
@@ -36,8 +36,8 @@ const DashboardHome: FC = () => {
         <div className="w-full pb-12 flex flex-col justify-start items-start gap-8">
             {/* header content */}
             <TitleContentDashboard title=" dashboard" desc="Grow your company quickly">
-                <ButtonBorder type="button" label="customize" />
-                <ButtonBlue type="button" label="new course" />
+                <LinkButtonBorder link="/" label="customize" />
+                <LinkButtonBlue link="/" label="new course" />
             </TitleContentDashboard>
 
             {/* statistik  */}
@@ -137,7 +137,7 @@ const StatistikDonut: FC = () => {
 
 
     // persentase 
-    const totalData = dataChart.reduce((acc, curr) => acc + curr.value, 0)
+    const totalData: number = dataChart.reduce((acc, curr) => acc + curr.value, 0)
 
 
     return (

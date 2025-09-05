@@ -1,11 +1,15 @@
 import { useState, type FC } from "react"
-import TitleContentDashboard from "../../../fragments/TitleContentDashboard"
-import ButtonBorder from "../../../components/ButtonBorder"
-import ButtonBlue from "../../../components/ButtonBlue"
-import CourseCard from "../../../components/CourseCard"
-import ButtonPagination from "../../../components/ButtonPagination"
+import TitleContentDashboard from "../../../../fragments/TitleContentDashboard"
+import CourseCard from "../../../../components/CourseCard"
+import ButtonPagination from "../../../../components/ButtonPagination"
+import { useLoaderData } from "react-router-dom"
+import LinkButtonBorder from "../../../../components/LinkButtonBorder"
+import LinkButtonBlue from "../../../../components/LinkButtonBlue"
 
 const DashboardCourses: FC = () => {
+    // loader 
+    const courses = useLoaderData();
+
     // state active 
     const [active, setActive] = useState<number>(1);
 
@@ -21,8 +25,8 @@ const DashboardCourses: FC = () => {
         <div className="w-full flex flex-col justify-start items-start gap-8 pb-8">
             {/* header content */}
             <TitleContentDashboard title="Manage Courses" desc="Give the best future for your great employees">
-                <ButtonBorder type="button" label="customize" />
-                <ButtonBlue type="button" label="new course" />
+                <LinkButtonBorder link="/" label="customize" />
+                <LinkButtonBlue link="/" label="new course" />
             </TitleContentDashboard>
 
 
@@ -30,14 +34,18 @@ const DashboardCourses: FC = () => {
             <div className="w-full flex flex-col justify-start items-start rounded-2xl bg-white-secondary py-8 px-6 gap-8">
 
                 {/* manage card content */}
-                <CourseCard />
-                <CourseCard />
-                <CourseCard />
-                <CourseCard />
-                <CourseCard />
+                {
+                    (courses) ? (
+                        courses.map((course: any, i: number) => (
+                            <CourseCard key={i} course={course} />
+                        ))
+                    ) : (
+                        <p>No data</p>
+                    )
+                }
 
                 {/* pagination */}
-                <div className="w-full flex flex-row justify-start items-start gap-4">
+                <div className="w-full flex flex-row justify-start items-start gap-3">
                     {
                         [1, 2, 3, 4, 5].map((_, index: number) => (
                             <ButtonPagination
