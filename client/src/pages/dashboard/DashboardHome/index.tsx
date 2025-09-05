@@ -37,13 +37,13 @@ const DashboardHome: FC = () => {
             {/* header content */}
             <TitleContentDashboard title=" dashboard" desc="Grow your company quickly">
                 <ButtonBorder type="button" label="customize" />
-                <ButtonBlue type="button" label="create course" />
+                <ButtonBlue type="button" label="new course" />
             </TitleContentDashboard>
 
             {/* statistik  */}
-            <div className="w-full flex row justify-between items-center bg-white-secondary p-8 rounded-2xl gap-4">
+            <div className="w-full h-[26rem] flex row justify-between items-center bg-white-secondary p-8 rounded-2xl gap-4">
                 {/* statistik number */}
-                <div className="flex-3 flex flex-col justify-between items-center gap-5">
+                <div className="flex-3 h-full flex flex-col justify-between items-center gap-5">
 
                     {/* statistik 1 */}
                     <div className="w-full flex flex-row justify-between items-center gap-5">
@@ -65,7 +65,7 @@ const DashboardHome: FC = () => {
                 </div>
 
                 {/* statistik donut chart  */}
-                <div className="flex-2 h-full flex flex-row justify-center items-center">
+                <div className="flex-2 h-full">
                     <StatistikDonut />
                 </div>
             </div>

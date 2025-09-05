@@ -3,6 +3,7 @@ import { type FC } from 'react'
 
 // icons
 import crownPurple from '../../assets/images/icons/crown-purple.svg'
+import DescCard from '../DescCard';
 
 
 
@@ -29,10 +30,7 @@ const StudentCard: FC<Props> = ({ avatar, name, total_course }) => {
                 </h2>
 
                 {/* category */}
-                <div className='w-full flex flex-row justify-start items-start gap capitalize gap-2'>
-                    <img src={crownPurple} alt="crown" className='w-5' loading='lazy' />
-                    <p className='text-slate-400 capitalize'>{total_course} course joined</p>
-                </div>
+                <DescCard icon={crownPurple} label={`${total_course} courses joined`} />
             </div>
         </div>
     )

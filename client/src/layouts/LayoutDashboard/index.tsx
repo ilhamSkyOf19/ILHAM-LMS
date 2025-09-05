@@ -25,7 +25,7 @@ const LayoutDashboard: FC = () => {
             </div>
 
             {/* content */}
-            <div className="w-full h-[200vh] flex flex-col justify-start items-start pt-4 pr-8 gap-8">
+            <div className="w-full flex flex-col justify-start items-start pt-4 pr-8 gap-8">
                 {/* header */}
                 <HeaderComponent user={user} />
 
