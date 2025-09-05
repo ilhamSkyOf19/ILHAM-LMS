@@ -11,21 +11,52 @@ import ButtonBlue from '../../../../components/ButtonBlue'
 import BoxInputThumbnail from '../../../../components/BoxInputThumbnail'
 import CategoryInput from '../../../../components/CategoryInput'
 import BoxInputTextArea from '../../../../components/BoxInputTextArea'
+import { useLoaderData } from 'react-router-dom'
+import sweetAlertNotiifNotUpdate from '../../../../components/SweetAlertNotifNotUpdate'
 
 
-const NewCourse: FC = () => {
+type CourseForm = {
+    name: string;
+    thumbnail: File | null;
+    tagline: string;
+    category: string;
+    description: string;
+};
 
+
+type Props = {
+    typeContent: 'edit' | 'new'
+}
+
+const NewCourse: FC<Props> = ({ typeContent }) => {
+
+    // use loader data
+    const course = useLoaderData();
 
     // use hook form 
-    const { handleSubmit, register, formState: { errors }, setValue, clearErrors } = useForm({
-
+    const { handleSubmit, register, formState: { errors }, setValue, clearErrors } = useForm<CourseForm>({
+        defaultValues: {
+            name: course?.name || '',
+            thumbnail: course?.thumbnail || null,
+            tagline: course?.tagline || '',
+            category: course?.category.toLowerCase() || '',
+            description: course?.description || '',
+        }
     });
 
 
     // handle on submit 
     const onSubmit = (data: any) => {
+        if (typeContent === 'edit' && (!data.name && !data.thumbnail && !data.tagline && (data.category === (course?.category).toLowerCase()) && !data.description)) {
+            sweetAlertNotiifNotUpdate();
+            return;
+        }
         console.log(data);
     }
+
+
+
+
     return (
         <div className='w-full flex flex-col justify-start items-start gap-4 pb-12'>
             {/* header */}
@@ -43,16 +74,19 @@ const NewCourse: FC = () => {
                     name='name'
                     placeholder='Write better name for your course'
                     label='course name'
-                    register={register('name', { required: "Input tidak boleh kosong" })}
+                    register={register('name', typeContent === 'edit' ? {} : { required: "Input tidak boleh kosong" })}
                     error={errors.name as FieldError}
                 />
 
                 {/* thumbnail */}
                 <BoxInputThumbnail
-                    register={register('thumbnail', { required: "Input tidak boleh kosong" })}
+                    register={register('thumbnail', typeContent === 'edit' ? {} : { required: "Input tidak boleh kosong" })}
                     setValue={setValue}
                     error={errors.thumbnail as FieldError}
                     clearErrors={clearErrors}
+                    previewEdit={
+                        typeContent === 'edit' ? `/thumbnails/${course?.thumbnail}` : undefined
+                    }
                 />
 
                 {/* tagline */}
@@ -62,7 +96,7 @@ const NewCourse: FC = () => {
                     name='tagline'
                     placeholder='Write better tagline for your course'
                     label='Course Tagline'
-                    register={register('tagline', { required: "Input tidak boleh kosong" })}
+                    register={register('tagline', typeContent === 'edit' ? {} : { required: "Input tidak boleh kosong" })}
                     error={errors.tagline as FieldError}
                 />
 
@@ -73,7 +107,7 @@ const NewCourse: FC = () => {
                     name='category'
                     placeholder='Choose one category'
                     label='Course Category'
-                    register={register('category', { required: "Input tidak boleh kosong" })}
+                    register={register('category', typeContent === 'edit' ? {} : { required: "Input tidak boleh kosong" })}
                     error={errors.category as FieldError}
                     setValue={setValue}
                     clearErrors={clearErrors}
@@ -82,7 +116,7 @@ const NewCourse: FC = () => {
 
                 {/* text area */}
                 <BoxInputTextArea
-                    register={register('description', { required: "Input tidak boleh kosong" })}
+                    register={register('description', typeContent === 'edit' ? {} : { required: "Input tidak boleh kosong" })}
                     error={errors.description as FieldError}
                 />
 

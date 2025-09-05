@@ -90,7 +90,14 @@ const router = createBrowserRouter([
             },
             {
                 path: '/dashboard/courses/new-course',
-                element: <NewCourse />
+                element: <NewCourse typeContent="new" />
+            },
+            {
+                path: '/dashboard/courses/detail-course/:id/edit-course',
+                loader: ({ params }) => {
+                    return courses.find((course: any) => course.id == params.id);
+                },
+                element: <NewCourse typeContent="edit" />
             },
             {
                 path: '/dashboard/students',

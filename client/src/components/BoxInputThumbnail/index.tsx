@@ -1,18 +1,25 @@
-import { useRef, useState, type ChangeEvent, type FC } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type FC } from 'react'
 import icon from '../../assets/images/icons/gallery-add-black.svg'
 import ButtonTrash from '../ButtonTrash';
-import type { FieldError, FieldValues, UseFormClearErrors, UseFormRegisterReturn, UseFormSetValue } from 'react-hook-form';
+import type { FieldError, UseFormClearErrors, UseFormRegisterReturn, UseFormSetValue } from 'react-hook-form';
 import clsx from 'clsx';
 import ErrorMessage from '../ErrorMessage';
-
+type CourseForm = {
+    name: string;
+    thumbnail: File | null;
+    tagline: string;
+    category: string;
+    description: string;
+};
 
 type Props = {
-    setValue: UseFormSetValue<FieldValues>;
+    setValue: UseFormSetValue<CourseForm>;
     error: FieldError;
     register: UseFormRegisterReturn;
-    clearErrors: UseFormClearErrors<FieldValues>;
+    clearErrors: UseFormClearErrors<CourseForm>;
+    previewEdit?: string;
 }
-const BoxInputThumbnail: FC<Props> = ({ setValue, error, register, clearErrors }) => {
+const BoxInputThumbnail: FC<Props> = ({ previewEdit, setValue, error, register, clearErrors }) => {
 
 
     // state preview
@@ -53,6 +60,13 @@ const BoxInputThumbnail: FC<Props> = ({ setValue, error, register, clearErrors }
             setValue('thumbnail', null);
         }
     };
+
+
+
+    // set preview edit
+    useEffect(() => {
+        if (previewEdit) setPreview(previewEdit)
+    }, [previewEdit])
 
 
 

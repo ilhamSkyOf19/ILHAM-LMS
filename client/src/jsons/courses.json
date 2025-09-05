@@ -2,7 +2,10 @@
     {
         "id": 1,
         "name": "Mastering React TypeScript 7 Website Development",
-        "overviewThumb": "",
+        "tagline": "Mastering React",
+        "description": "Mastering React TypeScript",
+        "overviewThumb": "th-2.png",
+        "thumbnail": "th-2.png",
         "total_students": 189897,
         "category": "Programming",
         "certificate": true,
@@ -112,7 +115,10 @@
     {
         "id": 2,
         "name": "Mastering React TypeScript 7 Website Development",
-        "overviewThumb": "",
+        "overviewThumb": "th-2.png",
+        "thumbnail": "th-2.png",
+        "tagline": "Mastering React",
+        "description": "Mastering React TypeScript",
         "total_students": 189897,
         "category": "Programming",
         "certificate": true,

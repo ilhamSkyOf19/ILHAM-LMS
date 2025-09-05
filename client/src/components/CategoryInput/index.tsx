@@ -1,10 +1,17 @@
 import clsx from 'clsx';
 import { useEffect, useRef, useState, type FC } from 'react'
-import type { FieldError, FieldValues, UseFormClearErrors, UseFormRegisterReturn, UseFormSetValue } from 'react-hook-form';
+import type { FieldError, UseFormClearErrors, UseFormRegisterReturn, UseFormSetValue } from 'react-hook-form';
 
 import arrow from '../../assets/images/icons/arrow-down.svg'
 import ErrorMessage from '../ErrorMessage';
 
+type CourseForm = {
+    name: string;
+    thumbnail: File | null;
+    tagline: string;
+    category: string;
+    description: string;
+};
 type Props = {
     type: 'text' | 'password' | 'email';
     name: string;
@@ -12,9 +19,9 @@ type Props = {
     label: string;
     icon: string;
     register: UseFormRegisterReturn;
-    setValue: UseFormSetValue<FieldValues>;
+    setValue: UseFormSetValue<CourseForm>;
     error?: FieldError;
-    clearErrors: UseFormClearErrors<FieldValues>
+    clearErrors: UseFormClearErrors<CourseForm>
 }
 
 const CategoryInput: FC<Props> = ({ type, name, placeholder, label, register, error, icon, setValue, clearErrors }) => {
