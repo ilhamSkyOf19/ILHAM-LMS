@@ -26,7 +26,7 @@ const DashboardCourses: FC = () => {
             {/* header content */}
             <TitleContentDashboard title="Manage Courses" desc="Give the best future for your great employees">
                 <LinkButtonBorder link="/" label="customize" />
-                <LinkButtonBlue link="/" label="new course" />
+                <LinkButtonBlue link="/dashboard/courses/new-course" label="new course" />
             </TitleContentDashboard>
 
 

@@ -18,6 +18,7 @@ import user from "../jsons/user.json";
 import statistik from "../jsons/statistik.json";
 import courses from "../jsons/courses.json";
 import students from "../jsons/students.json";
+import NewCourse from "../pages/dashboard/course/NewCourse";
 
 
 
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
                     return courses.find((course: any) => course.id == params.id);
                 },
                 element: <CourseDetail />
+            },
+            {
+                path: '/dashboard/courses/new-course',
+                element: <NewCourse />
             },
             {
                 path: '/dashboard/students',
