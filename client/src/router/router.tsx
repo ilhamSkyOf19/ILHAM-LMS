@@ -13,8 +13,13 @@ import DashboardCourses from "../pages/dashboard/DashboardCourses";
 
 import user from "../jsons/user.json";
 import statistik from "../jsons/statistik.json";
+import NotFound from "../pages/404";
 
 const router = createBrowserRouter([
+    {
+        path: '*',
+        element: <NotFound />,
+    },
     {
         path: '/',
         element: <LayoutGlobal />,
