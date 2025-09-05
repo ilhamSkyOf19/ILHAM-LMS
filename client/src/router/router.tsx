@@ -10,13 +10,14 @@ import LayoutDashboard from "../layouts/LayoutDashboard";
 import NotFound from "../pages/404";
 import CourseDetail from "../pages/dashboard/course/CourseDetail";
 import DashboardCourses from "../pages/dashboard/course/DashboardCourses";
+import DashboardStudents from "../pages/dashboard/student/DashboardStudents";
 
 
 // jsons
 import user from "../jsons/user.json";
 import statistik from "../jsons/statistik.json";
 import courses from "../jsons/courses.json";
-
+import students from "../jsons/students.json";
 
 
 
@@ -85,6 +86,13 @@ const router = createBrowserRouter([
                     return courses.find((course: any) => course.id == params.id);
                 },
                 element: <CourseDetail />
+            },
+            {
+                path: '/dashboard/students',
+                loader: () => {
+                    return students;
+                },
+                element: <DashboardStudents />
             }
         ]
     }

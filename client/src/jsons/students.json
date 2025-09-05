@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "name": "Andi Saputra",
+        "totalCourse": 5,
+        "avatar": "photo-2.png"
+    },
+    {
+        "id": 2,
+        "name": "Budi Santoso",
+        "totalCourse": 3,
+        "avatar": "photo-3.png"
+    },
+    {
+        "id": 3,
+        "name": "Citra Lestari",
+        "totalCourse": 7,
+        "avatar": "photo-4.png"
+    },
+    {
+        "id": 4,
+        "name": "Dewi Anggraini",
+        "totalCourse": 2,
+        "avatar": "photo-2.png"
+    },
+    {
+        "id": 5,
+        "name": "Eko Prasetyo",
+        "totalCourse": 6,
+        "avatar": "photo-3.png"
+    },
+    {
+        "id": 6,
+        "name": "Fitri Rahmawati",
+        "totalCourse": 4,
+        "avatar": "photo-4.png"
+    },
+    {
+        "id": 7,
+        "name": "Gilang Permana",
+        "totalCourse": 8,
+        "avatar": "photo-2.png"
+    },
+    {
+        "id": 8,
+        "name": "Hana Kartika",
+        "totalCourse": 1,
+        "avatar": "photo-3.png"
+    },
+    {
+        "id": 9,
+        "name": "Indra Wijaya",
+        "totalCourse": 9,
+        "avatar": "photo-4.png"
+    },
+    {
+        "id": 10,
+        "name": "Joko Susanto",
+        "totalCourse": 3,
+        "avatar": "photo-2.png"
+    }
+]
