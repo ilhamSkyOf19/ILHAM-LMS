@@ -1,4 +1,4 @@
-import { type FC, type ReactNode } from 'react'
+import { type BaseSyntheticEvent, type FC, type ReactNode } from 'react'
 import ButtonBlueShadowPurple from '../ButtonBlueShadowPurple';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -9,9 +9,10 @@ type Props = {
     children: ReactNode;
     type: 'manager' | 'student';
     auth: 'signin' | 'signup';
+    handleSubmit: (e: BaseSyntheticEvent) => Promise<void>;
 }
 
-const FormAuthLayout: FC<Props> = ({ children, type, auth }) => {
+const FormAuthLayout: FC<Props> = ({ children, type, auth, handleSubmit }) => {
 
 
     // type form 
@@ -21,7 +22,7 @@ const FormAuthLayout: FC<Props> = ({ children, type, auth }) => {
 
 
     return (
-        <form className='w-[25rem] border border-border-color-primary rounded-3xl px-6 bg-blue-secondary flex flex-col justify-start items-center pt-10 pb-6'>
+        <form onSubmit={handleSubmit} className='w-[25rem] border border-border-color-primary rounded-3xl px-6 bg-blue-secondary flex flex-col justify-start items-center pt-10 pb-6'>
             <div className='w-full flex flex-col justify-start items-center gap-8 mb-6'>
                 {/* header */}
                 <div className='w-full flex flex-col justify-start items-start gap-1.5'>
@@ -40,7 +41,7 @@ const FormAuthLayout: FC<Props> = ({ children, type, auth }) => {
 
                 {/* input */}
 
-                <div className='w-full flex flex-col justify-start items-center gap-7 py-8 relative before:content-[""] before:w-full before:h-[1px] before:bg-border-color-primary before:absolute before:top-0 after:content-[""] after:w-full after:h-[1px] after:bg-border-color-primary after:absolute after:bottom-0'>
+                <div className='w-full flex flex-col justify-start items-center py-8 relative before:content-[""] before:w-full before:h-[1px] before:bg-border-color-primary before:absolute before:top-0 after:content-[""] after:w-full after:h-[1px] after:bg-border-color-primary after:absolute after:bottom-0 gap-2'>
 
                     {children}
 

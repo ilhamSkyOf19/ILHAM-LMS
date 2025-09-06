@@ -66,7 +66,7 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
 
 
             {/* form input */}
-            <form onSubmit={handleSubmit(onSubmit)} className='w-[60%] rounded-2xl bg-white-secondary p-8'>
+            <form onSubmit={handleSubmit(onSubmit)} className='w-[60%] rounded-2xl bg-white-secondary p-8 flex flex-col justify-start items-start gap-1'>
                 {/* name */}
                 <BoxInputData
                     icon={noteFavorite}

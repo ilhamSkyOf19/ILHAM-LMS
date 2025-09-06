@@ -33,7 +33,7 @@ const FormStudent: FC = () => {
 
 
             {/* form */}
-            <form onSubmit={handleSubmit(onSubmit)} className='w-[60%] rounded-2xl bg-white-secondary flex flex-col justify-start items-start p-8'>
+            <form onSubmit={handleSubmit(onSubmit)} className='w-[60%] rounded-2xl bg-white-secondary flex flex-col justify-start items-start p-8 gap-1'>
                 {/* input add avatar */}
                 <BoxInputAvatar
                     setValue={setValue}

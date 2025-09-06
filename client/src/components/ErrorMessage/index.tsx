@@ -8,7 +8,7 @@ type Props = {
 
 const ErrorMessage: FC<Props> = ({ error }) => {
     return (
-        <div className='w-full min-h-8 mt-1.5 '>
+        <div className='w-full min-h-4.5 mt-1'>
             <p className={clsx(
                 'text-red-500 text-xs transition-all duration-200',
                 error ? 'visible' : 'invisible'

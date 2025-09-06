@@ -1,5 +1,5 @@
 import { type FC } from 'react'
-import FormAuthLayout from '../../../components/FormAtuhLayout'
+import FormAuthLayout from '../../../components/FormAuthLayout'
 import BoxInputBorderInset from '../../../components/BoxInputBorderInset'
 
 
@@ -11,6 +11,12 @@ import MotionToLeft from '../../../motion/MotionToLeft'
 import MotionToRight from '../../../motion/MotionToRight'
 import BigTitleAuth from '../../../components/BigTitleAuth'
 
+
+type FormData = {
+    email: string
+    password: string
+}
+
 type Props = {
     type: 'manager' | 'student'
 }
@@ -18,9 +24,15 @@ const SignIn: FC<Props> = ({ type }) => {
 
 
     // use hook form 
-    const { register } = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
 
     })
+
+
+    // on submit 
+    const onSubmit = (data: FormData) => {
+        console.log(data);
+    }
 
 
     return (
@@ -48,14 +60,17 @@ const SignIn: FC<Props> = ({ type }) => {
             </div>
             <div className='flex-1 flex flex-row justify-center items-start'>
                 <MotionToRight>
-                    <FormAuthLayout type={type} auth='signin'>
+                    <FormAuthLayout
+                        handleSubmit={handleSubmit(onSubmit)}
+                        type={type} auth='signin'>
                         {/* email */}
                         <BoxInputBorderInset
                             type='email'
                             icon={smsWhite}
                             name='email'
                             placeholder='Write your email address'
-                            register={register('email')}
+                            register={register('email', { required: 'email is required' })}
+                            error={errors?.email}
                         />
 
                         {/* password */}
@@ -64,7 +79,8 @@ const SignIn: FC<Props> = ({ type }) => {
                             icon={keyWhite}
                             name='password'
                             placeholder='Type your secure password'
-                            register={register('password')}
+                            register={register('password', { required: 'password is required' })}
+                            error={errors?.password}
                         />
 
                     </FormAuthLayout>

@@ -1,5 +1,5 @@
 import { type FC } from 'react'
-import FormAuthLayout from '../../../components/FormAtuhLayout'
+import FormAuthLayout from '../../../components/FormAuthLayout'
 import { useForm } from 'react-hook-form'
 
 
@@ -15,6 +15,14 @@ import MotionToRight from '../../../motion/MotionToRight'
 import BigTitleAuth from '../../../components/BigTitleAuth'
 
 
+
+type FormData = {
+    name: string
+    email: string
+    password: string
+    confirmPassword: string
+}
+
 type Props = {
     type: 'manager' | 'student'
 }
@@ -22,9 +30,16 @@ type Props = {
 const SignUp: FC<Props> = ({ type }) => {
 
     // use form
-    const { register } = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
 
     });
+
+
+    // handle on submit
+    const onSubmit = (data: FormData) => {
+        console.log(data);
+    }
+
 
 
 
@@ -41,38 +56,48 @@ const SignUp: FC<Props> = ({ type }) => {
                     <FormAuthLayout
                         type={type}
                         auth='signup'
+                        handleSubmit={handleSubmit(onSubmit)}
                     >
                         {/* name */}
                         <BoxInputBorderInset
-                            register={register('name')}
+                            register={register('name', { required: 'name is required' })}
                             type='text'
                             placeholder='Write your full name'
                             name='name'
-                            icon={user} />
+                            icon={user}
+                            error={errors?.name}
+
+                        />
 
                         {/* email */}
                         <BoxInputBorderInset
-                            register={register('email')}
+                            register={register('email', { required: 'email is required' })}
                             type='email'
                             placeholder='Write your email address'
                             name='email'
-                            icon={smsWhite} />
+                            icon={smsWhite}
+                            error={errors?.email}
+                        />
 
                         {/* password */}
                         <BoxInputBorderInset
-                            register={register('password')}
+                            register={register('password', { required: 'password is required' })}
                             type='password'
                             placeholder='Type your secure password'
                             name='password'
-                            icon={keyWhite} />
+                            icon={keyWhite}
+                            error={errors?.password}
+                        />
 
                         {/* confirm password */}
                         <BoxInputBorderInset
-                            register={register('confirm_password')}
+                            register={register('confirmPassword', { required: 'confirm password is required' })}
                             type='password'
                             placeholder='Confirm your password'
-                            name='confirm_password'
-                            icon={keyWhite} />
+                            name='confirmPassword'
+                            icon={keyWhite}
+                            error={errors?.confirmPassword}
+                        />
 
                     </FormAuthLayout>
                 </MotionToRight>

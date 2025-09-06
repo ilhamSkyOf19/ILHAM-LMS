@@ -1,9 +1,9 @@
 import { useState, type FC } from 'react'
 import type { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 import clsx from 'clsx';
+import ErrorMessage from '../ErrorMessage';
+import ButtonEye from '../ButtonEye';
 
-// icon
-import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
 
 
@@ -64,25 +64,13 @@ const BoxInputData: FC<Props> = ({ type, name, placeholder, label, register, err
                 {/* eye  */}
                 {
                     type === 'password' && (
-                        <button type='button' className='h-full' onClick={handleSetEye}>
-                            {/* eye icon */}
-                            {eye.type === 'password' ? (
-                                <VscEye className='w-6 h-6 flex shrink-0' />
-                            ) : (
-                                <VscEyeClosed className='w-6 h-6 flex shrink-0' />
-                            )}
-                        </button>
+                        <ButtonEye handleSetEye={handleSetEye} type={eye.type} color='black' />
                     )
                 }
             </div>
 
             {/* error message */}
-            <div className='w-full min-h-8'>
-                <p className={clsx(
-                    'text-red-500 text-xs transition-all duration-200',
-                    error ? 'visible' : 'invisible'
-                )}>{error?.message}</p>
-            </div>
+            <ErrorMessage error={error} />
         </div>
     )
 }
