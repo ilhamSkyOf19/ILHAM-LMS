@@ -1,7 +1,7 @@
 import { type FC } from 'react'
 import TitleContentDashboard from '../../../../fragments/TitleContentDashboard'
 import BoxInputData from '../../../../components/BoxInputData'
-import { useForm, type FieldError } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 
 // icons 
@@ -75,14 +75,14 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
                     placeholder='Write better name for your course'
                     label='course name'
                     register={register('name', typeContent === 'edit' ? {} : { required: "Input tidak boleh kosong" })}
-                    error={errors.name as FieldError}
+                    error={errors?.name}
                 />
 
                 {/* thumbnail */}
                 <BoxInputThumbnail
                     register={register('thumbnail', typeContent === 'edit' ? {} : { required: "Input tidak boleh kosong" })}
                     setValue={setValue}
-                    error={errors.thumbnail as FieldError}
+                    error={errors?.thumbnail}
                     clearErrors={clearErrors}
                     previewEdit={
                         typeContent === 'edit' ? `/thumbnails/${course?.thumbnail}` : undefined
@@ -97,7 +97,7 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
                     placeholder='Write better tagline for your course'
                     label='Course Tagline'
                     register={register('tagline', typeContent === 'edit' ? {} : { required: "Input tidak boleh kosong" })}
-                    error={errors.tagline as FieldError}
+                    error={errors?.tagline}
                 />
 
                 {/* category */}
@@ -108,7 +108,7 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
                     placeholder='Choose one category'
                     label='Course Category'
                     register={register('category', typeContent === 'edit' ? {} : { required: "Input tidak boleh kosong" })}
-                    error={errors.category as FieldError}
+                    error={errors?.category}
                     setValue={setValue}
                     clearErrors={clearErrors}
                 />
@@ -117,7 +117,7 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
                 {/* text area */}
                 <BoxInputTextArea
                     register={register('description', typeContent === 'edit' ? {} : { required: "Input tidak boleh kosong" })}
-                    error={errors.description as FieldError}
+                    error={errors?.description}
                 />
 
 

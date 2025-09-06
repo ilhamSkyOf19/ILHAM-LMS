@@ -6,7 +6,7 @@ type Props = {
 }
 const ButtonTrash: FC<Props> = ({ handleClick }) => {
     return (
-        <button type='button' className='w-10' onClick={handleClick}>
+        <button type='button' className='w-10 hover:scale-105 transition-all duration-300' onClick={handleClick}>
             <img src={iconDelete} alt={'icon delete'} className='w-full' loading='lazy' />
         </button>
     )

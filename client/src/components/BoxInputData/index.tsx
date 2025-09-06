@@ -1,8 +1,9 @@
-import { type FC } from 'react'
+import { useState, type FC } from 'react'
 import type { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 import clsx from 'clsx';
 
-
+// icon
+import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
 
 
@@ -19,6 +20,20 @@ type Props = {
 
 
 const BoxInputData: FC<Props> = ({ type, name, placeholder, label, register, error, icon }) => {
+
+    // state active eye
+    const [eye, setEye] = useState<{ isOpen: boolean, type: 'password' | 'text' }>({ isOpen: false, type: 'password' });
+
+
+
+    // handle eye 
+    const handleSetEye = () => {
+        setEye({ isOpen: !eye.isOpen, type: eye.type === 'password' ? 'text' : 'password' });
+    }
+
+
+
+
     return (
         <div className='w-full flex flex-col justify-start items-start'>
             {/* label text */}
@@ -39,13 +54,26 @@ const BoxInputData: FC<Props> = ({ type, name, placeholder, label, register, err
                 <input
                     {...register}
                     id={name}
-                    type={type}
+                    type={type === 'password' ? eye.type : type}
                     name={name}
                     aria-invalid={!!error}
                     className='w-full outline-none text-black font-semibold placeholder:font-normal placeholder:text-slate-400'
                     placeholder={placeholder}
-
                 />
+
+                {/* eye  */}
+                {
+                    type === 'password' && (
+                        <button type='button' className='h-full' onClick={handleSetEye}>
+                            {/* eye icon */}
+                            {eye.type === 'password' ? (
+                                <VscEye className='w-6 h-6 flex shrink-0' />
+                            ) : (
+                                <VscEyeClosed className='w-6 h-6 flex shrink-0' />
+                            )}
+                        </button>
+                    )
+                }
             </div>
 
             {/* error message */}

@@ -13,6 +13,10 @@
     --color-white-secondary: #F8FAFB;
 }
 
+input::-ms-reveal {
+  display: none;
+}
+
 
 * {
     font-family: 'Poppins', sans-serif;

@@ -40,7 +40,7 @@ const DashboardStudents: FC = () => {
                 <LinkButtonBorder link='/' label='import file' />
 
                 {/* add student */}
-                <LinkButtonBlue link='/dashboard/students/add-student' label='add student' />
+                <LinkButtonBlue link='/dashboard/students/new-student' label='add student' />
             </TitleContentDashboard>
 
             {/* content students */}

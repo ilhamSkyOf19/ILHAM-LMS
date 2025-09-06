@@ -19,6 +19,7 @@ import statistik from "../jsons/statistik.json";
 import courses from "../jsons/courses.json";
 import students from "../jsons/students.json";
 import NewCourse from "../pages/dashboard/course/NewCourse";
+import FormStudent from "../pages/dashboard/student/FormStudent";
 
 
 
@@ -105,6 +106,10 @@ const router = createBrowserRouter([
                     return students;
                 },
                 element: <DashboardStudents />
+            },
+            {
+                path: '/dashboard/students/new-student',
+                element: <FormStudent />
             }
         ]
     }

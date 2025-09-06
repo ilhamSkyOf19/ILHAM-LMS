@@ -14,7 +14,7 @@ type CourseForm = {
 
 type Props = {
     setValue: UseFormSetValue<CourseForm>;
-    error: FieldError;
+    error?: FieldError;
     register: UseFormRegisterReturn;
     clearErrors: UseFormClearErrors<CourseForm>;
     previewEdit?: string;
