@@ -4,6 +4,15 @@
         "name": "John Doe",
         "email": "V4FgM@example.com",
         "password": "password123",
-        "role": "manager"
+        "role": "manager",
+        "avatar": "photo-2.png"
+    },
+    {
+        "id": 2,
+        "name": "John Doe",
+        "email": "V4FgM@example.com",
+        "password": "password123",
+        "role": "manager",
+        "avatar": "photo-2.png"
     }
 ]

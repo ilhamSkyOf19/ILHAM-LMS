@@ -11,16 +11,36 @@ import BoxInputData from '../../../../components/BoxInputData';
 import note from '../../../../assets/images/icons/note-favorite-black.svg'
 import iconEmail from '../../../../assets/images/icons/sms-black.svg'
 import iconLock from '../../../../assets/images/icons/lock-black.svg'
+import { useLoaderData } from 'react-router-dom';
+import sweetAlertNotiifNotUpdate from '../../../../components/SweetAlertNotifNotUpdate';
+
 
 const FormStudent: FC = () => {
 
+    // use loader data
+    const students = useLoaderData();
+
 
     // use hook form 
-    const { register, handleSubmit, formState: { errors }, clearErrors, setValue } = useForm<Student>();
+    const { register, handleSubmit, formState: { errors }, clearErrors, setValue } = useForm<Student>({
+        // default values
+        defaultValues: ({
+            avatar: students?.avatar || null,
+            name: students?.name || '',
+            email: students?.email || '',
+            password: students?.password || ''
+        })
+    });
 
 
     // handle on submit
     const onSubmit = (data: Student) => {
+        // cek data 
+        if (!data.avatar && !data.name && !data.email && !data.password) {
+            sweetAlertNotiifNotUpdate();
+            return;
+        };
+
         console.log(data)
     };
 
@@ -38,8 +58,9 @@ const FormStudent: FC = () => {
                 <BoxInputAvatar
                     setValue={setValue}
                     error={errors?.avatar}
-                    register={register('avatar', { required: 'avatar is required' })}
+                    register={register('avatar', students ? {} : { required: 'avatar is required' })}
                     clearErrors={clearErrors}
+                    previewEdit={students?.avatar}
                 />
 
 
@@ -50,7 +71,7 @@ const FormStudent: FC = () => {
                     name='name'
                     placeholder='Write your full name'
                     label='full name'
-                    register={register('name', { required: 'full name is required' })}
+                    register={register('name', students ? {} : { required: 'name is required' })}
                     error={errors?.name}
                 />
 
@@ -61,7 +82,7 @@ const FormStudent: FC = () => {
                     name='email'
                     placeholder='Write your email address'
                     label='email address'
-                    register={register('email', { required: 'email is required' })}
+                    register={register('email', students ? {} : { required: 'email is required' })}
                     error={errors?.email}
                 />
 
@@ -72,7 +93,7 @@ const FormStudent: FC = () => {
                     name='password'
                     placeholder='Write your password'
                     label='password'
-                    register={register('password', { required: 'password is required' })}
+                    register={register('password', students ? {} : { required: 'password is required' })}
                     error={errors?.password}
                 />
 

@@ -1,4 +1,4 @@
-import { useRef, useState, type ChangeEvent, type FC } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type FC } from 'react'
 import type { FieldError, UseFormClearErrors, UseFormRegisterReturn, UseFormSetValue } from 'react-hook-form';
 import type { Student } from '../../types/types';
 import ButtonTrash from '../ButtonTrash';
@@ -15,9 +15,10 @@ type Props = {
     error?: FieldError;
     register: UseFormRegisterReturn
     clearErrors: UseFormClearErrors<Student>
+    previewEdit?: string
 }
 
-const BoxInputAvatar: FC<Props> = ({ setValue, error, register, clearErrors }) => {
+const BoxInputAvatar: FC<Props> = ({ setValue, error, register, clearErrors, previewEdit }) => {
 
     // state preview 
     const [preview, setPreview] = useState<string | undefined>(undefined);
@@ -56,6 +57,14 @@ const BoxInputAvatar: FC<Props> = ({ setValue, error, register, clearErrors }) =
             setValue('avatar', null);
         }
     }
+
+
+    // handle preview edit 
+    useEffect(() => {
+        if (previewEdit) {
+            setPreview(`/photos/${previewEdit}`);
+        }
+    }, [previewEdit])
 
 
     return (

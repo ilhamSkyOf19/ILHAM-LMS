@@ -55,7 +55,7 @@ const DashboardStudents: FC = () => {
                             <div className='w-full flex flex-row justify-end items-center gap-3'>
 
                                 {/* edit */}
-                                <LinkButtonBorder link={`/dashboard/students/${student.id}`} label='edit student' />
+                                <LinkButtonBorder link={`/dashboard/students/${student.id}/edit-student`} label='edit student' />
 
                                 {/* delete */}
                                 <ButtonDelete type='button' label='delete' handleDelete={deleteAlert} />

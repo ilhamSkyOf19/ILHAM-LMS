@@ -110,6 +110,13 @@ const router = createBrowserRouter([
             {
                 path: '/dashboard/students/new-student',
                 element: <FormStudent />
+            },
+            {
+                path: '/dashboard/students/:id/edit-student',
+                loader: ({ params }) => {
+                    return students.find((student: any) => student.id == params.id);
+                },
+                element: <FormStudent />
             }
         ]
     }
