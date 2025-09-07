@@ -38,6 +38,11 @@ const errorHandle = (
                 success: false,
                 message: "Email already exists",
             });
+        } else if (Object.keys((err as any).keyValue).includes("name")) {
+            return res.status(409).json({
+                success: false,
+                message: "Name already exists",
+            });
         } else {
             return res.status(409).json({
                 success: false,
