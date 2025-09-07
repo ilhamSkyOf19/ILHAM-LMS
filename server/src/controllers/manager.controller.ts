@@ -69,6 +69,7 @@ export class ManagerController {
             const id = req.params.id;
 
 
+
             // delete manager
             const response = await ManagerService.delete(id);
 

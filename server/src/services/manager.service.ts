@@ -74,7 +74,9 @@ export class ManagerService {
     // delete manager 
     static async delete(id: string): Promise<ResponseMessage> {
         // delete data 
-        const response = await Manager.findByIdAndDelete(id);
+        const response = await Manager.findOneAndDelete({
+            _id: id
+        });
 
 
         // cek response 

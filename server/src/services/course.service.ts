@@ -19,7 +19,7 @@ export class CourseService {
         };
 
         // cek limit course 
-        if (manager.limit_course === 0) {
+        if (manager.limit_course === 0 || manager.courses.length >= manager.limit_course) {
             return {
                 success: false,
                 message: 'limit course reached'

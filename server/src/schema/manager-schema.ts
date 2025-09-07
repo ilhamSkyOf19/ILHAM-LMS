@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { IManager } from "../models/manager-model";
+import Course from "./course-schema";
 
 const managerSchema = new Schema<IManager>(
     {
@@ -41,6 +42,17 @@ const managerSchema = new Schema<IManager>(
         timestamps: true
     }
 )
+
+
+// delete 
+managerSchema.post('findOneAndDelete', async (doc) => {
+    try {
+        // delete course 
+        await Course.deleteMany({ manager: doc._id });
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 // create model
 const Manager = model<IManager>("Manager", managerSchema);
