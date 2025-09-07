@@ -1,5 +1,6 @@
 import { CreateStudentRequest, StudentResponse, toStudentResponse, UpdateStudentRequest } from "../models/student-model";
 import Student from "../schema/student-schema";
+import { ResponseMessage } from "../types/types";
 
 export class StudentService {
     // create 
@@ -42,5 +43,24 @@ export class StudentService {
             ...response._doc,
             avatarUrl: response.avatar
         })
+    }
+
+    // delete student 
+    static async delete(id: string): Promise<ResponseMessage> {
+        // delete data 
+        const response = await Student.findByIdAndDelete(id);
+
+        if (!response) {
+            return {
+                success: false,
+                message: 'student not found'
+            }
+        }
+
+        // response
+        return {
+            success: true,
+            message: 'student deleted'
+        }
     }
 }

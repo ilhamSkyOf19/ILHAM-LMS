@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { CreateStudentRequest, StudentResponse, UpdateStudentRequest } from '../models/student-model';
-import { ResponseData } from '../types/types';
+import { ResponseData, ResponseMessage } from '../types/types';
 import bcrypt from 'bcrypt';
 import { StudentService } from '../services/student.service';
 import Student from '../schema/student-schema';
@@ -26,7 +26,7 @@ export class StudentController {
 
 
             // return 
-            return res.status(200).json({
+            return res.status(201).json({
                 success: true,
                 data: student
             });
@@ -88,6 +88,32 @@ export class StudentController {
                 data: updatedStudent
             })
 
+        } catch (error) {
+            console.log(error);
+            next(error)
+        }
+    }
+
+
+    // delete 
+    static async delete(req: Request<{ id: string }>, res: Response<ResponseMessage>, next: NextFunction) {
+        try {
+            // get params id 
+            const id = req.params.id;
+
+
+            // delete student
+            const response = await StudentService.delete(id);
+
+            // cek 
+            if (!response.success) {
+                return res.status(400).json(response)
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: "student deleted"
+            })
         } catch (error) {
             console.log(error);
             next(error)

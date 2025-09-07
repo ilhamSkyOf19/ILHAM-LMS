@@ -21,4 +21,11 @@ studentRoute.patch(
 )
 
 
+// delete 
+studentRoute.delete(
+    '/delete/:id',
+    StudentController.delete
+)
+
+
 export default studentRoute
