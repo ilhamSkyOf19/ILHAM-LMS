@@ -65,25 +65,16 @@ export class StudentController {
             }
 
 
-            // cek password 
-            if (body.password) {
-                // hash password 
-                const hashPassword = await bcrypt.hash(body.password, 10);
-                body.password = hashPassword
-            }
-
-
-
             // update student 
             const updatedStudent = await StudentService.update(id, body)
 
-
+            // cek 
+            if (!updatedStudent.success) {
+                return res.status(400).json(updatedStudent)
+            }
 
             // response 
-            return res.status(200).json({
-                success: true,
-                data: updatedStudent
-            })
+            return res.status(200).json(updatedStudent)
 
         } catch (error) {
             console.log(error);

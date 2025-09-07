@@ -2,6 +2,7 @@ import { CreateManagerRequest, ManagerResponse, toManagerResponse, UpdateManager
 import Manager from "../schema/manager-schema";
 
 import bcrypt from 'bcrypt';
+import { ResponseData, ResponseMessage } from "../types/types";
 export class ManagerService {
     // create 
     static async create(req: CreateManagerRequest): Promise<ManagerResponse> {
@@ -32,7 +33,7 @@ export class ManagerService {
     }
 
     // update manager
-    static async update(id: string, req: UpdateManagerRequest): Promise<ManagerResponse> {
+    static async update(id: string, req: UpdateManagerRequest): Promise<ResponseData<ManagerResponse>> {
 
         // cek password 
         if (req.password) {
@@ -51,15 +52,42 @@ export class ManagerService {
         ).lean<ManagerResponse>();
 
         // check 
-        if (!response) throw new Error('manager not found');
+        if (!response) {
+            return {
+                success: false,
+                message: 'manager not found'
+            }
+        };
 
 
-        return toManagerResponse({
-            ...response,
-            _id: response._id as string,
-            avatarUrl: response.avatar
-        })
+        return {
+            success: true,
+            data: toManagerResponse({
+                ...response,
+                _id: response._id as string,
+                avatarUrl: response.avatar
+            })
+        }
+    }
+
+    // delete manager 
+    static async delete(id: string): Promise<ResponseMessage> {
+        // delete data 
+        const response = await Manager.findByIdAndDelete(id);
+
+        // cek response 
+        if (!response) {
+            return {
+                success: false,
+                message: 'manager not found'
+            }
+        }
 
 
+        // response 
+        return {
+            success: true,
+            message: 'manager deleted'
+        }
     }
 }

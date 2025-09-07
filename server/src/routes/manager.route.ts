@@ -16,6 +16,11 @@ managerRoute.post('/create', ValidationRequest<CreateManagerRequest>(ManagerVali
 managerRoute.patch('/update/:id', ValidationRequest<UpdateManagerRequest>(ManagerValidation.UPDATE), ManagerController.update);
 
 
+
+// delete 
+managerRoute.delete('/delete/:id', ManagerController.delete);
+
+
 // export default 
 export default managerRoute
 

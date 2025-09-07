@@ -2,8 +2,9 @@ import { Types } from "mongoose";
 import { ManagerResponse } from "../models/manager-model";
 import { CreateStudentRequest, StudentEntity, StudentResponse, toStudentResponse, UpdateStudentRequest } from "../models/student-model";
 import Student from "../schema/student-schema";
-import { ResponseMessage } from "../types/types";
+import { ResponseData, ResponseMessage } from "../types/types";
 import bcrypt from 'bcrypt';
+import { success } from "zod";
 
 export class StudentService {
     // create 
@@ -30,9 +31,14 @@ export class StudentService {
 
 
     // update 
-    static async update(id: string, req: UpdateStudentRequest): Promise<StudentResponse> {
+    static async update(id: string, req: UpdateStudentRequest): Promise<ResponseData<StudentResponse>> {
 
-        console.log(req);
+        // cek password 
+        if (req.password) {
+            // hash password 
+            const hashPassword = await bcrypt.hash(req.password, 10);
+            req.password = hashPassword
+        }
 
         // update data
         const response = await Student.findByIdAndUpdate(
@@ -44,14 +50,22 @@ export class StudentService {
         ).lean<StudentResponse>();
 
         // check 
-        if (!response) throw new Error('student not found');
+        if (!response) {
+            return {
+                success: false,
+                message: 'student not found'
+            }
+        };
 
         // response
-        return toStudentResponse({
-            ...response,
-            _id: response._id as string,
-            avatarUrl: response.avatar
-        })
+        return {
+            success: true,
+            data: toStudentResponse({
+                ...response,
+                _id: response._id as string,
+                avatarUrl: response.avatar
+            })
+        }
     }
 
     // delete student 
