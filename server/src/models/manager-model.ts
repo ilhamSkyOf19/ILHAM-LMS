@@ -22,10 +22,17 @@ export type CreateManagerRequest = Omit<ManagerEntity, '_id' | 'limit_course' | 
 export type UpdateManagerRequest = Partial<CreateManagerRequest>;
 
 
+// update course type 
+export type UpdateCourseManagerRequest = Partial<Omit<ManagerEntity, '_id' | 'limit_course' | 'role' | 'name' | 'email' | 'password' | 'role' | 'avatar' | 'limit_course'>>;
+
+
 // response manager 
-export type ManagerResponse = Omit<ManagerEntity, 'password'> & {
-    _id: string
-    avatarUrl: string,
+export type ManagerResponse = Omit<ManagerEntity, 'password' | 'courses'> & {
+    _id: string;
+    avatarUrl: string;
+    courses: {
+        _id: string
+    }[]; // type courses
 };
 
 
@@ -40,6 +47,8 @@ export const toManagerResponse = (
         avatar: manager.avatar,
         limit_course: manager.limit_course,
         avatarUrl: manager.avatarUrl,
-        courses: manager.courses
+        courses: manager.courses?.map(c => ({
+            _id: c._id.toString(),
+        })) || []
     }
 }
