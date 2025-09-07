@@ -1,5 +1,5 @@
 import z, { ZodType } from "zod";
-import { CreateManagerRequest } from "../models/manager-model";
+import { CreateManagerRequest, UpdateManagerRequest } from "../models/manager-model";
 
 export class ManagerValidation {
 
@@ -10,4 +10,12 @@ export class ManagerValidation {
         password: z.string(),
         avatar: z.string()
     }).strict() as ZodType<CreateManagerRequest>
+
+    // update 
+    static readonly UPDATE = z.object({
+        name: z.string().optional(),
+        email: z.email().optional(),
+        password: z.string().optional(),
+        avatar: z.string().optional()
+    }).strict() as ZodType<UpdateManagerRequest>
 }

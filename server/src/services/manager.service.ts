@@ -1,4 +1,4 @@
-import { CreateManagerRequest, ManagerResponse, toManagerResponse } from "../models/manager-model";
+import { CreateManagerRequest, ManagerResponse, toManagerResponse, UpdateManagerRequest } from "../models/manager-model";
 import Manager from "../schema/manager-schema";
 
 import bcrypt from 'bcrypt';
@@ -13,7 +13,8 @@ export class ManagerService {
         const doc = await Manager.create({
             ...req,
             password: passwordHash,
-            limit_course: []
+            courses: [],
+            limit_course: 0
         });
 
 
@@ -28,5 +29,37 @@ export class ManagerService {
                 _id: response._id as string,
                 avatarUrl: response.avatar
             })
+    }
+
+    // update manager
+    static async update(id: string, req: UpdateManagerRequest): Promise<ManagerResponse> {
+
+        // cek password 
+        if (req.password) {
+            // hash password
+            const passwordHash = await bcrypt.hash(req.password, 10);
+            req.password = passwordHash;
+        }
+
+        // update data 
+        const response = await Manager.findByIdAndUpdate(
+            id,
+            req,
+            {
+                new: true
+            }
+        ).lean<ManagerResponse>();
+
+        // check 
+        if (!response) throw new Error('manager not found');
+
+
+        return toManagerResponse({
+            ...response,
+            _id: response._id as string,
+            avatarUrl: response.avatar
+        })
+
+
     }
 }

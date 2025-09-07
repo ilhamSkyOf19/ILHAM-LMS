@@ -26,7 +26,11 @@ const managerSchema = new Schema<IManager>(
             type: String,
             required: true
         },
-        limit_course: [
+        limit_course: {
+            type: Number,
+            required: true
+        },
+        courses: [
             {
                 type: Schema.Types.ObjectId,
                 ref: "Course"
