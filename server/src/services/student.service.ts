@@ -1,4 +1,4 @@
-import { CreateStudentRequest, StudentResponse, toStudentResponse } from "../models/student-model";
+import { CreateStudentRequest, StudentResponse, toStudentResponse, UpdateStudentRequest } from "../models/student-model";
 import Student from "../schema/student-schema";
 
 export class StudentService {
@@ -19,8 +19,28 @@ export class StudentService {
             ...response._doc,
             avatarUrl: response.avatar
         })
+    }
 
 
+    // update 
+    static async update(id: string, req: UpdateStudentRequest): Promise<StudentResponse> {
 
+        // update data
+        const response = await Student.findByIdAndUpdate(
+            id,
+            req,
+            {
+                new: true
+            }
+        );
+
+        // check 
+        if (!response) throw new Error('student not found');
+
+        // response
+        return toStudentResponse({
+            ...response._doc,
+            avatarUrl: response.avatar
+        })
     }
 }
