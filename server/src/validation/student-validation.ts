@@ -6,6 +6,6 @@ export class StudentValidation {
         name: z.string(),
         email: z.email(),
         password: z.string(),
-        avatarUrl: z.string()
+        avatar: z.string()
     }).strict() as ZodType<CreateStudentRequest>
 }

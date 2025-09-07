@@ -1,9 +1,12 @@
 import express, { Application } from 'express';
-
 // load dotnev
 import dotenv from 'dotenv';
-import bodyParser from 'body-parser';
 dotenv.config();
+
+import { connectDB } from './lib/db';
+import bodyParser from 'body-parser';
+import errorHandle from './middlewares/error-handle';
+import studentRoute from './routes/student.route';
 
 
 
@@ -21,13 +24,31 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
-// check
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
+// start server & koneksi db 
+const startServer = async () => {
+    await connectDB();
 
 
-// start the server 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
-})
+    // check
+    app.get('/', (req, res) => {
+        res.send('Hello World!')
+    })
+
+
+    // student route
+    app.use('/api/student', studentRoute);
+
+
+    // erro handle 
+    app.use(errorHandle);
+
+
+    // start the server 
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`)
+    })
+
+}
+
+// start server
+startServer();
