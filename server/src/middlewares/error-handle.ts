@@ -11,6 +11,7 @@ const errorHandle = (
     console.error(err);
 
     if (err instanceof mongoose.Error.ValidationError) {
+
         return res.status(400).json({
             success: false,
             message: err.message
@@ -32,10 +33,17 @@ const errorHandle = (
     }
 
     if ((err as any).code === 11000) {
-        return res.status(409).json({
-            success: false,
-            message: "Value already exists",
-        });
+        if (Object.keys((err as any).keyValue).includes("email")) {
+            return res.status(409).json({
+                success: false,
+                message: "Email already exists",
+            });
+        } else {
+            return res.status(409).json({
+                success: false,
+                message: "Value already exists",
+            });
+        }
     }
 
     return res.status(500).json({

@@ -1,30 +1,26 @@
-import { Document } from "mongodb";
+import { Document, Types } from "mongoose";
 
 
-// model db
-export interface IStudent extends Document {
+
+// entity
+export type StudentEntity = {
     name: string;
     email: string;
     password: string;
     role: 'STUDENT' | 'MANAGER' | 'ADMIN';
     avatar: string;
 }
+// model db
+export interface IStudent extends Document, StudentEntity { }
+
+
 // create request 
-export type CreateStudentRequest = {
-    name: string;
-    email: string;
-    password: string;
-    avatar: string;
-}
+export type CreateStudentRequest = Omit<StudentEntity, "role" | "limit_course">;
 
-
-// update request 
-export type UpdateStudentRequest = {
-    name?: string;
-    email?: string;
-    password?: string;
-    avatar?: string;
-}
+// update request
+export type UpdateStudentRequest = Partial<
+    Omit<StudentEntity, "role">
+>;
 
 
 // delete request 
@@ -34,24 +30,22 @@ export type DeleteStudentRequest = {
 
 
 // response 
-export type StudentResponse = {
-    id: string;
-    name: string;
-    email: string;
-    password: string;
-    avatar: string;
+export type StudentResponse = Omit<StudentEntity, "password"> & {
+    _id: string;
     avatarUrl: string;
-}
+};
 
 
 // to response 
-export const toStudentResponse = (student: IStudent & { avatarUrl: string }): StudentResponse => {
+export const toStudentResponse = (
+    student: StudentResponse
+): StudentResponse => {
     return {
-        id: student._id.toString(),
+        _id: student._id.toString(),
         name: student.name,
         email: student.email,
-        password: student.password,
+        role: student.role,
         avatar: student.avatar,
         avatarUrl: student.avatarUrl,
-    }
-}
+    };
+};

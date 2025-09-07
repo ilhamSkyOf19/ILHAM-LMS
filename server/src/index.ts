@@ -7,6 +7,7 @@ import { connectDB } from './lib/db';
 import bodyParser from 'body-parser';
 import errorHandle from './middlewares/error-handle';
 import studentRoute from './routes/student.route';
+import managerRoute from './routes/manager.route';
 
 
 
@@ -37,6 +38,7 @@ const startServer = async () => {
 
     // student route
     app.use('/api/student', studentRoute);
+    app.use('/api/manager', managerRoute);
 
 
     // erro handle 

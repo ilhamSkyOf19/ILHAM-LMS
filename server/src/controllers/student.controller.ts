@@ -14,14 +14,11 @@ export class StudentController {
             // get body 
             const body = req.body;
 
-            // hash password 
-            const hashPassword = await bcrypt.hash(body.password, 10);
 
 
             // create student 
             const student = await StudentService.create({
-                ...body,
-                password: hashPassword
+                ...body
             });
 
 

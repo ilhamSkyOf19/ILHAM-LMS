@@ -1,9 +1,7 @@
 import { Schema, model } from "mongoose";
-import { IStudent } from "../models/student-model";
+import { IManager } from "../models/manager-model";
 
-
-
-const studentSchema = new Schema<IStudent>(
+const managerSchema = new Schema<IManager>(
     {
         name: {
             type: String,
@@ -20,17 +18,27 @@ const studentSchema = new Schema<IStudent>(
         },
         role: {
             type: String,
+            enum: ["STUDENT", "MANAGER", "ADMIN"],
+            default: "MANAGER",
             required: true
         },
         avatar: {
             type: String,
             required: true
-        }
+        },
+        limit_course: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Course"
+            }
+        ]
     },
-    { timestamps: true }
-);
+    {
+        timestamps: true
+    }
+)
 
 // create model
-const Student = model<IStudent>("Student", studentSchema);
+const Manager = model<IManager>("Manager", managerSchema);
 
-export default Student;
+export default Manager;

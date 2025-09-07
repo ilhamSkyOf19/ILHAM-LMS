@@ -1,30 +1,38 @@
-import { CreateStudentRequest, StudentResponse, toStudentResponse, UpdateStudentRequest } from "../models/student-model";
+import { Types } from "mongoose";
+import { ManagerResponse } from "../models/manager-model";
+import { CreateStudentRequest, StudentEntity, StudentResponse, toStudentResponse, UpdateStudentRequest } from "../models/student-model";
 import Student from "../schema/student-schema";
 import { ResponseMessage } from "../types/types";
+import bcrypt from 'bcrypt';
 
 export class StudentService {
     // create 
     static async create(req: CreateStudentRequest): Promise<StudentResponse> {
-        // create data 
-        const response = new Student({
+        // hash password 
+        const hashPassword = await bcrypt.hash(req.password, 10);
+        // create document
+        const doc = await Student.create({
             ...req,
+            password: hashPassword,
             role: 'STUDENT'
         });
 
-        // save data 
-        await response.save();
+        // convert ke plain object
+        const response = doc.toObject();
 
-        // return data
-
+        // return dengan mapping
         return toStudentResponse({
-            ...response._doc,
-            avatarUrl: response.avatar
-        })
+            ...response,
+            _id: response._id as string,
+            avatarUrl: response.avatar,
+        });
     }
 
 
     // update 
     static async update(id: string, req: UpdateStudentRequest): Promise<StudentResponse> {
+
+        console.log(req);
 
         // update data
         const response = await Student.findByIdAndUpdate(
@@ -33,14 +41,15 @@ export class StudentService {
             {
                 new: true
             }
-        );
+        ).lean<StudentResponse>();
 
         // check 
         if (!response) throw new Error('student not found');
 
         // response
         return toStudentResponse({
-            ...response._doc,
+            ...response,
+            _id: response._id as string,
             avatarUrl: response.avatar
         })
     }
