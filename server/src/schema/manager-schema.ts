@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { IManager } from "../models/manager-model";
 import Course from "./course-schema";
+import Category from "./category-schema";
 
 const managerSchema = new Schema<IManager>(
     {
@@ -48,8 +49,27 @@ const managerSchema = new Schema<IManager>(
 // delete 
 managerSchema.post('findOneAndDelete', async (doc) => {
     try {
-        // delete course 
-        await Course.deleteMany({ manager: doc._id });
+        // get course
+        const courses = await Course.find({ manager: doc._id });
+
+        // cek course 
+        if (courses.length > 0) {
+            const courseId = courses.map(c => c._id);
+
+            // delete  course in category
+            await Category.updateMany({
+                courses: { $in: courseId }
+            }, {
+                $pull: {
+                    courses: { $in: courseId }
+                }
+            })
+
+
+            // delete course
+            await Course.deleteMany({ manager: doc._id });
+        }
+
     } catch (error) {
         console.log(error);
     }

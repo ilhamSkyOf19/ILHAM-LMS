@@ -7,11 +7,13 @@ import { SigninRequest } from "../models/auth-model";
 import Manager from "../schema/manager-schema";
 import { Model } from "mongoose";
 import { CreateManagerRequest, IManager } from "../models/manager-model";
+import { CreateAdminRequest, IAdmin } from "../models/admin-mode";
 
 // type sign up
 type SignupMap = {
     student: { model: IStudent; req: CreateStudentRequest };
     manager: { model: IManager; req: CreateManagerRequest };
+    admin: { model: IAdmin; req: CreateAdminRequest };
 };
 
 

@@ -11,6 +11,7 @@ import managerRoute from './routes/manager.route';
 import courseRoute from './routes/course.route';
 import categoryRoute from './routes/category.route';
 import cookieParser from 'cookie-parser';
+import adminRoute from './routes/admin.route';
 
 
 // intialize express
@@ -44,6 +45,7 @@ const startServer = async () => {
 
 
     // student route
+    app.use('/api/admin', adminRoute);
     app.use('/api/student', studentRoute);
     app.use('/api/manager', managerRoute);
     app.use('/api/course', courseRoute);
