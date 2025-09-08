@@ -29,7 +29,8 @@ const managerSchema = new Schema<IManager>(
         },
         limit_course: {
             type: Number,
-            required: true
+            required: true,
+            default: 0
         },
         courses: [
             {

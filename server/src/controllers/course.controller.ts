@@ -2,18 +2,19 @@ import { Request, Response, NextFunction } from 'express';
 import { CourseAllResponse, CourseCreateRequest, CourseResponse, CourseUpdateRequest } from '../models/course-model';
 import { CourseService } from '../services/course.service';
 import { ResponseData, ResponseMessage } from '../types/types';
+import { TokenRequest } from '../models/jwt-model';
 
 
 export class CourseController {
     // create 
-    static async create(req: Request<{ id: string }, {}, CourseCreateRequest>, res: Response<ResponseData<CourseResponse>>, next: NextFunction) {
+    static async create(req: TokenRequest<{}, {}, CourseCreateRequest>, res: Response<ResponseData<CourseResponse>>, next: NextFunction) {
         try {
             // get body 
             const body = req.body;
 
 
-            // get params id 
-            const id = req.params.id;
+            // get data id 
+            const { id } = req.data ?? { id: '' };
 
 
             // get service

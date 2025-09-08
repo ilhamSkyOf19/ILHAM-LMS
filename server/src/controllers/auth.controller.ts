@@ -1,4 +1,7 @@
 import { SigninRequest } from "../models/auth-model";
+import { IManager } from "../models/manager-model";
+import { IStudent } from "../models/student-model";
+import Manager from "../schema/manager-schema";
 import Student from "../schema/student-schema";
 import { AuthService } from "../services/auth.service";
 import { ResponseMessage } from "../types/types";
@@ -13,7 +16,7 @@ export class AuthController {
             const body = req.body;
 
             // signin student 
-            const response = await AuthService.signIn(body, Student);
+            const response = await AuthService.signIn<IStudent>(body, Student);
 
             // cek response 
             if (!response.success) {
@@ -32,6 +35,42 @@ export class AuthController {
             return res.status(200).json({
                 success: true,
                 message: "student signed in"
+            })
+
+
+        } catch (error) {
+            console.log(error);
+            next(error)
+        }
+    }
+
+
+    // sign in 
+    static async managerSignIn(req: Request<{}, {}, SigninRequest>, res: Response<ResponseMessage>, next: NextFunction) {
+        try {
+            // get body 
+            const body = req.body;
+
+            // signin student 
+            const response = await AuthService.signIn<IManager>(body, Manager);
+
+            // cek response 
+            if (!response.success) {
+                return res.status(400).json(response)
+            }
+
+            // set cookie 
+            res.cookie('token', response.data, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                maxAge: 60 * 60 * 1000
+            })
+
+
+            // return 
+            return res.status(200).json({
+                success: true,
+                message: "manager signed in"
             })
 
 

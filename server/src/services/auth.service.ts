@@ -1,37 +1,55 @@
 import { JWTPayloadType } from "../models/jwt-model";
-import { CreateStudentRequest, IStudent, StudentResponse } from "../models/student-model";
-import Student from "../schema/student-schema";
-import { ResponseData, ResponseMessage } from "../types/types";
+import { CreateStudentRequest, IStudent } from "../models/student-model";
+import { ResponseData, } from "../types/types";
 import bcrypt from "bcrypt";
-import jwt, { SignCallback } from "jsonwebtoken";
-import { StudentService } from "./student.service";
 import tokenJWT from "../helper/token-jwt";
 import { SigninRequest } from "../models/auth-model";
 import Manager from "../schema/manager-schema";
-import { Document, Model } from "mongoose";
-import { IManager } from "../models/manager-model";
+import { Model } from "mongoose";
+import { CreateManagerRequest, IManager } from "../models/manager-model";
+
+// type sign up
+type SignupMap = {
+    student: { model: IStudent; req: CreateStudentRequest };
+    manager: { model: IManager; req: CreateManagerRequest };
+};
+
+
 
 
 export class AuthService {
 
     // sign up 
-    static async studentSignUp(req: CreateStudentRequest): Promise<ResponseData<string>> {
+    static async signup<K extends keyof SignupMap>(
+        req: SignupMap[K]["req"],
+        model: Model<SignupMap[K]["model"]>
+    ): Promise<ResponseData<string>> {
+
+
+        // hash password
+        const passwordHash = await bcrypt.hash(req.password, 10);
+
+        // set password
+        req.password = passwordHash
+
         // create 
-        const student = await StudentService.create(req);
+        const doc = await model.create(req);
 
         // cek 
-        if (!student) return {
+        if (!model) return {
             success: false,
-            message: "student not created"
+            message: "data not created"
         }
 
 
         // get payload 
         const payload = {
-            id: student._id.toString(),
-            email: student.email,
-            role: student.role
+            id: doc.id,
+            email: doc.email,
+            role: doc.role
         } as JWTPayloadType;
+
+
 
         // generate 
         const token = tokenJWT({

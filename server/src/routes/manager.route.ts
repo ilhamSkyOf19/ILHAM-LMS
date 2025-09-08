@@ -3,6 +3,7 @@ import { CreateManagerRequest, UpdateManagerRequest } from '../models/manager-mo
 import { ManagerValidation } from '../validation/manager-validation';
 import ValidationRequest from '../middlewares/validation-request';
 import { ManagerController } from '../controllers/manager.controller';
+import tokenMiddleware from '../middlewares/token-middleware';
 
 // initialize route
 const managerRoute: Router = express.Router();
@@ -13,12 +14,12 @@ managerRoute.post('/create', ValidationRequest<CreateManagerRequest>(ManagerVali
 
 
 // update 
-managerRoute.patch('/update/:id', ValidationRequest<UpdateManagerRequest>(ManagerValidation.UPDATE), ManagerController.update);
+managerRoute.patch('/update', tokenMiddleware("MANAGER"), ValidationRequest<UpdateManagerRequest>(ManagerValidation.UPDATE), ManagerController.update);
 
 
 
 // delete 
-managerRoute.delete('/delete/:id', ManagerController.delete);
+managerRoute.delete('/delete/:id', tokenMiddleware("ADMIN"), ManagerController.delete);
 
 
 // export default 

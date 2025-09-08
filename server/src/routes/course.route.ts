@@ -3,6 +3,7 @@ import ValidationRequest from "../middlewares/validation-request";
 import { CourseCreateRequest, CourseUpdateRequest } from "../models/course-model";
 import { CourseValidation } from "../validation/course-validation";
 import { CourseController } from "../controllers/course.controller";
+import tokenMiddleware from "../middlewares/token-middleware";
 
 
 
@@ -14,14 +15,14 @@ courseRoute.get('/all', CourseController.getAll);
 
 
 // create 
-courseRoute.post('/create/:id', ValidationRequest<CourseCreateRequest>(CourseValidation.CREATE), CourseController.create);
+courseRoute.post('/create', tokenMiddleware("MANAGER"), ValidationRequest<CourseCreateRequest>(CourseValidation.CREATE), CourseController.create);
 
 
 // delete 
-courseRoute.delete('/delete/:id', CourseController.delete);
+courseRoute.delete('/delete/:id', tokenMiddleware("MANAGER"), CourseController.delete);
 
 // update 
-courseRoute.patch('/update/:id', ValidationRequest<CourseUpdateRequest>(CourseValidation.UPDATE), CourseController.update);
+courseRoute.patch('/update/:id', tokenMiddleware("MANAGER"), ValidationRequest<CourseUpdateRequest>(CourseValidation.UPDATE), CourseController.update);
 
 
 

@@ -6,6 +6,9 @@ import Student from '../schema/student-schema';
 import { AuthService } from '../services/auth.service';
 import { TokenRequest } from '../models/jwt-model';
 
+
+
+
 export class StudentController {
 
 
@@ -16,9 +19,7 @@ export class StudentController {
             const body = req.body;
 
             // create student 
-            const student = await AuthService.studentSignUp({
-                ...body
-            });
+            const student = await AuthService.signup<"student">(body, Student);
 
 
             // cek 
@@ -54,9 +55,6 @@ export class StudentController {
 
             // get payload 
             const user = req.data?.id as string;
-
-
-
 
 
             // cek body

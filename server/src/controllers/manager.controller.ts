@@ -1,13 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 import { CreateManagerRequest, ManagerResponse, UpdateManagerRequest } from '../models/manager-model';
 import { ResponseData, ResponseMessage } from '../types/types';
-import bcrypt from 'bcrypt';
 import { ManagerService } from '../services/manager.service';
+import { AuthService } from '../services/auth.service';
+import Manager from '../schema/manager-schema';
+import { TokenRequest } from '../models/jwt-model';
 
 export class ManagerController {
 
     // create 
-    static async create(req: Request<{}, {}, CreateManagerRequest>, res: Response<ResponseData<ManagerResponse>>, next: NextFunction) {
+    static async create(req: Request<{}, {}, CreateManagerRequest>, res: Response<ResponseData<string>>, next: NextFunction) {
         try {
 
             // get body 
@@ -15,15 +17,28 @@ export class ManagerController {
 
 
             // get service
-            const manager = await ManagerService.create({
-                ...body,
-            });
+            const manager = await AuthService.signup<"manager">(body, Manager)
+
+            // cek service 
+            if (!manager.success) {
+                return res.status(400).json(manager)
+            }
+
+
+            // set cookie 
+            res.cookie('token', manager.data, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                maxAge: 60 * 60 * 1000
+            })
 
             // return 
             return res.status(201).json({
                 success: true,
-                data: manager
+                data: "manager created & logged in"
             })
+
+
         } catch (error) {
             console.log(error);
             next(error)
@@ -31,10 +46,10 @@ export class ManagerController {
     }
 
     // update 
-    static async update(req: Request<{ id: string }, {}, UpdateManagerRequest>, res: Response<ResponseData<ManagerResponse>>, next: NextFunction) {
+    static async update(req: TokenRequest<{}, {}, UpdateManagerRequest>, res: Response<ResponseData<ManagerResponse>>, next: NextFunction) {
         try {
-            // get params id 
-            const id = req.params.id;
+            // get id manager
+            const { id } = req.data ?? { id: '' };
 
 
             // cek all req 
