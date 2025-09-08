@@ -71,3 +71,50 @@ export const toCourseResponse = (
     }
 }
 
+
+
+// course all response 
+export type CourseAllResponse = {
+    _id: string;
+    name: string;
+    thumbnail: string;
+    tagline: string;
+    description: string;
+    price: number;
+    manager: {
+        _id: string;
+        name: string;
+    };
+    category: {
+        _id: string;
+        name: string;
+    };
+    contents: {
+        _id: string;
+    }[]
+}
+
+
+// to all response
+export const toAllCourseResponse = (
+    course: CourseAllResponse): CourseAllResponse => {
+    return {
+        _id: course._id.toString(),
+        name: course.name,
+        thumbnail: course.thumbnail,
+        tagline: course.tagline,
+        description: course.description,
+        price: course.price,
+        manager: {
+            _id: course.manager._id.toString(),
+            name: course.manager.name
+        },
+        category: {
+            _id: course.category._id.toString(),
+            name: course.category.name
+        },
+        contents: course.contents ? course.contents.map(content => ({
+            _id: content._id.toString()
+        })) : [],
+    }
+}

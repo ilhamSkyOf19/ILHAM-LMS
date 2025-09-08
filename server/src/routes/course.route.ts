@@ -8,8 +8,20 @@ import { CourseController } from "../controllers/course.controller";
 
 const courseRoute: Router = express.Router();
 
+
+// get all
+courseRoute.get('/all', CourseController.getAll);
+
+
 // create 
 courseRoute.post('/create/:id', ValidationRequest<CourseCreateRequest>(CourseValidation.CREATE), CourseController.create);
+
+
+// delete 
+courseRoute.delete('/delete/:id', CourseController.delete);
+
+
+
 
 
 export default courseRoute

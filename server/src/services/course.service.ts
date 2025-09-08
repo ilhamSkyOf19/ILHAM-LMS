@@ -1,7 +1,8 @@
-import { CourseCreateRequest, CourseResponse, toCourseResponse } from "../models/course-model";
+import { CourseAllResponse, CourseCreateRequest, CourseResponse, toAllCourseResponse, toCourseResponse } from "../models/course-model";
+import Category from "../schema/category-schema";
 import Course from "../schema/course-schema";
 import Manager from "../schema/manager-schema";
-import { ResponseData } from "../types/types";
+import { ResponseData, ResponseMessage } from "../types/types";
 
 export class CourseService {
     // create 
@@ -18,6 +19,8 @@ export class CourseService {
             }
         };
 
+
+
         // cek limit course 
         if (manager.limit_course === 0 || manager.courses.length >= manager.limit_course) {
             return {
@@ -28,6 +31,17 @@ export class CourseService {
 
 
         // cek category
+        const category = await Category.findById(req.category);
+
+
+        // cek 
+        if (!category) {
+            return {
+                success: false,
+                message: 'category not found'
+            }
+        };
+
 
 
         // create cours
@@ -54,6 +68,51 @@ export class CourseService {
                 contents: []
             })
         };
+
+    }
+
+
+    // get course 
+    static async getAll(): Promise<ResponseData<CourseAllResponse[]>> {
+        // get all course
+        const course = await Course.find({})
+            .populate('manager', 'name')
+            .populate('category', '-courses')
+            .lean<CourseAllResponse[]>();
+
+        if (!course) {
+            return {
+                success: false,
+                message: 'course not found'
+            }
+        }
+
+        return {
+            success: true,
+            data: course.map(course => toAllCourseResponse(course))
+        }
+    }
+
+    // delete course 
+    static async delete(id: string): Promise<ResponseMessage> {
+
+
+        // delete data
+        const response = await Course.findOneAndDelete({ _id: id });
+
+        // cek response 
+        if (!response) {
+            return {
+                success: false,
+                message: 'course not found'
+            }
+        }
+
+        // return response 
+        return {
+            success: true,
+            message: 'course deleted'
+        }
 
     }
 }

@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { ICourse } from "../models/course-model";
 import Manager from "./manager-schema";
+import Category from "./category-schema";
 
 
 
@@ -47,8 +48,10 @@ const courseSchema = new Schema<ICourse>(
 )
 
 
+// update manager & category if create 
 courseSchema.post('save', async (doc) => {
     try {
+        // update manager
         await Manager.findByIdAndUpdate({
             _id: doc.manager
         }, {
@@ -56,8 +59,48 @@ courseSchema.post('save', async (doc) => {
                 courses: doc._id
             }
         })
+
+        // update category
+        await Category.findByIdAndUpdate({
+            _id: doc.category
+        }, {
+            $push: {
+                courses: doc._id
+            }
+        })
+
+
     } catch (error) {
         console.log(error);
+    }
+})
+
+
+
+// delete 
+courseSchema.post('findOneAndDelete', async function (doc) {
+    try {
+        // delete course in manager 
+        await Manager.findByIdAndUpdate({
+            _id: doc.manager
+        }, {
+            $pull: {
+                courses: doc._id
+            }
+        })
+
+
+        // delete course in category 
+        await Category.findByIdAndUpdate({
+            _id: doc.category
+        }, {
+            $pull: {
+                courses: doc._id
+            }
+        })
+
+    } catch (error) {
+
     }
 })
 
