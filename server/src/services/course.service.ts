@@ -1,4 +1,4 @@
-import { CourseAllResponse, CourseCreateRequest, CourseResponse, toAllCourseResponse, toCourseResponse } from "../models/course-model";
+import { CourseAllResponse, CourseCreateRequest, CourseResponse, CourseUpdateRequest, toAllCourseResponse, toCourseResponse } from "../models/course-model";
 import Category from "../schema/category-schema";
 import Course from "../schema/course-schema";
 import Manager from "../schema/manager-schema";
@@ -112,6 +112,69 @@ export class CourseService {
         return {
             success: true,
             message: 'course deleted'
+        }
+
+    }
+
+    // update course 
+    static async update(id: string, req: CourseUpdateRequest): Promise<ResponseData<CourseResponse>> {
+
+        // cek course 
+        if (req.category) {
+
+        }
+        const course = await Course.findById(id);
+
+        // cek 
+        if (!course) {
+            return {
+                success: false,
+                message: 'course not found'
+            }
+        }
+
+        // cek the same category
+        if (course.category._id.toString() !== req.category) {
+            // delete category old in course 
+            await Category.findByIdAndUpdate({
+                _id: course.category
+            }, {
+                $pull: {
+                    courses: course._id
+                }
+            })
+        }
+
+        if (req.category) {
+            // cek category 
+            const category = await Category.findById(req.category);
+
+            // cek 
+            if (!category) {
+                return {
+                    success: false,
+                    message: 'category not found'
+                }
+            }
+        }
+
+
+        // update data
+        const response = await Course.findOneAndUpdate({ _id: id }, req, { new: true }).lean<CourseResponse>();
+
+        // cek response 
+        if (!response) {
+            return {
+                success: false,
+                message: 'course not found'
+            }
+        }
+
+
+        // return response 
+        return {
+            success: true,
+            data: toCourseResponse(response)
         }
 
     }

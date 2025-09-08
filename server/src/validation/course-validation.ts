@@ -11,4 +11,15 @@ export class CourseValidation {
         price: z.number(),
         category: z.string(),
     }).strict() as ZodType<CourseCreateRequest>
+
+
+    // update 
+    static readonly UPDATE = z.object({
+        name: z.string().optional(),
+        thumbnail: z.string().optional(),
+        tagline: z.string().optional(),
+        description: z.string().optional(),
+        price: z.number().optional(),
+        category: z.string().optional(),
+    }).strict()
 }

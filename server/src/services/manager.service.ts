@@ -1,4 +1,4 @@
-import { CreateManagerRequest, ManagerResponse, toManagerResponse, UpdateCourseManagerRequest, UpdateManagerRequest } from "../models/manager-model";
+import { CreateManagerRequest, ManagerResponse, toManagerResponse, UpdateManagerRequest } from "../models/manager-model";
 import Manager from "../schema/manager-schema";
 
 import bcrypt from 'bcrypt';

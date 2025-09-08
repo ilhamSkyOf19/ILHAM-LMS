@@ -1,6 +1,6 @@
 import express, { Router } from "express";
 import ValidationRequest from "../middlewares/validation-request";
-import { CourseCreateRequest } from "../models/course-model";
+import { CourseCreateRequest, CourseUpdateRequest } from "../models/course-model";
 import { CourseValidation } from "../validation/course-validation";
 import { CourseController } from "../controllers/course.controller";
 
@@ -19,6 +19,9 @@ courseRoute.post('/create/:id', ValidationRequest<CourseCreateRequest>(CourseVal
 
 // delete 
 courseRoute.delete('/delete/:id', CourseController.delete);
+
+// update 
+courseRoute.patch('/update/:id', ValidationRequest<CourseUpdateRequest>(CourseValidation.UPDATE), CourseController.update);
 
 
 

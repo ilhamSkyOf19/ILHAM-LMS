@@ -25,7 +25,7 @@ export type CourseCreateRequest = Omit<CourseEntity, "_id" | "manager" | "conten
 
 
 // update request
-export type CourseUpdateRequest = Partial<Omit<CourseCreateRequest, "manager" | "category" | "contents">>;
+export type CourseUpdateRequest = Partial<Omit<CourseCreateRequest, "manager" | "contents">>;
 
 
 // response course

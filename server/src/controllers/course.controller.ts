@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { CourseAllResponse, CourseCreateRequest, CourseResponse } from '../models/course-model';
+import { CourseAllResponse, CourseCreateRequest, CourseResponse, CourseUpdateRequest } from '../models/course-model';
 import { CourseService } from '../services/course.service';
 import { ResponseData, ResponseMessage } from '../types/types';
 
@@ -98,4 +98,31 @@ export class CourseController {
             next(error)
         }
     }
+
+    // update 
+    static async update(req: Request<{ id: string }, {}, CourseUpdateRequest>, res: Response<ResponseData<CourseResponse>>, next: NextFunction) {
+        try {
+            // get params id
+            const id = req.params.id;
+
+            // get body 
+            const body = req.body;
+
+            // get service 
+            const course = await CourseService.update(id, body);
+
+            // cek response 
+            if (!course.success) {
+                return res.status(400).json(course)
+            }
+
+            // return
+            return res.status(200).json(course)
+        } catch (error) {
+            // error handle 
+            console.log(error);
+            next(error)
+        }
+    }
+
 }

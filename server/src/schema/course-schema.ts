@@ -104,6 +104,24 @@ courseSchema.post('findOneAndDelete', async function (doc) {
     }
 })
 
+// update category 
+courseSchema.post('findOneAndUpdate', async function (doc) {
+    try {
+
+        // update category
+        await Category.findByIdAndUpdate({
+            _id: doc.category
+        }, {
+            $push: {
+                courses: doc._id
+            }
+        })
+
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 
 // create model
 const Course = model<ICourse>("Course", courseSchema);
