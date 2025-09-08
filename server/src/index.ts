@@ -10,7 +10,7 @@ import studentRoute from './routes/student.route';
 import managerRoute from './routes/manager.route';
 import courseRoute from './routes/course.route';
 import categoryRoute from './routes/category.route';
-
+import cookieParser from 'cookie-parser';
 
 
 // intialize express
@@ -23,7 +23,12 @@ const PORT = process.env.PORT || 3000;
 
 // body parse 
 app.use(bodyParser.json())
+
+// body parse encoded
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// cookie parser
+app.use(cookieParser());
 
 
 

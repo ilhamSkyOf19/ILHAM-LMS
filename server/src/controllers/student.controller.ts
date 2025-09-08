@@ -1,33 +1,46 @@
 import { NextFunction, Request, Response } from 'express';
 import { CreateStudentRequest, StudentResponse, UpdateStudentRequest } from '../models/student-model';
 import { ResponseData, ResponseMessage } from '../types/types';
-import bcrypt from 'bcrypt';
 import { StudentService } from '../services/student.service';
 import Student from '../schema/student-schema';
+import { AuthService } from '../services/auth.service';
+import { TokenRequest } from '../models/jwt-model';
 
 export class StudentController {
 
 
     // create 
-    static async create(req: Request<{}, {}, CreateStudentRequest>, res: Response<ResponseData<StudentResponse>>, next: NextFunction) {
+    static async create(req: Request<{}, {}, CreateStudentRequest>, res: Response<ResponseData<string>>, next: NextFunction) {
         try {
             // get body 
             const body = req.body;
 
-
-
             // create student 
-            const student = await StudentService.create({
+            const student = await AuthService.studentSignUp({
                 ...body
             });
+
+
+            // cek 
+            if (!student.success) {
+                return res.status(400).json(student)
+            }
+
+
+            // set cookie 
+            res.cookie('token', student.data, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                maxAge: 60 * 60 * 1000
+            })
+
 
 
             // return 
             return res.status(201).json({
                 success: true,
-                data: student
+                data: "student created & logged in"
             });
-
 
         } catch (error) {
             console.log(error);
@@ -36,8 +49,16 @@ export class StudentController {
     }
 
     // update 
-    static async update(req: Request<{ id: string }, {}, UpdateStudentRequest>, res: Response<ResponseData<StudentResponse>>, next: NextFunction) {
+    static async update(req: TokenRequest<{}, {}, UpdateStudentRequest>, res: Response<ResponseData<StudentResponse>>, next: NextFunction) {
         try {
+
+            // get payload 
+            const user = req.data?.id as string;
+
+
+
+
+
             // cek body
             if (!req.body) {
                 return res.status(400).json({
@@ -49,12 +70,10 @@ export class StudentController {
             // get body
             const body = req.body
 
-            // get params 
-            const id = req.params.id
 
 
             // cek user 
-            const student = await Student.findById(id)
+            const student = await Student.findById(user)
 
             // cek student 
             if (!student) {
@@ -66,7 +85,7 @@ export class StudentController {
 
 
             // update student 
-            const updatedStudent = await StudentService.update(id, body)
+            const updatedStudent = await StudentService.update(user, body)
 
             // cek 
             if (!updatedStudent.success) {
