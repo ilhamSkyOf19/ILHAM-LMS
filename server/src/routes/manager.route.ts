@@ -15,6 +15,13 @@ const managerRoute: Router = express.Router();
 // sign in 
 managerRoute.post('/signin', ValidationRequest<SigninRequest>(AuthValidation.SIGNIN), AuthController.managerSignIn);
 
+
+
+// get detail 
+managerRoute.get('/detail', tokenMiddleware("MANAGER"), ManagerController.getDetail);
+
+
+
 // create
 managerRoute.post('/create', ValidationRequest<CreateManagerRequest>(ManagerValidation.CREATE), ManagerController.create);
 

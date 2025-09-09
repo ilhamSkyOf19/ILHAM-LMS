@@ -30,6 +30,7 @@ const managerSchema = new Schema<IManager>(
         },
         bundle: {
             type: Schema.Types.ObjectId,
+            ref: "Bundle",
             default: null
         },
         courses: [

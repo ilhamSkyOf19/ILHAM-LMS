@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { BundleResponse, CreateBundleRequest, UpdateBundleRequest } from "../models/bundle-model";
 import { ResponseData, ResponseMessage } from "../types/types";
 import { BundleService } from "../services/bundle.service";
-import { fi } from "zod/v4/locales/index.cjs";
 
 export class bundleController {
     // create 

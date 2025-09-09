@@ -1,3 +1,4 @@
+import { BundleEntity } from "../models/bundle-model";
 import { CourseAllResponse, CourseCreateRequest, CourseResponse, CourseUpdateRequest, toAllCourseResponse, toCourseResponse } from "../models/course-model";
 import Category from "../schema/category-schema";
 import Course from "../schema/course-schema";
@@ -9,7 +10,7 @@ export class CourseService {
     static async create(req: CourseCreateRequest, managerId: string): Promise<ResponseData<CourseResponse>> {
 
         // cek manager
-        const manager = await Manager.findById(managerId);
+        const manager = await Manager.findById(managerId).populate<{ bundle: BundleEntity }>('bundle', ' limit_course limit_student').lean();
 
         // cek 
         if (!manager) {
@@ -21,11 +22,19 @@ export class CourseService {
 
 
 
+
         // cek limit course 
-        if (manager.limit_course === 0 || manager.courses.length >= manager.limit_course) {
+        if (!manager.bundle) {
             return {
                 success: false,
                 message: 'limit course reached'
+            }
+        } else {
+            if (manager.courses.length >= manager.bundle.limit_course) {
+                return {
+                    success: false,
+                    message: 'limit course reached'
+                }
             }
         }
 

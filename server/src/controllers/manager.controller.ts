@@ -8,6 +8,38 @@ import { TokenRequest } from '../models/jwt-model';
 
 export class ManagerController {
 
+
+    // get detail
+    static async getDetail(req: TokenRequest, res: Response<ResponseData<ManagerResponse>>, next: NextFunction) {
+        try {
+
+            // get id manager 
+            const { id } = req.data ?? { id: '' };
+
+            // get service 
+            const manager = await ManagerService.getDetail(id);
+
+            // cek service 
+            if (!manager) {
+                return res.status(400).json({
+                    success: false,
+                    message: "manager not found"
+                })
+            }
+
+            // return
+            return res.status(200).json({
+                success: true,
+                data: manager
+            })
+
+        } catch (error) {
+            // error handle 
+            console.log(error);
+            next(error)
+        }
+    }
+
     // create 
     static async create(req: Request<{}, {}, CreateManagerRequest>, res: Response<ResponseData<string>>, next: NextFunction) {
         try {

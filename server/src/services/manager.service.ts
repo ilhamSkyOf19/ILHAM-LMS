@@ -65,4 +65,27 @@ export class ManagerService {
             message: 'manager deleted'
         }
     }
+
+    // get detail manager 
+    static async getDetail(id: string): Promise<ManagerResponse> {
+
+        // get data 
+        const response = await Manager.findById({ _id: id })
+            .populate('courses')
+            .populate('bundle', '-createdAt -updatedAt -__v')
+            .lean<ManagerResponse>();
+
+
+        // cek response 
+        if (!response) {
+            throw new Error('manager not found')
+        }
+
+
+        return toManagerResponse({
+            ...response,
+            _id: response._id as string,
+            avatarUrl: response.avatar
+        })
+    }
 }

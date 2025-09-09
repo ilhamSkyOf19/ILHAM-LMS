@@ -13,6 +13,8 @@ const bundleRoute: Router = Router();
 // get all 
 bundleRoute.get('/all', bundleController.getAll);
 
+
+
 // create bundle 
 bundleRoute.post('/create', tokenMiddleware("ADMIN"), ValidationRequest<CreateBundleRequest>(BundleValidation.CREATE), bundleController.create);
 

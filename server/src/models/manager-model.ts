@@ -1,4 +1,5 @@
 import { Document, Types } from 'mongoose'
+import { BundleResponse } from './bundle-model'
 
 // entity 
 export type ManagerEntity = {
@@ -26,7 +27,7 @@ export type UpdateManagerRequest = Partial<CreateManagerRequest>;
 export type ManagerResponse = Omit<ManagerEntity, 'password' | 'courses' | 'bundle'> & {
     _id: string;
     avatarUrl: string;
-    bundle: string | null;
+    bundle: BundleResponse;
     courses: {
         _id: string
     }[]; // type courses
