@@ -2,6 +2,7 @@ import { Schema, model } from "mongoose";
 import { ICourse } from "../models/course-model";
 import Manager from "./manager-schema";
 import Category from "./category-schema";
+import Content from "./content-schema";
 
 
 
@@ -98,6 +99,9 @@ courseSchema.post('findOneAndDelete', async function (doc) {
                 courses: doc._id
             }
         })
+
+        // delete content by course 
+        await Content.deleteMany({ course: doc._id });
 
     } catch (error) {
 

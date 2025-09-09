@@ -94,8 +94,27 @@ export class CourseService {
     }
 
     // delete course 
-    static async delete(id: string): Promise<ResponseMessage> {
+    static async delete(id: string, manager: string): Promise<ResponseMessage> {
 
+        // cek course 
+        const course = await Course.findById(id);
+
+        // cek 
+        if (!course) {
+            return {
+                success: false,
+                message: 'course not found'
+            }
+        }
+
+
+        // cek manager 
+        if (course.manager.toString() !== manager) {
+            return {
+                success: false,
+                message: 'unauthorized'
+            }
+        }
 
         // delete data
         const response = await Course.findOneAndDelete({ _id: id });
@@ -117,7 +136,7 @@ export class CourseService {
     }
 
     // update course 
-    static async update(id: string, req: CourseUpdateRequest): Promise<ResponseData<CourseResponse>> {
+    static async update(id: string, manager: string, req: CourseUpdateRequest): Promise<ResponseData<CourseResponse>> {
 
         // cek course 
         if (req.category) {
@@ -130,6 +149,14 @@ export class CourseService {
             return {
                 success: false,
                 message: 'course not found'
+            }
+        }
+
+        // cek manager 
+        if (course.manager.toString() !== manager) {
+            return {
+                success: false,
+                message: 'unauthorized'
             }
         }
 

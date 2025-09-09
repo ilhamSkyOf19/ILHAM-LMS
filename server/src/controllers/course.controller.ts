@@ -70,15 +70,18 @@ export class CourseController {
     }
 
     // delete
-    static async delete(req: Request<{ id: string }>, res: Response<ResponseMessage>, next: NextFunction) {
+    static async delete(req: TokenRequest<{ id: string }>, res: Response<ResponseMessage>, next: NextFunction) {
         try {
+
+            // get id manager
+            const { id: manager } = req.data ?? { id: '' };
 
             // get params id 
             const id = req.params.id;
 
 
             // delete course
-            const response = await CourseService.delete(id);
+            const response = await CourseService.delete(id, manager);
 
 
             // cek response 
@@ -101,16 +104,19 @@ export class CourseController {
     }
 
     // update 
-    static async update(req: Request<{ id: string }, {}, CourseUpdateRequest>, res: Response<ResponseData<CourseResponse>>, next: NextFunction) {
+    static async update(req: TokenRequest<{ id: string }, {}, CourseUpdateRequest>, res: Response<ResponseData<CourseResponse>>, next: NextFunction) {
         try {
             // get params id
             const id = req.params.id;
+
+            // get id manager 
+            const { id: manager } = req.data ?? { id: '' };
 
             // get body 
             const body = req.body;
 
             // get service 
-            const course = await CourseService.update(id, body);
+            const course = await CourseService.update(id, manager, body);
 
             // cek response 
             if (!course.success) {
