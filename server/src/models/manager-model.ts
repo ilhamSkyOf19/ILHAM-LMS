@@ -7,15 +7,15 @@ export type ManagerEntity = {
     password: string
     role: 'STUDENT' | 'MANAGER' | 'ADMIN'
     avatar: string
-    limit_course: number
     courses: Types.ObjectId[]
+    bundle: Types.ObjectId | null;
 }
 // model db 
 export interface IManager extends ManagerEntity, Document { }
 
 
 // create request 
-export type CreateManagerRequest = Omit<ManagerEntity, '_id' | 'limit_course' | 'role' | 'courses'>;
+export type CreateManagerRequest = Omit<ManagerEntity, '_id' | 'bundle' | 'role' | 'courses'>;
 
 
 // update type 
@@ -23,9 +23,10 @@ export type UpdateManagerRequest = Partial<CreateManagerRequest>;
 
 
 // response manager 
-export type ManagerResponse = Omit<ManagerEntity, 'password' | 'courses'> & {
+export type ManagerResponse = Omit<ManagerEntity, 'password' | 'courses' | 'bundle'> & {
     _id: string;
     avatarUrl: string;
+    bundle: string | null;
     courses: {
         _id: string
     }[]; // type courses
@@ -41,7 +42,7 @@ export const toManagerResponse = (
         email: manager.email,
         role: manager.role,
         avatar: manager.avatar,
-        limit_course: manager.limit_course,
+        bundle: manager.bundle,
         avatarUrl: manager.avatarUrl,
         courses: manager.courses?.map(c => ({
             _id: c._id.toString(),

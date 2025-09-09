@@ -4,8 +4,6 @@ import Manager from "../schema/manager-schema";
 import bcrypt from 'bcrypt';
 import { ResponseData, ResponseMessage } from "../types/types";
 export class ManagerService {
-
-
     // update manager
     static async update(id: string, req: UpdateManagerRequest): Promise<ResponseData<ManagerResponse>> {
 

@@ -28,10 +28,9 @@ const managerSchema = new Schema<IManager>(
             type: String,
             required: true
         },
-        limit_course: {
-            type: Number,
-            required: true,
-            default: 0
+        bundle: {
+            type: Schema.Types.ObjectId,
+            default: null
         },
         courses: [
             {

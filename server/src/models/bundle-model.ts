@@ -19,6 +19,10 @@ export interface IBundle extends Document, BundleEntity { };
 export type CreateBundleRequest = BundleEntity;
 
 
+// update bundle 
+export type UpdateBundleRequest = Partial<BundleEntity>;
+
+
 
 // bundle response 
 export type BundleResponse = BundleEntity & {

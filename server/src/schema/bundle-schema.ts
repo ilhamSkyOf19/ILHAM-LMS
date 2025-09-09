@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 import { IBundle } from "../models/bundle-model";
+import Manager from "./manager-schema";
 
 
 
@@ -28,6 +29,22 @@ const bundleSchema = new Schema<IBundle>({
     timestamps: true
 })
 
+
+// delete 
+bundleSchema.post('findOneAndDelete', async function (doc) {
+    try {
+        // delete relasi to course
+        await Manager.updateMany({
+            bundle: doc._id
+        }, {
+            $set: {
+                bundle: null
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 // create model 
 const Bundle = model<IBundle>("Bundle", bundleSchema);
