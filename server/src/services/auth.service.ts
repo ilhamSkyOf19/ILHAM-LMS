@@ -74,7 +74,7 @@ export class AuthService {
 
 
     // sign in 
-    static async signIn<T extends IManager | IStudent>(req: SigninRequest, Model: Model<T>): Promise<ResponseData<string>> {
+    static async signIn<T extends IManager | IStudent | IAdmin>(req: SigninRequest, Model: Model<T>): Promise<ResponseData<string>> {
 
         // get student by email 
         const user = await Model.findOne({ email: req.email });
