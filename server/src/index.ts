@@ -14,6 +14,8 @@ import cookieParser from 'cookie-parser';
 import adminRoute from './routes/admin.route';
 import contentRoute from './routes/content.route';
 import bundleRoute from './routes/bundle.route';
+import transactionBundleRoute from './routes/transaction-bundle.route';
+import paymentRoute from './routes/payment.route';
 
 
 // intialize express
@@ -41,7 +43,7 @@ const startServer = async () => {
 
 
     // check
-    app.get('/', (req, res) => {
+    app.get('/home', (req, res) => {
         res.send('Hello World!')
     })
 
@@ -54,6 +56,10 @@ const startServer = async () => {
     app.use('/api/category', categoryRoute);
     app.use('/api/:idCourse/content', contentRoute);
     app.use('/api/bundle', bundleRoute);
+
+    // payment 
+    app.use('/api/transaction-bundle', transactionBundleRoute);
+    app.use('/api/payment', paymentRoute);
 
 
 
