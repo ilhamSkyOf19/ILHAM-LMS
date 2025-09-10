@@ -28,11 +28,6 @@ const managerSchema = new Schema<IManager>(
             type: String,
             required: true
         },
-        bundle: {
-            type: Schema.Types.ObjectId,
-            ref: "Bundle",
-            default: null
-        },
         courses: [
             {
                 type: Schema.Types.ObjectId,

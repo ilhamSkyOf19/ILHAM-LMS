@@ -1,3 +1,11 @@
+// request 
+export type TransactionRequest = {
+    id_item: string
+}
+
+
+// create payment
+
 export type CreatePaymentRequest = {
     id_transaction: string;
     email_user: string;
@@ -11,3 +19,4 @@ export type CreatePaymentRequest = {
 export type PaymentResponse = {
     redirect_url: string;
 }
+

@@ -3,6 +3,8 @@ import Manager from "../schema/manager-schema";
 
 import bcrypt from 'bcrypt';
 import { ResponseData, ResponseMessage } from "../types/types";
+import TransactionBundle from "../schema/transaction-bundle-schema";
+import { BundleEntity, BundleResponse, toBundleResponse } from "../models/bundle-model";
 export class ManagerService {
     // update manager
     static async update(id: string, req: UpdateManagerRequest): Promise<ResponseData<ManagerResponse>> {
@@ -72,8 +74,8 @@ export class ManagerService {
         // get data 
         const response = await Manager.findById({ _id: id })
             .populate('courses')
-            .populate('bundle', '-createdAt -updatedAt -__v')
             .lean<ManagerResponse>();
+
 
 
         // cek response 
@@ -82,10 +84,21 @@ export class ManagerService {
         }
 
 
+        const transaction = await TransactionBundle.findOne({
+            id_manager: response._id,
+            status: 'success'
+        }).populate<{ id_bundle: BundleEntity }>('id_bundle', 'name limit_course limit_student benefits').lean<{ id_bundle: BundleResponse }>();
+
         return toManagerResponse({
             ...response,
             _id: response._id as string,
+            bundle: transaction?.id_bundle ? {
+                name: transaction.id_bundle.name,
+                limit_course: transaction.id_bundle.limit_course,
+                limit_student: transaction.id_bundle.limit_student,
+                benefits: transaction.id_bundle.benefits
+            } : null,
             avatarUrl: response.avatar
-        })
+        });
     }
 }

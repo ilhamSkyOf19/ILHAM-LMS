@@ -14,8 +14,7 @@ import cookieParser from 'cookie-parser';
 import adminRoute from './routes/admin.route';
 import contentRoute from './routes/content.route';
 import bundleRoute from './routes/bundle.route';
-import transactionBundleRoute from './routes/transaction-bundle.route';
-import paymentRoute from './routes/payment.route';
+import transactionRoute from './routes/transaction.route';
 
 
 // intialize express
@@ -58,8 +57,7 @@ const startServer = async () => {
     app.use('/api/bundle', bundleRoute);
 
     // payment 
-    app.use('/api/transaction-bundle', transactionBundleRoute);
-    app.use('/api/payment', paymentRoute);
+    app.use('/api/payment', transactionRoute);
 
 
 

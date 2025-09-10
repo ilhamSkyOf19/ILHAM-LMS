@@ -9,14 +9,13 @@ export type ManagerEntity = {
     role: 'STUDENT' | 'MANAGER' | 'ADMIN'
     avatar: string
     courses: Types.ObjectId[]
-    bundle: Types.ObjectId | null;
 }
 // model db 
 export interface IManager extends ManagerEntity, Document { }
 
 
 // create request 
-export type CreateManagerRequest = Omit<ManagerEntity, '_id' | 'bundle' | 'role' | 'courses'>;
+export type CreateManagerRequest = Omit<ManagerEntity, '_id' | 'role' | 'courses'>;
 
 
 // update type 
@@ -24,10 +23,15 @@ export type UpdateManagerRequest = Partial<CreateManagerRequest>;
 
 
 // response manager 
-export type ManagerResponse = Omit<ManagerEntity, 'password' | 'courses' | 'bundle'> & {
+export type ManagerResponse = Omit<ManagerEntity, 'password' | 'courses'> & {
     _id: string;
     avatarUrl: string;
-    bundle: BundleResponse;
+    bundle: {
+        name: string
+        limit_course: number
+        limit_student: number
+        benefits: string[]
+    } | null;
     courses: {
         _id: string
     }[]; // type courses

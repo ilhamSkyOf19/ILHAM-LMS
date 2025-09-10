@@ -7,7 +7,8 @@ const transactionBundleSchema = new Schema<ITransactionBundle>({
     id_manager: {
         type: Schema.Types.ObjectId,
         ref: "Manager",
-        required: true
+        required: true,
+        index: true
     },
     id_bundle: {
         type: Schema.Types.ObjectId,
@@ -24,6 +25,9 @@ const transactionBundleSchema = new Schema<ITransactionBundle>({
     timestamps: true
 })
 
+
+// index compund
+transactionBundleSchema.index({ id_manager: 1, status: 1 });
 
 // create model 
 export const TransactionBundle = model<ITransactionBundle>("TransactionBundle", transactionBundleSchema)

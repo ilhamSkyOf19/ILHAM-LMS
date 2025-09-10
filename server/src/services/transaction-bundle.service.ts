@@ -46,7 +46,7 @@ export class TransactionBundleService {
         const payment = await PaymentService.payment({
             id_transaction: response._id as string,
             email_user: manager.email,
-            price: req.price,
+            price: bundle.price,
             name: "bundle"
         })
 

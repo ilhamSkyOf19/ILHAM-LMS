@@ -1,8 +1,10 @@
 import { BundleEntity } from "../models/bundle-model";
 import { CourseAllResponse, CourseCreateRequest, CourseResponse, CourseUpdateRequest, toAllCourseResponse, toCourseResponse } from "../models/course-model";
+import { ManagerEntity, ManagerResponse } from "../models/manager-model";
 import Category from "../schema/category-schema";
 import Course from "../schema/course-schema";
 import Manager from "../schema/manager-schema";
+import TransactionBundle from "../schema/transaction-bundle-schema";
 import { ResponseData, ResponseMessage } from "../types/types";
 
 export class CourseService {
@@ -10,7 +12,7 @@ export class CourseService {
     static async create(req: CourseCreateRequest, managerId: string): Promise<ResponseData<CourseResponse>> {
 
         // cek manager
-        const manager = await Manager.findById(managerId).populate<{ bundle: BundleEntity }>('bundle', ' limit_course limit_student').lean();
+        const manager = await Manager.findById(managerId).lean<ManagerResponse>();
 
         // cek 
         if (!manager) {
@@ -20,17 +22,24 @@ export class CourseService {
             }
         };
 
+        // cek transaction bundle 
+        const bundle = await TransactionBundle.findOne({
+            id_manager: manager._id,
+            status: 'success'
+        }).populate<{ id_bundle: BundleEntity }>('id_bundle').lean<{ id_bundle: BundleEntity }>();
+
+
 
 
 
         // cek limit course 
-        if (!manager.bundle) {
+        if (!bundle) {
             return {
                 success: false,
-                message: 'limit course reached'
+                message: 'Buy a bundle first'
             }
         } else {
-            if (manager.courses.length >= manager.bundle.limit_course) {
+            if (manager.courses.length >= bundle.id_bundle.limit_course) {
                 return {
                     success: false,
                     message: 'limit course reached'
