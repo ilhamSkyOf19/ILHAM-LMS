@@ -80,9 +80,10 @@ export class PaymentController {
                     if (name === "bundle") {
                         if (type === 'extend') {
                             // cek response
-                            const findTransaction = await TransactionBundle.findOne({ _id: order_id });
+                            const findTransaction = await TransactionBundle.findOne({ _id: order_id, status: "success" });
 
 
+                            // cek transaction
                             if (!findTransaction) {
                                 return res.status(400).json({
                                     success: false,
@@ -90,13 +91,19 @@ export class PaymentController {
                                 });
                             }
 
+                            // date conditional
+                            const baseDate = findTransaction.expiresAt > new Date()
+                                ? findTransaction.expiresAt
+                                : new Date()
+
+
+
                             // update expire + 30 days
                             await TransactionBundle.findByIdAndUpdate(
                                 { _id: order_id },
-                                { $set: { expiresAt: new Date(findTransaction.expiresAt.getTime() + 30 * 24 * 60 * 60 * 1000) } },
+                                { $set: { expiresAt: new Date(baseDate.getTime() + 30 * 24 * 60 * 60 * 1000) } },
                                 { new: true, runValidators: true }
                             );
-
 
                             return {
                                 success: true,
@@ -105,6 +112,8 @@ export class PaymentController {
 
 
                         } else {
+
+
                             // cek response
                             const response = await PaymentService.updatePayment<ITransactionBundle>({ id: order_id, status: "success" }, TransactionBundle);
 
@@ -125,24 +134,11 @@ export class PaymentController {
                 case "cancel":
                 case "expire":
                 case "failure":
-                    if (name === "bundle") {
-                        const response = await PaymentService.updatePayment<ITransactionBundle>({ id: order_id, status: "failure" }, TransactionBundle);
-
-                        if (!response.success) {
-                            console.log(response);
-                            return res.status(400).json(response)
-                        }
-                        return res.status(200).json({
-                            success: true,
-                            message: "Failure"
-                        });
-                    }
+                    console.log("Transaction pending, skip extend:", order_id);
                     break;
                 default:
-                    return res.status(400).json({
-                        success: false,
-                        message: "Invalid transaction status"
-                    })
+                    console.log("Transaction pending, skip extend:", order_id);
+                    break;
             }
 
 

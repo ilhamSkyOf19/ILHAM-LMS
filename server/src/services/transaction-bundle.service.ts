@@ -34,60 +34,48 @@ export class TransactionBundleService {
             id_manager: req.id_manager,
             id_bundle: req.id_bundle,
             status: "success"
-        });
+        }).lean();
+
+
 
         // cek transaction 
         if (findTransaction) {
             if (findTransaction.id_bundle.toString() === req.id_bundle) {
-
-                // cek expire at 
-                if (findTransaction.expiresAt > new Date()) {
-
-                    console.log("masuk");
-                    // payment 
-                    const payment = await PaymentService.payment({
-                        id_transaction: findTransaction._id as string,
-                        email_user: manager.email,
-                        price: bundle.price,
-                        name: "bundle"
-                    }, "extend");
+                // payment
+                const payment = await PaymentService.payment({
+                    id_transaction: findTransaction._id as string,
+                    email_user: manager.email,
+                    price: bundle.price,
+                    name: "bundle"
+                }, "extend");
 
 
-                    // cek payment 
-                    if (!payment.success) return payment;
+                // cek payment
+                if (!payment.success) return payment;
 
 
-                    // return 
-                    return {
-                        success: true,
-                        data: payment.data.redirect_url
-                    }
-
-                } else {
-
-                    // findTransaction.expiresAt = new Date()
-                    // findTransaction.expiresAt.setDate(new Date().getDate() + 30);
-
-                    // await findTransaction.save();
-
-                    // return {
-                    //     success: false,
-                    //     message: "transaction longer than 30 days"
-                    // }
-
+                // return
+                return {
+                    success: true,
+                    data: payment.data.redirect_url
                 }
-            } else {
-                // update transaction
-                // findTransaction.status = "failed";
-                // await findTransaction.save();
-
             }
         }
 
 
+        // delete transaction
+        await TransactionBundle.findOneAndDelete({
+            id_manager: req.id_manager,
+            status: "success"
+        })
+
+
+
+
+
+
 
         // expires at
-
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + 30); // set to 30 days from now
 
