@@ -20,6 +20,10 @@ const transactionBundleSchema = new Schema<ITransactionBundle>({
         enum: ["pending", "success", "failed"],
         default: "pending",
         required: true
+    },
+    expiresAt: {
+        type: Date,
+        required: true
     }
 }, {
     timestamps: true

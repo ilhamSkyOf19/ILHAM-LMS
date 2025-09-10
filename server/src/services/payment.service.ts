@@ -9,7 +9,7 @@ export class PaymentService {
 
 
     // payment bundle 
-    static async payment(req: CreatePaymentRequest): Promise<ResponseData<PaymentResponse>> {
+    static async payment(req: CreatePaymentRequest, type: "extend" | "new"): Promise<ResponseData<PaymentResponse>> {
 
 
         // midtrans url
@@ -30,7 +30,7 @@ export class PaymentService {
             body: JSON.stringify({
                 // transaction details
                 transaction_details: {
-                    order_id: `${req.name}-${req.id_transaction}`,
+                    order_id: `${type}-${req.name}-${req.id_transaction}-${Math.floor(Math.random() * 100)}`,
                     gross_amount: req.price,
                 },
                 credit_card: {

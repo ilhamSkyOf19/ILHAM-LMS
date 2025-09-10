@@ -5,6 +5,7 @@ export type TransactionBundleEntity = {
     id_manager: Types.ObjectId
     id_bundle: Types.ObjectId
     status: 'pending' | 'success' | 'failed'
+    expiresAt: Date
 }
 
 

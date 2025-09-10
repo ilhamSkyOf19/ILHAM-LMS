@@ -68,7 +68,7 @@ export class PaymentController {
     static async handleAfterPayment(req: Request, res: Response<ResponseMessage>) {
         try {
             // get name & id order
-            const [name, order_id] = req.body.order_id.split("-");
+            const [type, name, order_id] = req.body.order_id.split("-") as ["new" | "extend", string, string];
 
 
             // get body
@@ -78,17 +78,46 @@ export class PaymentController {
                 case "capture":
                 case "settlement":
                     if (name === "bundle") {
-                        const response = await PaymentService.updatePayment<ITransactionBundle>({ id: order_id, status: "success" }, TransactionBundle);
+                        if (type === 'extend') {
+                            // cek response
+                            const findTransaction = await TransactionBundle.findOne({ _id: order_id });
 
-                        if (!response.success) {
-                            console.log(response);
-                            return res.status(400).json(response)
+
+                            if (!findTransaction) {
+                                return res.status(400).json({
+                                    success: false,
+                                    message: "Transaction not found"
+                                });
+                            }
+
+                            // update expire + 30 days
+                            await TransactionBundle.findByIdAndUpdate(
+                                { _id: order_id },
+                                { $set: { expiresAt: new Date(findTransaction.expiresAt.getTime() + 30 * 24 * 60 * 60 * 1000) } },
+                                { new: true, runValidators: true }
+                            );
+
+
+                            return {
+                                success: true,
+                                message: "Success"
+                            }
+
+
+                        } else {
+                            // cek response
+                            const response = await PaymentService.updatePayment<ITransactionBundle>({ id: order_id, status: "success" }, TransactionBundle);
+
+                            if (!response.success) {
+                                console.log(response);
+                                return res.status(400).json(response)
+                            }
+
+                            return res.status(200).json({
+                                success: true,
+                                message: "Success"
+                            });
                         }
-
-                        return res.status(200).json({
-                            success: true,
-                            message: "Success"
-                        });
                     }
 
                     break;
