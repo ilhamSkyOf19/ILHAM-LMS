@@ -11,6 +11,33 @@ import { TokenRequest } from '../models/jwt-model';
 
 export class StudentController {
 
+    // get detail
+    static async getDetail(req: TokenRequest, res: Response<ResponseData<StudentResponse>>, next: NextFunction) {
+        try {
+
+            // get data id 
+            const id = req.data?.id as string;
+
+            // get student 
+            const student = await StudentService.getDetail(id);
+
+
+            // cek 
+            if (!student.success) {
+                return res.status(400).json(student)
+            }
+
+
+            // return 
+            return res.status(200).json(student)
+
+        } catch (error) {
+            // error handle
+            console.log(error);
+            next(error)
+        }
+    }
+
 
     // create 
     static async create(req: Request<{}, {}, CreateStudentRequest>, res: Response<ResponseData<string>>, next: NextFunction) {

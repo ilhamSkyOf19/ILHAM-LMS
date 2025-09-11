@@ -33,6 +33,14 @@ export type DeleteStudentRequest = {
 export type StudentResponse = Omit<StudentEntity, "password"> & {
     _id: string;
     avatarUrl: string;
+    courses: {
+        _id: string;
+        name: string;
+        thumbnail: string;
+        category: {
+            name: string;
+        };
+    }[] | null
 };
 
 
@@ -47,5 +55,11 @@ export const toStudentResponse = (
         role: student.role,
         avatar: student.avatar,
         avatarUrl: student.avatarUrl,
+        courses: student.courses ? student.courses.map(item => ({
+            _id: item._id.toString(),
+            name: item.name,
+            thumbnail: item.thumbnail,
+            category: item.category
+        })) : null
     };
 };

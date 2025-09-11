@@ -10,6 +10,9 @@ import { AuthController } from '../controllers/auth.controller';
 
 const studentRoute: Router = express.Router();
 
+// get detail 
+studentRoute.get('/detail', tokenMiddleware("STUDENT"), StudentController.getDetail)
+
 // sign in
 studentRoute.post(
     '/signin',

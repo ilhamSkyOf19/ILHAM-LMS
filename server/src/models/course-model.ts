@@ -63,7 +63,7 @@ export const toCourseResponse = (
             _id: course.manager._id.toString(),
         },
         category: {
-            _id: course.category._id.toString()
+            _id: course.category._id.toString(),
         },
         contents: course.contents ? course.contents.map(content => ({
             _id: content._id.toString()
