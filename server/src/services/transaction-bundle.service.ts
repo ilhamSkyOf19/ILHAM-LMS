@@ -11,7 +11,7 @@ export class TransactionBundleService {
     static async create(req: CreateTransactionBundleRequest): Promise<ResponseData<string>> {
 
         // cek bundle 
-        const bundle = await Bundle.findById(req.id_bundle);
+        const bundle = await Bundle.findById(req.bundle);
 
         // cek bundle 
         if (!bundle) return {
@@ -20,7 +20,7 @@ export class TransactionBundleService {
         };
 
         // cek manager 
-        const manager = await Manager.findById(req.id_manager);
+        const manager = await Manager.findById(req.manager);
 
         // cek manager 
         if (!manager) return {
@@ -31,16 +31,18 @@ export class TransactionBundleService {
 
         // cek transaction 
         const findTransaction = await TransactionBundle.findOne({
-            id_manager: req.id_manager,
-            id_bundle: req.id_bundle,
+            manager: req.manager,
             status: "success"
-        }).lean();
+        });
+
+        console.log(req)
+        console.log(findTransaction);
 
 
 
         // cek transaction 
         if (findTransaction) {
-            if (findTransaction.id_bundle.toString() === req.id_bundle) {
+            if (findTransaction.bundle.toString() === req.bundle) {
                 // payment
                 const payment = await PaymentService.payment({
                     id_transaction: findTransaction._id as string,
@@ -59,18 +61,11 @@ export class TransactionBundleService {
                     success: true,
                     data: payment.data.redirect_url
                 }
+            } else if (findTransaction.bundle.toString() !== req.bundle) {
+                // delete transaction
+                await findTransaction.deleteOne();
             }
         }
-
-
-        // delete transaction
-        await TransactionBundle.findOneAndDelete({
-            id_manager: req.id_manager,
-            status: "success"
-        })
-
-
-
 
 
 
@@ -82,8 +77,8 @@ export class TransactionBundleService {
 
         // create db 
         const transaction = await TransactionBundle.create({
-            id_manager: req.id_manager,
-            id_bundle: req.id_bundle,
+            manager: req.manager,
+            bundle: req.bundle,
             status: "pending",
             expiresAt
         });

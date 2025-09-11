@@ -22,7 +22,8 @@ const managerSchema = new Schema<IManager>(
             type: String,
             enum: ["STUDENT", "MANAGER", "ADMIN"],
             default: "MANAGER",
-            required: true
+            required: true,
+            immutable: true
         },
         avatar: {
             type: String,

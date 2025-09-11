@@ -87,16 +87,16 @@ export class ManagerService {
         const transaction = await TransactionBundle.findOne({
             id_manager: response._id,
             status: 'success'
-        }).populate<{ id_bundle: BundleEntity }>('id_bundle', 'name limit_course limit_student benefits').lean<{ id_bundle: BundleResponse }>();
+        }).populate<{ bundle: BundleEntity }>('bundle', 'name limit_course limit_student benefits').lean<{ bundle: BundleResponse }>();
 
         return toManagerResponse({
             ...response,
             _id: response._id as string,
-            bundle: transaction?.id_bundle ? {
-                name: transaction.id_bundle.name,
-                limit_course: transaction.id_bundle.limit_course,
-                limit_student: transaction.id_bundle.limit_student,
-                benefits: transaction.id_bundle.benefits
+            bundle: transaction?.bundle ? {
+                name: transaction.bundle.name,
+                limit_course: transaction.bundle.limit_course,
+                limit_student: transaction.bundle.limit_student,
+                benefits: transaction.bundle.benefits
             } : null,
             avatarUrl: response.avatar
         });

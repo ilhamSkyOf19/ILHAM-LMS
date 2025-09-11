@@ -14,6 +14,11 @@ const transactionRoute: Router = Router();
 // payment bundle
 transactionRoute.post('/bundle', tokenMiddleware("MANAGER"), ValidationRequest<TransactionRequest>(PaymentValidation.CREATE), PaymentController.transaction('bundle'));
 
+
+// payment course
+transactionRoute.post('/course', tokenMiddleware("STUDENT"), ValidationRequest<TransactionRequest>(PaymentValidation.CREATE), PaymentController.transaction('course'));
+
+
 // handle after payment
 transactionRoute.post('/handleAfterPayment', PaymentController.handleAfterPayment)
 

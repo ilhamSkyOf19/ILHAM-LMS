@@ -2,6 +2,7 @@ import { Model } from "mongoose";
 import { CreatePaymentRequest, PaymentResponse } from "../models/payment-model";
 import { ITransactionBundle } from "../models/transaction-bundle-model";
 import { ResponseData, ResponseMessage } from "../types/types";
+import { ITraansactionCourse } from "../models/transaction-course-model";
 
 
 
@@ -30,7 +31,7 @@ export class PaymentService {
             body: JSON.stringify({
                 // transaction details
                 transaction_details: {
-                    order_id: `${type}-${req.name}-${req.id_transaction}-${Math.floor(Math.random() * 100)}`,
+                    order_id: `${type}-${req.name}-${req.id_transaction}-${Math.floor(Math.random() * 1000)}`,
                     gross_amount: req.price,
                 },
                 credit_card: {
@@ -72,7 +73,7 @@ export class PaymentService {
 
 
     // payment update 
-    static async updatePayment<T extends ITransactionBundle>(req: { id: string, status: "success" | "failure" }, model: Model<T>): Promise<ResponseMessage> {
+    static async updatePayment<T extends ITransactionBundle | ITraansactionCourse>(req: { id: string, status: "success" | "failure" }, model: Model<T>): Promise<ResponseMessage> {
 
         // cek transaction
         const response = await model.findByIdAndUpdate({

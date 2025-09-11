@@ -1,9 +1,12 @@
 import { TokenRequest } from "../models/jwt-model";
 import { TransactionRequest } from "../models/payment-model";
 import { CreateTransactionBundleRequest, ITransactionBundle } from "../models/transaction-bundle-model";
+import { ITraansactionCourse } from "../models/transaction-course-model";
 import TransactionBundle from "../schema/transaction-bundle-schema";
+import TransactionCourse from "../schema/transaction-course-schema";
 import { PaymentService } from "../services/payment.service";
 import { TransactionBundleService } from "../services/transaction-bundle.service";
+import { TransactionCourseService } from "../services/transaction-course.service";
 import { ResponseData, ResponseMessage } from "../types/types";
 import { NextFunction, Request, Response } from "express";
 export class PaymentController {
@@ -22,10 +25,11 @@ export class PaymentController {
 
 
                 if (transaction === 'bundle') {
-                    // get service 
+
+                    // get service bundle 
                     const response = await TransactionBundleService.create({
-                        id_bundle: body.id_item,
-                        id_manager: id
+                        bundle: body.id_item,
+                        manager: id
                     });
 
 
@@ -37,10 +41,11 @@ export class PaymentController {
                     // response 
                     return res.status(200).json(response)
                 } else {
-                    // get service 
-                    const response = await TransactionBundleService.create({
-                        id_bundle: body.id_item,
-                        id_manager: id
+
+                    // get service course
+                    const response = await TransactionCourseService.create({
+                        student: id,
+                        course: body.id_item
                     });
 
 
@@ -127,6 +132,23 @@ export class PaymentController {
                                 message: "Success"
                             });
                         }
+                    } else {
+
+                        // cek response
+                        const response = await PaymentService.updatePayment<ITraansactionCourse>({ id: order_id, status: "success" }, TransactionCourse);
+
+
+                        // cek response
+                        if (!response.success) {
+                            console.log(response);
+                            return res.status(400).json(response)
+                        }
+
+
+                        return res.status(200).json({
+                            success: true,
+                            message: "Success"
+                        });
                     }
 
                     break;

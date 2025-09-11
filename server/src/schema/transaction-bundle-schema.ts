@@ -4,13 +4,13 @@ import { ITransactionBundle } from "../models/transaction-bundle-model";
 
 
 const transactionBundleSchema = new Schema<ITransactionBundle>({
-    id_manager: {
+    manager: {
         type: Schema.Types.ObjectId,
         ref: "Manager",
         required: true,
         index: true
     },
-    id_bundle: {
+    bundle: {
         type: Schema.Types.ObjectId,
         ref: "Bundle",
         required: true
@@ -31,7 +31,7 @@ const transactionBundleSchema = new Schema<ITransactionBundle>({
 
 
 // index compund
-transactionBundleSchema.index({ id_manager: 1, status: 1 });
+transactionBundleSchema.index({ manager: 1, bundle: 1, status: 1 });
 
 // create model 
 export const TransactionBundle = model<ITransactionBundle>("TransactionBundle", transactionBundleSchema)

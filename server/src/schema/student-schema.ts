@@ -20,7 +20,10 @@ const studentSchema = new Schema<IStudent>(
         },
         role: {
             type: String,
-            required: true
+            enum: ["STUDENT", "MANAGER", "ADMIN"],
+            default: "STUDENT",
+            required: true,
+            immutable: true
         },
         avatar: {
             type: String,
