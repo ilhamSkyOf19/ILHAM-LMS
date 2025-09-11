@@ -15,7 +15,7 @@ export interface IStudent extends Document, StudentEntity { }
 
 
 // create request 
-export type CreateStudentRequest = Omit<StudentEntity, "role" | "limit_course">;
+export type CreateStudentRequest = Omit<StudentEntity, "role" | "limit_course" | "avatar">;
 
 // update request
 export type UpdateStudentRequest = Partial<

@@ -14,12 +14,12 @@ import DashboardStudents from "../pages/dashboard/student/DashboardStudents";
 
 
 // jsons
-import user from "../jsons/user.json";
 import statistik from "../jsons/statistik.json";
 import courses from "../jsons/courses.json";
 import students from "../jsons/students.json";
 import NewCourse from "../pages/dashboard/course/NewCourse";
 import FormStudent from "../pages/dashboard/student/FormStudent";
+import loaderAuth from "../contexts/loaders/useLoaderAuth";
 
 
 
@@ -64,7 +64,7 @@ const router = createBrowserRouter([
     {
         path: '/dashboard',
         loader: () => {
-            return user;
+            return loaderAuth('MANAGER');
         },
         element: <LayoutDashboard />,
         children: [

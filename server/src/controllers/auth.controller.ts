@@ -1,12 +1,13 @@
 import { IAdmin } from "../models/admin-mode";
-import { SigninRequest } from "../models/auth-model";
+import { AuthResponse, SigninRequest } from "../models/auth-model";
+import { TokenRequest } from "../models/jwt-model";
 import { IManager } from "../models/manager-model";
 import { IStudent } from "../models/student-model";
 import Admin from "../schema/admin-schema";
 import Manager from "../schema/manager-schema";
 import Student from "../schema/student-schema";
 import { AuthService } from "../services/auth.service";
-import { ResponseMessage } from "../types/types";
+import { ResponseData, ResponseMessage } from "../types/types";
 import { Request, Response, NextFunction } from "express";
 
 
@@ -115,6 +116,44 @@ export class AuthController {
         } catch (error) {
             console.log(error);
             next(error)
+        }
+    }
+
+
+    // get auth 
+    static async getAuth(req: TokenRequest, res: Response<ResponseData<AuthResponse>>) {
+        try {
+
+            // get user 
+            const user = req.data;
+
+            // cek user 
+            if (!user) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Unauthorized"
+                })
+            }
+
+
+            // return
+            return res.status(200).json({
+                success: true,
+                data: {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role
+                }
+            })
+
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                success: false,
+                message: "Internal Server Error"
+            })
         }
     }
 }

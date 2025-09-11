@@ -7,6 +7,7 @@ const tokenJWT = (req: JWTPayloadType): string => {
     // get payload
     const payload = {
         id: req.id,
+        name: req.name,
         email: req.email,
         role: req.role
     } as JWTPayloadType;

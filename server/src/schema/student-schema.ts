@@ -27,7 +27,8 @@ const studentSchema = new Schema<IStudent>(
         },
         avatar: {
             type: String,
-            required: true
+            required: true,
+            default: "default"
         }
     },
     { timestamps: true }

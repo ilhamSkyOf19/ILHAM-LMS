@@ -47,6 +47,7 @@ export class AuthService {
         // get payload 
         const payload = {
             id: doc.id,
+            name: doc.name,
             email: doc.email,
             role: doc.role
         } as JWTPayloadType;
@@ -56,6 +57,7 @@ export class AuthService {
         // generate 
         const token = tokenJWT({
             id: payload.id,
+            name: payload.name,
             email: payload.email,
             role: payload.role
         });
@@ -101,6 +103,7 @@ export class AuthService {
         // generate token 
         const token = tokenJWT({
             id: user.id,
+            name: user.name,
             email: user.email,
             role: user.role
         });
@@ -141,6 +144,7 @@ export class AuthService {
         // generate token 
         const token = tokenJWT({
             id: manager.id,
+            name: manager.name,
             email: manager.email,
             role: manager.role
         });

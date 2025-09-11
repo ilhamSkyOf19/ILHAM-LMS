@@ -16,6 +16,7 @@ import contentRoute from './routes/content.route';
 import bundleRoute from './routes/bundle.route';
 import transactionRoute from './routes/transaction.route';
 import cors from 'cors';
+import authRoute from './routes/auth.route';
 
 
 // intialize express
@@ -24,12 +25,10 @@ const app: Application = express();
 const PORT = process.env.PORT || 3000;
 
 
-// cors 
-app.use(cors())
 
 // initialize cors
 app.use(cors({
-    origin: process.env.ORIGIN || "http://localhost:3000",
+    origin: process.env.ORIGIN || "http://localhost:5173",
     methods: ["GET", "POST", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
@@ -57,13 +56,29 @@ const startServer = async () => {
     })
 
 
+
+    // auth route
+    app.use('/api', authRoute);
+
     // student route
-    app.use('/api/admin', adminRoute);
     app.use('/api/student', studentRoute);
+
+    // admin route
+    app.use('/api/admin', adminRoute);
+
+    // manager route
     app.use('/api/manager', managerRoute);
+
+    // course route
     app.use('/api/course', courseRoute);
+
+    // category route
     app.use('/api/category', categoryRoute);
+
+    // content route
     app.use('/api/:idCourse/content', contentRoute);
+
+    // bundle route
     app.use('/api/bundle', bundleRoute);
 
     // payment 

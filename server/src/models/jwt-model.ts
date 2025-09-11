@@ -3,6 +3,7 @@ import { Request } from "express";
 // type payload 
 export type JWTPayloadType = {
     id: string,
+    name: string,
     email: string,
     role: 'ADMIN' | 'STUDENT' | 'MANAGER'
 }

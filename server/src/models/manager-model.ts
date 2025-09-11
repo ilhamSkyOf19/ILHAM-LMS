@@ -15,7 +15,7 @@ export interface IManager extends ManagerEntity, Document { }
 
 
 // create request 
-export type CreateManagerRequest = Omit<ManagerEntity, '_id' | 'role' | 'courses'>;
+export type CreateManagerRequest = Omit<ManagerEntity, '_id' | 'role' | 'courses' | 'avatar'>;
 
 
 // update type 

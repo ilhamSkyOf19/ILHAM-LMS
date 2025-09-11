@@ -1,0 +1,34 @@
+import AXIOS from "../lib/axios";
+import type { AuthResponseType, SignUpRequestType } from "../models/auth-model";
+import type { ResponseData, ResponseMessage } from "../types/types";
+
+export class AuthService {
+
+    // get auth 
+    static async getAuth(role: 'MANAGER' | 'STUDENT'): Promise<ResponseData<AuthResponseType>> {
+
+        // get response 
+        const response = await AXIOS.get(`/auth/${role}`).then(res => res.data);
+
+        // return response 
+        return response
+    }
+
+
+    // sign up 
+    static async signUp(req: SignUpRequestType, type: 'student' | 'manager'): Promise<ResponseMessage> {
+
+        // get response
+        const response = await AXIOS.post(`${type === 'student' ? '/student/create' : '/manager/create'}`, req, {
+            headers: { 'Content-Type': 'application/json' }
+        }).then(res => res.data)
+
+
+        // return success 
+        return response;
+    }
+
+
+
+
+}

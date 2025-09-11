@@ -10,9 +10,10 @@ type Props = {
     type: 'manager' | 'student';
     auth: 'signin' | 'signup';
     handleSubmit: (e: BaseSyntheticEvent) => Promise<void>;
+    buttonDisable?: boolean
 }
 
-const FormAuthLayout: FC<Props> = ({ children, type, auth, handleSubmit }) => {
+const FormAuthLayout: FC<Props> = ({ children, type, auth, handleSubmit, buttonDisable }) => {
 
 
     // type form 
@@ -48,7 +49,7 @@ const FormAuthLayout: FC<Props> = ({ children, type, auth, handleSubmit }) => {
                 </div>
 
                 {/* button */}
-                <ButtonBlueShadowPurple type='submit' label={pathname.includes('signin') ? 'sign in' : 'sign up'} />
+                <ButtonBlueShadowPurple type='submit' label={pathname.includes('signin') ? 'sign in' : 'sign up'} disabled={buttonDisable} />
             </div>
 
             {/* link */}

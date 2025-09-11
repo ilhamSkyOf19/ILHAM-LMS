@@ -7,8 +7,7 @@ export class ManagerValidation {
     static readonly CREATE = z.object({
         name: z.string(),
         email: z.email(),
-        password: z.string(),
-        avatar: z.string()
+        password: z.string()
     }).strict() as ZodType<CreateManagerRequest>
 
     // update 

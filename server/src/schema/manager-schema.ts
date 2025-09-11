@@ -27,7 +27,8 @@ const managerSchema = new Schema<IManager>(
         },
         avatar: {
             type: String,
-            required: true
+            required: true,
+            default: "default"
         },
         courses: [
             {

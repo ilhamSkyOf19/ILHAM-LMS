@@ -21,7 +21,7 @@ export type ResponseData<T> =
 
 
 // response message 
-export type ResponseService =
+export type ResponseMessage =
     {
         success: boolean,
         message: string

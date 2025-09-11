@@ -100,6 +100,13 @@ export class ManagerController {
                 return res.status(400).json(manager)
             }
 
+            // create cookie 
+            res.cookie('token', manager.data, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                maxAge: 60 * 60 * 1000
+            })
+
 
             // return 
             return res.status(200).json(manager)

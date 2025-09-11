@@ -5,9 +5,10 @@ import bcrypt from 'bcrypt';
 import { ResponseData, ResponseMessage } from "../types/types";
 import TransactionBundle from "../schema/transaction-bundle-schema";
 import { BundleEntity, BundleResponse, toBundleResponse } from "../models/bundle-model";
+import tokenJWT from "../helper/token-jwt";
 export class ManagerService {
     // update manager
-    static async update(id: string, req: UpdateManagerRequest): Promise<ResponseData<ManagerResponse>> {
+    static async update(id: string, req: UpdateManagerRequest): Promise<ResponseData<ManagerResponse> & { token: string }> {
 
         // cek password 
         if (req.password) {
@@ -29,9 +30,20 @@ export class ManagerService {
         if (!response) {
             return {
                 success: false,
+                token: '',
                 message: 'manager not found'
             }
         };
+
+        // update cookie 
+        const token = tokenJWT({
+            id: response._id,
+            name: response.name,
+            email: response.email,
+            role: response.role
+        });
+
+
 
 
         return {
@@ -40,7 +52,8 @@ export class ManagerService {
                 ...response,
                 _id: response._id as string,
                 avatarUrl: response.avatar
-            })
+            }),
+            token: token
         }
     }
 

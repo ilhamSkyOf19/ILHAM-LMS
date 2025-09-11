@@ -52,6 +52,7 @@ const tokenMiddleware = (role: "STUDENT" | "MANAGER" | "ADMIN") => {
             // set request 
             req.data = {
                 id: payload.id,
+                name: payload.name,
                 email: payload.email,
                 role: payload.role
             }

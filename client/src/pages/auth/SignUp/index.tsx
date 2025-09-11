@@ -1,7 +1,13 @@
 import { type FC } from 'react'
 import FormAuthLayout from '../../../components/FormAuthLayout'
 import { useForm } from 'react-hook-form'
-
+import BoxInputBorderInset from '../../../components/BoxInputBorderInset'
+import MotionToLeft from '../../../motion/MotionToLeft'
+import MotionToRight from '../../../motion/MotionToRight'
+import BigTitleAuth from '../../../components/BigTitleAuth'
+import type { SignUpRequestType } from '../../../models/auth-model'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
 
 
 // icons 
@@ -9,19 +15,14 @@ import { useForm } from 'react-hook-form'
 import user from '../../../assets/images/icons/user-octagon-white.svg'
 import smsWhite from '../../../assets/images/icons/sms-white.svg'
 import keyWhite from '../../../assets/images/icons/key-white.svg'
-import BoxInputBorderInset from '../../../components/BoxInputBorderInset'
-import MotionToLeft from '../../../motion/MotionToLeft'
-import MotionToRight from '../../../motion/MotionToRight'
-import BigTitleAuth from '../../../components/BigTitleAuth'
+import { AuthValidation } from '../../../validations/auth-validation'
+import { AuthService } from '../../../services/auth.service'
+import { AxiosError } from 'axios'
+import { useNavigate } from 'react-router-dom'
+import { notif } from '../../../utils/sweetAlert'
 
 
 
-type FormData = {
-    name: string
-    email: string
-    password: string
-    confirmPassword: string
-}
 
 type Props = {
     type: 'manager' | 'student'
@@ -29,15 +30,51 @@ type Props = {
 
 const SignUp: FC<Props> = ({ type }) => {
 
-    // use form
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+    // navigate 
+    const navigate = useNavigate();
 
+    // use form
+    const { register, handleSubmit, formState: { errors } } = useForm<SignUpRequestType>({
+        resolver: zodResolver(AuthValidation.SIGN_UP)
     });
 
 
+    // handle mutation
+    const { isPending, mutateAsync } = useMutation({
+        mutationFn: (data: SignUpRequestType) => AuthService.signUp(data, type),
+        onError: (errors: unknown) => {
+            if (errors instanceof AxiosError) {
+
+                // notification
+                notif('error', errors.response ? errors.response.data.message : 'something went wrong');
+
+            } else {
+                console.log(errors)
+            }
+        },
+        onSuccess: (data) => {
+            // redirect
+            navigate('/dashboard');
+            console.log(data)
+        }
+    })
+
+
     // handle on submit
-    const onSubmit = (data: FormData) => {
-        console.log(data);
+    const onSubmit = (data: SignUpRequestType) => {
+        try {
+            // cek data 
+            if (!data) {
+                return
+            }
+
+            // response 
+            mutateAsync(data);
+
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 
@@ -56,11 +93,12 @@ const SignUp: FC<Props> = ({ type }) => {
                     <FormAuthLayout
                         type={type}
                         auth='signup'
+                        buttonDisable={isPending}
                         handleSubmit={handleSubmit(onSubmit)}
                     >
                         {/* name */}
                         <BoxInputBorderInset
-                            register={register('name', { required: 'name is required' })}
+                            register={register('name')}
                             type='text'
                             placeholder='Write your full name'
                             name='name'
@@ -71,7 +109,7 @@ const SignUp: FC<Props> = ({ type }) => {
 
                         {/* email */}
                         <BoxInputBorderInset
-                            register={register('email', { required: 'email is required' })}
+                            register={register('email')}
                             type='email'
                             placeholder='Write your email address'
                             name='email'
@@ -81,24 +119,13 @@ const SignUp: FC<Props> = ({ type }) => {
 
                         {/* password */}
                         <BoxInputBorderInset
-                            register={register('password', { required: 'password is required' })}
+                            register={register('password')}
                             type='password'
                             placeholder='Type your secure password'
                             name='password'
                             icon={keyWhite}
                             error={errors?.password}
                         />
-
-                        {/* confirm password */}
-                        <BoxInputBorderInset
-                            register={register('confirmPassword', { required: 'confirm password is required' })}
-                            type='password'
-                            placeholder='Confirm your password'
-                            name='confirmPassword'
-                            icon={keyWhite}
-                            error={errors?.confirmPassword}
-                        />
-
                     </FormAuthLayout>
                 </MotionToRight>
             </div>
