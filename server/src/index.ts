@@ -15,6 +15,7 @@ import adminRoute from './routes/admin.route';
 import contentRoute from './routes/content.route';
 import bundleRoute from './routes/bundle.route';
 import transactionRoute from './routes/transaction.route';
+import cors from 'cors';
 
 
 // intialize express
@@ -23,7 +24,15 @@ const app: Application = express();
 const PORT = process.env.PORT || 3000;
 
 
+// cors 
+app.use(cors())
 
+// initialize cors
+app.use(cors({
+    origin: process.env.ORIGIN || "http://localhost:3000",
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}))
 
 // body parse 
 app.use(bodyParser.json())
@@ -58,6 +67,7 @@ const startServer = async () => {
 
     // payment 
     app.use('/api/payment', transactionRoute);
+
 
 
 
