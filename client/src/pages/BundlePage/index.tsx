@@ -1,10 +1,18 @@
 import { type FC } from 'react'
 import BundleCard from '../../components/BundleCard'
 import { useLoaderData } from 'react-router-dom'
+import type { ResponseData } from '../../types/types';
+import type { BundleResponse } from '../../models/bundle-model';
 
 const BundlePage: FC = () => {
     // get loader 
-    const bundle = useLoaderData();
+    const bundle = useLoaderData() as ResponseData<BundleResponse[]>;
+
+
+    // handle error 
+    if (!bundle.success) {
+        alert(bundle.message);
+    }
 
     return (
         <div className='w-full py-12 flex flex-col justify-start items-center gap-12'>
@@ -23,10 +31,17 @@ const BundlePage: FC = () => {
 
             {/* bundle */}
             <div className='w-full flex flex-row justify-center items-start gap-12'>
-                {/* card bundle 1 */}
-                <BundleCard bundle={bundle[0]} />
-                {/* card bundle  */}
-                <BundleCard bundle={bundle[1]} />
+                {
+                    bundle.success && (
+                        <>
+                            {/* card bundle 1 */}
+                            <BundleCard bundle={bundle.data[0]} />
+                            {/* card bundle  */}
+                            <BundleCard bundle={bundle.data[1]} />
+
+                        </>
+                    )
+                }
             </div>
         </div>
     )

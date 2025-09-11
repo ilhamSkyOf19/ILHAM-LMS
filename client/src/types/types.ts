@@ -12,3 +12,17 @@ export type Student = {
     password: string;
     role: string;
 }
+
+
+// response data 
+export type ResponseData<T> =
+    { success: true, data: T }
+    | { success: false, message: string }
+
+
+// response message 
+export type ResponseService =
+    {
+        success: boolean,
+        message: string
+    }

@@ -15,7 +15,7 @@ const Navbar: FC = () => {
     // navbar 
     const menu: Menu[] = [
         {
-            link: '/welcome',
+            link: '/',
             label: 'Home'
         },
         {

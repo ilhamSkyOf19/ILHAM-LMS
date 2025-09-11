@@ -31,7 +31,8 @@ app.use(cors())
 app.use(cors({
     origin: process.env.ORIGIN || "http://localhost:3000",
     methods: ["GET", "POST", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
 }))
 
 // body parse 
