@@ -6,6 +6,10 @@ export type SignUpRequestType = {
 }
 
 
+// sign in request 
+export type SignInRequestType = Omit<SignUpRequestType, 'name'>
+
+
 // auth response 
 export type AuthResponseType = {
     id: string;
@@ -13,3 +17,4 @@ export type AuthResponseType = {
     email: string;
     role: 'STUDENT' | 'MANAGER';
 }
+

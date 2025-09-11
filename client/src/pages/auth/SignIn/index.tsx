@@ -10,28 +10,68 @@ import { useForm } from 'react-hook-form'
 import MotionToLeft from '../../../motion/MotionToLeft'
 import MotionToRight from '../../../motion/MotionToRight'
 import BigTitleAuth from '../../../components/BigTitleAuth'
+import { useNavigate } from 'react-router-dom'
+import { AuthValidation } from '../../../validations/auth-validation'
+import type { SignInRequestType } from '../../../models/auth-model'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { AuthService } from '../../../services/auth.service'
+import { AxiosError } from 'axios'
 
-
-type FormData = {
-    email: string
-    password: string
-}
 
 type Props = {
     type: 'manager' | 'student'
 }
 const SignIn: FC<Props> = ({ type }) => {
 
+    // navigate 
+    const navigate = useNavigate();
+
 
     // use hook form 
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+    const { register, handleSubmit, formState: { errors }, setError } = useForm<SignInRequestType>({
+        resolver: zodResolver(AuthValidation.SIGN_IN)
+    })
 
+    // use mutation 
+    const { isPending, mutateAsync } = useMutation({
+        mutationFn: (data: SignInRequestType) => AuthService.signIn(data, type),
+        onSuccess: (data) => {
+            // navigate 
+            navigate('/dashboard');
+            console.log(data)
+        },
+        onError: (errors: unknown) => {
+            if (errors instanceof AxiosError) {
+                console.log(errors.response?.data.message);
+                if (errors.status === 400) {
+                    // email or password wrong 
+                    setError(("email"), { type: 'manual', message: errors.response?.data.message });
+                    setError(("password"), { type: 'manual', message: errors.response?.data.message });
+
+                } else {
+                    console.log(errors.response?.data.message);
+                }
+
+            } else {
+                console.log(errors)
+            }
+        }
     })
 
 
     // on submit 
-    const onSubmit = (data: FormData) => {
-        console.log(data);
+    const onSubmit = (data: SignInRequestType) => {
+        try {
+            // cek data 
+            if (!data) return;
+
+            // mutae 
+            mutateAsync(data);
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 
@@ -62,6 +102,7 @@ const SignIn: FC<Props> = ({ type }) => {
                 <MotionToRight>
                     <FormAuthLayout
                         handleSubmit={handleSubmit(onSubmit)}
+                        buttonDisable={isPending}
                         type={type} auth='signin'>
                         {/* email */}
                         <BoxInputBorderInset
@@ -69,7 +110,7 @@ const SignIn: FC<Props> = ({ type }) => {
                             icon={smsWhite}
                             name='email'
                             placeholder='Write your email address'
-                            register={register('email', { required: 'email is required' })}
+                            register={register('email')}
                             error={errors?.email}
                         />
 
@@ -79,7 +120,7 @@ const SignIn: FC<Props> = ({ type }) => {
                             icon={keyWhite}
                             name='password'
                             placeholder='Type your secure password'
-                            register={register('password', { required: 'password is required' })}
+                            register={register('password')}
                             error={errors?.password}
                         />
 

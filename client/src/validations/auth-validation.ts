@@ -1,5 +1,5 @@
 import z, { ZodType } from 'zod'
-import type { SignUpRequestType } from '../models/auth-model'
+import type { SignInRequestType, SignUpRequestType } from '../models/auth-model'
 
 export class AuthValidation {
 
@@ -9,4 +9,11 @@ export class AuthValidation {
         email: z.email(),
         password: z.string().min(6, "Password must be at least 6 characters").max(50).trim()
     }).strict() satisfies ZodType<SignUpRequestType>
+
+
+    // sign in 
+    static readonly SIGN_IN = z.object({
+        email: z.email(),
+        password: z.string().min(6, "Password must be at least 6 characters").max(50).trim()
+    }).strict() satisfies ZodType<SignInRequestType>
 }

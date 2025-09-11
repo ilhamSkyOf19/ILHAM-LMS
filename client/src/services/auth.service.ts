@@ -1,5 +1,5 @@
 import AXIOS from "../lib/axios";
-import type { AuthResponseType, SignUpRequestType } from "../models/auth-model";
+import type { AuthResponseType, SignInRequestType, SignUpRequestType } from "../models/auth-model";
 import type { ResponseData, ResponseMessage } from "../types/types";
 
 export class AuthService {
@@ -26,6 +26,20 @@ export class AuthService {
 
         // return success 
         return response;
+    }
+
+
+    // sign in 
+    static async signIn(req: SignInRequestType, type: 'student' | 'manager'): Promise<ResponseMessage> {
+
+        // get response 
+        const response = await AXIOS.post(`${type === 'student' ? '/student/signin' : '/manager/signin'}`, req, {
+            headers: { 'Content-Type': 'application/json' }
+        }).then(res => res.data);
+
+
+        // return success
+        return response
     }
 
 

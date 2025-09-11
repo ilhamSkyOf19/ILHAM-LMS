@@ -19,7 +19,6 @@ import { AuthValidation } from '../../../validations/auth-validation'
 import { AuthService } from '../../../services/auth.service'
 import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { notif } from '../../../utils/sweetAlert'
 
 
 
@@ -34,7 +33,7 @@ const SignUp: FC<Props> = ({ type }) => {
     const navigate = useNavigate();
 
     // use form
-    const { register, handleSubmit, formState: { errors } } = useForm<SignUpRequestType>({
+    const { register, handleSubmit, formState: { errors }, setError } = useForm<SignUpRequestType>({
         resolver: zodResolver(AuthValidation.SIGN_UP)
     });
 
@@ -42,21 +41,24 @@ const SignUp: FC<Props> = ({ type }) => {
     // handle mutation
     const { isPending, mutateAsync } = useMutation({
         mutationFn: (data: SignUpRequestType) => AuthService.signUp(data, type),
-        onError: (errors: unknown) => {
-            if (errors instanceof AxiosError) {
-
-                // notification
-                notif('error', errors.response ? errors.response.data.message : 'something went wrong');
-
-            } else {
-                console.log(errors)
-            }
-        },
         onSuccess: (data) => {
             // redirect
             navigate('/dashboard');
             console.log(data)
-        }
+        },
+
+        onError: (errors: unknown) => {
+            if (errors instanceof AxiosError) {
+
+                if (errors.status === 409) {
+                    setError("email", { type: 'manual', message: errors.response?.data.message });
+                } else {
+                    console.log(errors.response?.data.message);
+                }
+            } else {
+                console.log(errors)
+            }
+        },
     })
 
 
