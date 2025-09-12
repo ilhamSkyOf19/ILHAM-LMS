@@ -3,22 +3,39 @@ import { CourseAllResponse, CourseCreateRequest, CourseResponse, CourseUpdateReq
 import { CourseService } from '../services/course.service';
 import { ResponseData, ResponseMessage } from '../types/types';
 import { TokenRequest } from '../models/jwt-model';
+import ValidationRequest from '../middlewares/validation-request';
+import { CourseValidation } from '../validation/course-validation';
+import validationService from '../services/validation.service';
+import { FileService } from '../services/file.service';
 
 
 export class CourseController {
     // create 
     static async create(req: TokenRequest<{}, {}, CourseCreateRequest>, res: Response<ResponseData<CourseResponse>>, next: NextFunction) {
         try {
-            // get body 
-            const body = req.body;
+
+
+            // cek validation 
+            const body = validationService<CourseCreateRequest>(CourseValidation.CREATE, req.body);
+
+            // cek validation 
+            if (!body.success) {
+                // cek file request
+                if (req.file) {
+                    await FileService.deleteFileRequest(req.file.path)
+                }
+
+                return res.status(400).json(body)
+            }
 
 
             // get data id 
             const { id } = req.data ?? { id: '' };
 
 
+
             // get service
-            const course = await CourseService.create(body, id);
+            const course = await CourseService.create({ ...body.data }, id, req.file?.filename ?? '');
 
             // cek response 
             if (!course.success) {

@@ -6,10 +6,11 @@ import Course from "../schema/course-schema";
 import Manager from "../schema/manager-schema";
 import TransactionBundle from "../schema/transaction-bundle-schema";
 import { ResponseData, ResponseMessage } from "../types/types";
+import { FileService } from "./file.service";
 
 export class CourseService {
     // create 
-    static async create(req: CourseCreateRequest, managerId: string): Promise<ResponseData<CourseResponse>> {
+    static async create(req: CourseCreateRequest, managerId: string, thumbnail: string): Promise<ResponseData<CourseResponse>> {
 
         // cek manager
         const manager = await Manager.findById(managerId).lean<ManagerResponse>();
@@ -22,13 +23,15 @@ export class CourseService {
             }
         };
 
+        console.log(manager);
+
         // cek transaction bundle 
         const bundle = await TransactionBundle.findOne({
-            id_manager: manager._id,
+            manager: manager._id,
             status: 'success'
-        }).populate<{ id_bundle: BundleEntity }>('id_bundle').lean<{ id_bundle: BundleEntity }>();
+        }).populate<{ bundle: BundleEntity }>('bundle').lean<{ bundle: BundleEntity }>();
 
-
+        console.log(bundle);
 
 
 
@@ -39,7 +42,7 @@ export class CourseService {
                 message: 'Buy a bundle first'
             }
         } else {
-            if (manager.courses.length >= bundle.id_bundle.limit_course) {
+            if (manager.courses.length >= bundle.bundle.limit_course) {
                 return {
                     success: false,
                     message: 'limit course reached'
@@ -65,7 +68,8 @@ export class CourseService {
         // create cours
         const doc = await Course.create({
             ...req,
-            manager: managerId
+            manager: managerId,
+            thumbnail: thumbnail
         });
 
 
@@ -196,6 +200,15 @@ export class CourseService {
                 success: false,
                 message: 'unauthorized'
             }
+        }
+
+        // delete thumbnail
+        const deleteThumbnail = await FileService.deleteFileFormPath(course.thumbnail, 'file');
+
+
+        // cek delete thumbnail
+        if (!deleteThumbnail.success) {
+            return deleteThumbnail
         }
 
         // delete data

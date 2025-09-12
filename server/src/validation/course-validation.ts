@@ -5,10 +5,9 @@ export class CourseValidation {
     // create
     static readonly CREATE = z.object({
         name: z.string(),
-        thumbnail: z.string(),
         tagline: z.string(),
         description: z.string(),
-        price: z.number(),
+        price: z.coerce.number(),
         category: z.string(),
     }).strict() as ZodType<CourseCreateRequest>
 

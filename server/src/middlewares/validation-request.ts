@@ -4,7 +4,9 @@ import { ResponseMessage } from "../types/types";
 
 
 
-const ValidationRequest = <T>(schema: ZodType<T>) => {
+const ValidationRequest = <T>(
+    schema: ZodType<T>,
+) => {
     return async (req: Request<{}, {}, T>, res: Response<ResponseMessage>, next: NextFunction) => {
         try {
 

@@ -1,3 +1,17 @@
+
+
+// create course 
+export type CreateCourseModel = {
+    name: string;
+    thumbnail: string;
+    tagline: string;
+    description: string;
+    price: number;
+    category: string
+}
+
+
+
 // student course model 
 export type StudenCourseModel = {
     _id: string;

@@ -19,7 +19,7 @@ export interface ICourse extends CourseEntity, Document { };
 
 
 // create request
-export type CourseCreateRequest = Omit<CourseEntity, "_id" | "manager" | "contents" | "category"> & {
+export type CourseCreateRequest = Omit<CourseEntity, "_id" | "manager" | "contents" | "category" | "thumbnail"> & {
     category: string;
 }
 

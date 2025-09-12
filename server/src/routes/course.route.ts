@@ -1,9 +1,10 @@
 import express, { Router } from "express";
 import ValidationRequest from "../middlewares/validation-request";
-import { CourseCreateRequest, CourseUpdateRequest } from "../models/course-model";
+import { CourseUpdateRequest } from "../models/course-model";
 import { CourseValidation } from "../validation/course-validation";
 import { CourseController } from "../controllers/course.controller";
 import tokenMiddleware from "../middlewares/token-middleware";
+import { MulterService } from "../services/multer.service";
 
 
 
@@ -22,7 +23,7 @@ courseRoute.get('/all', CourseController.getAll);
 
 
 // create 
-courseRoute.post('/create', tokenMiddleware("MANAGER"), ValidationRequest<CourseCreateRequest>(CourseValidation.CREATE), CourseController.create);
+courseRoute.post('/create', tokenMiddleware("MANAGER"), MulterService.uploadFile('thumbnail'), CourseController.create);
 
 
 // delete 
