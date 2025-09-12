@@ -32,10 +32,16 @@ export class CourseController {
             // get data id 
             const { id } = req.data ?? { id: '' };
 
+            // base url 
+            const baseUrl = `${req.protocol}://${req.get("host")}`;
+
+            // generate url
+            const url_thumbnail = `${baseUrl}/uploads/file/${req.file?.filename}`
+
 
 
             // get service
-            const course = await CourseService.create({ ...body.data }, id, req.file?.filename ?? '');
+            const course = await CourseService.create({ ...body.data }, id, req.file?.filename ?? '', url_thumbnail);
 
             // cek response 
             if (!course.success) {

@@ -1,3 +1,4 @@
+import path from "path";
 import { BundleEntity } from "../models/bundle-model";
 import { CourseAllResponse, CourseCreateRequest, CourseResponse, CourseUpdateRequest, toAllCourseResponse, toCourseResponse } from "../models/course-model";
 import { ManagerEntity, ManagerResponse } from "../models/manager-model";
@@ -10,7 +11,7 @@ import { FileService } from "./file.service";
 
 export class CourseService {
     // create 
-    static async create(req: CourseCreateRequest, managerId: string, thumbnail: string): Promise<ResponseData<CourseResponse>> {
+    static async create(req: CourseCreateRequest, managerId: string, thumbnail: string, url_thumbnail: string): Promise<ResponseData<CourseResponse>> {
 
         // cek manager
         const manager = await Manager.findById(managerId).lean<ManagerResponse>();
@@ -75,7 +76,7 @@ export class CourseService {
 
 
         // convert ke plain object
-        const response = doc.toObject();
+        const response = doc.toObject()
 
         // return 
         return {
@@ -83,6 +84,7 @@ export class CourseService {
             data: toCourseResponse({
                 ...response,
                 _id: response._id as string,
+                url_thumbnail: url_thumbnail,
                 manager: {
                     _id: response.manager._id.toString(),
                 },

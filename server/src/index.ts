@@ -17,6 +17,7 @@ import bundleRoute from './routes/bundle.route';
 import transactionRoute from './routes/transaction.route';
 import cors from 'cors';
 import authRoute from './routes/auth.route';
+import path from 'path';
 
 
 // intialize express
@@ -83,6 +84,9 @@ const startServer = async () => {
 
     // payment 
     app.use('/api/payment', transactionRoute);
+
+    // / expose folder "public" sebagai static
+    app.use("/uploads", express.static(path.join(__dirname, "../public/uploads")));
 
 
 
