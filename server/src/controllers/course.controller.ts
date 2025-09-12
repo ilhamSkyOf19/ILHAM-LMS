@@ -3,7 +3,6 @@ import { CourseAllResponse, CourseCreateRequest, CourseResponse, CourseUpdateReq
 import { CourseService } from '../services/course.service';
 import { ResponseData, ResponseMessage } from '../types/types';
 import { TokenRequest } from '../models/jwt-model';
-import ValidationRequest from '../middlewares/validation-request';
 import { CourseValidation } from '../validation/course-validation';
 import validationService from '../services/validation.service';
 import { FileService } from '../services/file.service';
@@ -35,7 +34,7 @@ export class CourseController {
             // base url 
             const baseUrl = `${req.protocol}://${req.get("host")}`;
 
-            // generate url
+            // generate
             const url_thumbnail = `${baseUrl}/uploads/file/${req.file?.filename}`
 
 
