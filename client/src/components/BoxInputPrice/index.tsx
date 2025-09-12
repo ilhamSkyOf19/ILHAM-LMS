@@ -2,7 +2,7 @@ import { type FC } from 'react'
 import { Controller, type Control, type FieldError } from 'react-hook-form';
 import clsx from 'clsx';
 import ErrorMessage from '../ErrorMessage';
-import type { CreateCourseModel } from '../../models/course-model';
+import type { CreateCourseModel, UpdateCourseModel } from '../../models/course-model';
 
 
 
@@ -13,12 +13,13 @@ type Props = {
     label: string;
     icon: string;
     error?: FieldError;
-    control?: Control<CreateCourseModel>
+    control?: Control<CreateCourseModel | UpdateCourseModel>
+    value?: number
 }
 
 
 
-const BoxInputPrice: FC<Props> = ({ name, placeholder, label, error, icon, control }) => {
+const BoxInputPrice: FC<Props> = ({ name, placeholder, label, error, icon, control, value }) => {
 
 
     return (
@@ -49,7 +50,7 @@ const BoxInputPrice: FC<Props> = ({ name, placeholder, label, error, icon, contr
                         return (
                             <input
                                 type="text"
-                                value={field.value ? formatNumber(field.value.toString()) : ""}
+                                value={value ? formatNumber(value.toString()) : field.value ? formatNumber(field.value.toString()) : ""}
                                 onChange={(e) => {
                                     const raw = e.target.value.replace(/\D/g, ""); // simpan angka mentah
                                     field.onChange(raw);

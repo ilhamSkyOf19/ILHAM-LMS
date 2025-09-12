@@ -4,7 +4,7 @@ import ButtonTrash from '../ButtonTrash';
 import type { FieldError, UseFormClearErrors, UseFormRegisterReturn, UseFormResetField, UseFormSetValue } from 'react-hook-form';
 import clsx from 'clsx';
 import ErrorMessage from '../ErrorMessage';
-import type { CreateCourseModel } from '../../models/course-model';
+import type { CreateCourseModel, UpdateCourseModel } from '../../models/course-model';
 type CourseForm = {
     name: string;
     thumbnail: File | null;
@@ -14,12 +14,12 @@ type CourseForm = {
 };
 
 type Props = {
-    setValue: UseFormSetValue<CreateCourseModel>;
+    setValue: UseFormSetValue<CreateCourseModel | UpdateCourseModel>;
     error?: FieldError;
     register: UseFormRegisterReturn;
     clearErrors: UseFormClearErrors<CourseForm>;
     previewEdit?: string;
-    resetField: UseFormResetField<CreateCourseModel>;
+    resetField: UseFormResetField<CreateCourseModel | UpdateCourseModel>;
 }
 const BoxInputThumbnail: FC<Props> = ({ previewEdit, setValue, error, register, clearErrors, resetField }) => {
 
@@ -67,8 +67,13 @@ const BoxInputThumbnail: FC<Props> = ({ previewEdit, setValue, error, register, 
 
     // set preview edit
     useEffect(() => {
-        if (previewEdit) setPreview(previewEdit)
+        if (previewEdit) {
+            setPreview(previewEdit)
+        } else {
+            setPreview(undefined)
+        }
     }, [previewEdit])
+
 
 
 
@@ -107,7 +112,7 @@ const BoxInputThumbnail: FC<Props> = ({ previewEdit, setValue, error, register, 
 
                 {/* preview */}
                 {
-                    preview && (
+                    preview && typeof preview === 'string' ? (
                         <div className='w-full h-full flex flex-row justify-center items-center absolute'>
                             <img src={preview} alt="preview" className='w-full h-full object-cover object-center' />
 
@@ -116,6 +121,8 @@ const BoxInputThumbnail: FC<Props> = ({ previewEdit, setValue, error, register, 
                                 <ButtonTrash handleClick={handleResetPreview} />
                             </div>
                         </div>
+                    ) : (
+                        null
                     )
                 }
             </div>

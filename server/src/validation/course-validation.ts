@@ -1,5 +1,5 @@
 import z, { ZodType } from "zod";
-import { CourseCreateRequest } from "../models/course-model";
+import { CourseCreateRequest, CourseUpdateRequest } from "../models/course-model";
 
 export class CourseValidation {
     // create
@@ -15,10 +15,9 @@ export class CourseValidation {
     // update 
     static readonly UPDATE = z.object({
         name: z.string().optional(),
-        thumbnail: z.string().optional(),
         tagline: z.string().optional(),
         description: z.string().optional(),
         price: z.number().optional(),
         category: z.string().optional(),
-    }).strict()
+    }).strict() as ZodType<CourseUpdateRequest>
 }

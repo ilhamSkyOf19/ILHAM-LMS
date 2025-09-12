@@ -14,7 +14,7 @@ import BoxInputTextArea from '../../../../components/BoxInputTextArea'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 import sweetAlertNotiifNotUpdate from '../../../../components/SweetAlertNotifNotUpdate'
 import type { ResponseData } from '../../../../types/types'
-import type { CourseModel, CreateCourseModel } from '../../../../models/course-model'
+import type { CourseModel, CreateCourseModel, UpdateCourseModel } from '../../../../models/course-model'
 import { useMutation } from '@tanstack/react-query'
 import { CourseService } from '../../../../services/course.service'
 import { AxiosError } from 'axios'
@@ -33,9 +33,16 @@ type Props = {
 const NewCourse: FC<Props> = ({ typeContent }) => {
 
     // use loader data
-    const doc = useLoaderData() as { course?: ResponseData<CourseModel>; categories: ResponseData<CategoryOriginalResponse[]> };
+    const doc = useLoaderData() as {
+        course?: ResponseData<CourseModel>;
+        categories: ResponseData<CategoryOriginalResponse[]>
+    };
 
+    // get data course
     const data = doc.course ? doc.course : null;
+
+
+    // get categories
     const category = (doc.categories && doc.categories.success) ? doc.categories.data : [];
 
 
@@ -47,14 +54,15 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
     const navigate = useNavigate();
 
     // use hook form 
-    const { handleSubmit, register, formState: { errors }, setValue, clearErrors, resetField, control } = useForm<CreateCourseModel>({
+    const { handleSubmit, register, formState: { errors }, setValue, clearErrors, resetField, control } = useForm<CreateCourseModel | UpdateCourseModel>({
         defaultValues: {
             name: course?.name || '',
             tagline: course?.tagline || '',
             category: course?.category.name.toLowerCase() || '',
             description: course?.description || '',
+            price: course?.price.toString() || '',
         },
-        resolver: zodResolver(CourseValidation.CREATE)
+        resolver: zodResolver(typeContent === 'edit' ? CourseValidation.UPDATE : CourseValidation.CREATE)
     });
 
 
@@ -63,7 +71,6 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
         mutationFn: (data: FormData) => CourseService.create(data),
         onSuccess: (response: ResponseData<CourseModel>) => {
             if (response.success) {
-                console.log(response.data);
 
                 // reset form 
                 resetField('name');
@@ -91,9 +98,9 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
 
 
     // handle on submit 
-    const onSubmit = async (data: CreateCourseModel) => {
+    const onSubmit = async (data: CreateCourseModel | UpdateCourseModel) => {
         try {
-            if (typeContent === 'edit' && (!data.name && !data.thumbnail && !data.tagline && (data.category === (course?.category.name || '').toLowerCase()) && !data.description)) {
+            if (typeContent === 'edit' && (!data.name && !data.tagline && (data.category === (course?.category.name || '').toLowerCase()) && !data.description)) {
                 sweetAlertNotiifNotUpdate();
                 return;
             }
@@ -104,22 +111,22 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
             const formData = new FormData();
 
             // name 
-            formData.append('name', data.name);
+            formData.append('name', typeContent === 'edit' ? course?.name as UpdateCourseModel['name'] || '' : data.name as CreateCourseModel['name']);
 
             // tagline 
-            formData.append('tagline', data.tagline);
+            formData.append('tagline', typeContent === 'edit' ? course?.tagline as UpdateCourseModel['tagline'] || '' : data.tagline as CreateCourseModel['tagline']);
 
             // category 
-            formData.append('category', data.category);
+            formData.append('category', typeContent === 'edit' ? course?.category.name.toLowerCase() as UpdateCourseModel['category'] || '' : data.category as CreateCourseModel['category']);
 
             // description 
-            formData.append('description', data.description);
+            formData.append('description', typeContent === 'edit' ? course?.description as UpdateCourseModel['description'] || '' : data.description as CreateCourseModel['description']);
 
             // thumbnail
-            formData.append('thumbnail', data.thumbnail);
+            formData.append('thumbnail', typeContent === 'edit' ? course?.thumbnail as UpdateCourseModel['thumbnail'] || '' : data.thumbnail as CreateCourseModel['thumbnail']);
 
             // price 
-            formData.append('price', data.price.toString());
+            formData.append('price', typeContent === 'edit' ? course?.price.toString() as UpdateCourseModel['price'] || '' : data.price as CreateCourseModel['price']);
 
             // request 
             await mutateAsync(formData);
@@ -162,7 +169,7 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
                     error={errors?.thumbnail}
                     clearErrors={clearErrors}
                     previewEdit={
-                        typeContent === 'edit' ? `/thumbnails/${course?.thumbnail}` : undefined
+                        typeContent === 'edit' ? `${course ? course?.url_thumbnail : undefined}` : undefined
                     }
                 />
 
@@ -189,6 +196,7 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
                     category={category}
                     setValue={setValue}
                     clearErrors={clearErrors}
+                    previewValue={typeContent === 'edit' ? course?.category.name : undefined}
                 />
 
                 {/* price */}
@@ -199,6 +207,7 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
                     control={control}
                     error={errors?.price}
                     icon={bill}
+                    value={typeContent === 'edit' ? course?.price : undefined}
                 />
 
 

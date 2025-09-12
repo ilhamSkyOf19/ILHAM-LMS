@@ -5,6 +5,7 @@ import { Document, Types } from "mongoose";
 export type CourseEntity = {
     name: string;
     thumbnail: string;
+    url_thumbnail: string;
     tagline: string;
     description: string;
     price: number;
@@ -19,13 +20,13 @@ export interface ICourse extends CourseEntity, Document { };
 
 
 // create request
-export type CourseCreateRequest = Omit<CourseEntity, "_id" | "manager" | "contents" | "category" | "thumbnail"> & {
+export type CourseCreateRequest = Omit<CourseEntity, "_id" | "manager" | "contents" | "category" | "url_thumbnail" | "thumbnail"> & {
     category: string;
 }
 
 
 // update request
-export type CourseUpdateRequest = Partial<Omit<CourseCreateRequest, "manager" | "contents">>;
+export type CourseUpdateRequest = Partial<Omit<CourseCreateRequest, "manager" | "contents" | "url_thumbnail" | "thumbnail">>;
 
 
 // response course

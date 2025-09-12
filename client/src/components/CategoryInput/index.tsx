@@ -4,7 +4,7 @@ import type { FieldError, UseFormClearErrors, UseFormRegisterReturn, UseFormSetV
 
 import arrow from '../../assets/images/icons/arrow-down.svg'
 import ErrorMessage from '../ErrorMessage';
-import type { CreateCourseModel } from '../../models/course-model';
+import type { CreateCourseModel, UpdateCourseModel } from '../../models/course-model';
 import type { CategoryOriginalResponse } from '../../models/category-model';
 
 type CourseForm = {
@@ -21,16 +21,20 @@ type Props = {
     label: string;
     icon: string;
     register: UseFormRegisterReturn;
-    setValue: UseFormSetValue<CreateCourseModel>;
+    setValue: UseFormSetValue<CreateCourseModel | UpdateCourseModel>;
     error?: FieldError;
     clearErrors: UseFormClearErrors<CourseForm>
     category: CategoryOriginalResponse[]
+    previewValue?: string;
 }
 
-const CategoryInput: FC<Props> = ({ type, name, placeholder, label, register, error, icon, setValue, clearErrors, category }) => {
+const CategoryInput: FC<Props> = ({ type, name, placeholder, label, register, error, icon, setValue, clearErrors, category, previewValue }) => {
 
     // state modal choose
     const [isOpen, setIsOpen] = useState<boolean>(false);
+
+    // set value choose
+    const [valueChoose, setValueChoose] = useState<string>('');
 
     // ref choose & modal choose
     const chooseRef = useRef<HTMLDivElement>(null);
@@ -44,6 +48,7 @@ const CategoryInput: FC<Props> = ({ type, name, placeholder, label, register, er
     const handleChoose = (value: string): void => {
         clearErrors('category');
         setValue('category', value);
+        setValueChoose(value);
     }
 
 
@@ -97,6 +102,7 @@ const CategoryInput: FC<Props> = ({ type, name, placeholder, label, register, er
                         type={type}
                         name={name}
                         aria-invalid={!!error}
+                        value={previewValue ? previewValue : valueChoose}
                         readOnly
                         className='w-full outline-none text-black font-semibold placeholder:font-semibold placeholder:text-black cursor-pointer capitalize'
                         placeholder={placeholder}
@@ -119,7 +125,7 @@ const CategoryInput: FC<Props> = ({ type, name, placeholder, label, register, er
                         {/* choose */}
                         {
                             choose.map((item: { label: string, value: string }, i: number) => (
-                                <button key={i} type='button' className='w-full px-4 py-2 hover:bg-blue-primary hover:text-white transition-all duration-200 text-left font-semibold capitalize text-sm' onClick={() => handleChoose(item.value)}>{item.label}</button>
+                                <button key={i} type='button' className='w-full px-4 py-2 hover:bg-blue-primary hover:text-white transition-all duration-200 text-left font-semibold capitalize text-sm' onClick={() => { handleChoose(item.value), setValueChoose(item.label) }}>{item.label}</button>
                             ))
                         }
                     </div>

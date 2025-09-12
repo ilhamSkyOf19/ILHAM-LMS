@@ -1,6 +1,7 @@
 import * as fsp from 'fs/promises';
 import path from 'path';
 import { ResponseMessage } from '../types/types';
+import { NextFunction } from 'express';
 
 
 export class FileService {
@@ -37,6 +38,7 @@ export class FileService {
         )
 
 
+
         // delete file 
         try {
 
@@ -45,11 +47,12 @@ export class FileService {
             // delete 
             await fsp.unlink(filePathFull);
 
+            console.log('file deleted successfully');
+
             return {
                 success: true,
                 message: 'File deleted successfully'
-            }
-
+            };
         } catch (error) {
             console.log(error);
             return {

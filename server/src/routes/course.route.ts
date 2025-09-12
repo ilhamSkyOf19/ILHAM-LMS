@@ -16,7 +16,7 @@ courseRoute.get('/manager', tokenMiddleware("MANAGER"), CourseController.getCour
 
 
 // get detail course 
-courseRoute.get('/detail/:id', tokenMiddleware('ALL'), CourseController.getCourseDetail);
+courseRoute.get('/detail/:id', CourseController.getCourseDetail);
 
 // get all
 courseRoute.get('/all', CourseController.getAll);
@@ -30,7 +30,7 @@ courseRoute.post('/create', tokenMiddleware("MANAGER"), MulterService.uploadFile
 courseRoute.delete('/delete/:id', tokenMiddleware("MANAGER"), CourseController.delete);
 
 // update 
-courseRoute.patch('/update/:id', tokenMiddleware("MANAGER"), ValidationRequest<CourseUpdateRequest>(CourseValidation.UPDATE), CourseController.update);
+courseRoute.patch('/update/:id', tokenMiddleware("MANAGER"), MulterService.uploadFile('thumbnail'), CourseController.update);
 
 
 

@@ -6,6 +6,10 @@ import { TokenRequest } from '../models/jwt-model';
 import { CourseValidation } from '../validation/course-validation';
 import validationService from '../services/validation.service';
 import { FileService } from '../services/file.service';
+import path from 'path';
+import Course from '../schema/course-schema';
+import { error } from 'console';
+import { unknown, ZodError } from 'zod';
 
 
 export class CourseController {
@@ -28,6 +32,7 @@ export class CourseController {
             }
 
 
+
             // get data id 
             const { id } = req.data ?? { id: '' };
 
@@ -35,14 +40,18 @@ export class CourseController {
             const baseUrl = `${req.protocol}://${req.get("host")}`;
 
             // generate
-            const url_thumbnail = `${baseUrl}/uploads/file/${req.file?.filename}`
+            const url_thumbnail = `${baseUrl}/uploads/file/${req.file?.filename}`;
 
 
 
             // get service
-            const course = await CourseService.create({ ...body.data }, id, req.file?.filename ?? '', url_thumbnail);
+            const course = await CourseService.create(
+                { ...body.data },
+                id,
+                req.file?.filename ?? '',
+                url_thumbnail);
 
-            // cek response 
+            // cek response
             if (!course.success) {
                 return res.status(400).json(course)
             }
@@ -126,7 +135,7 @@ export class CourseController {
     }
 
     // update 
-    static async update(req: TokenRequest<{ id: string }, {}, CourseUpdateRequest>, res: Response<ResponseData<CourseResponse>>, next: NextFunction) {
+    static async update(req: TokenRequest<{ id: string }, {}, Omit<CourseUpdateRequest, 'thumbnail'>>, res: Response<ResponseData<CourseResponse>>, next: NextFunction) {
         try {
             // get params id
             const id = req.params.id;
@@ -134,23 +143,92 @@ export class CourseController {
             // get id manager 
             const { id: manager } = req.data ?? { id: '' };
 
-            // get body 
-            const body = req.body;
 
-            // get service 
-            const course = await CourseService.update(id, manager, body);
 
-            // cek response 
-            if (!course.success) {
-                return res.status(400).json(course)
+
+            // cek validation
+            const body = validationService<CourseUpdateRequest>(CourseValidation.UPDATE, req.body);
+
+            // cek body 
+            if (!body.success) {
+                // hapus file
+                if (req.file) await FileService.deleteFileRequest(req.file.path);
+
+                return res.status(500).json({
+                    success: false,
+                    message: body.message
+                });
             }
 
+
+            // cek course 
+            const course = await Course.findById({ _id: id }).populate('category', 'name');
+
+
+            // cek
+            if (!course) {
+                // cek file 
+                if (req.file) await FileService.deleteFileRequest(req.file.path);
+                return res.status(400).json({
+                    success: false,
+                    message: 'course not found ini'
+                })
+            }
+
+
+
+
+
+            // cek file
+            if (req.file) {
+                // delete file
+                // masuk
+                console.log('masuk 2');
+
+                const deleteThumbnail = await FileService.deleteFileFormPath(course.thumbnail, 'file');
+
+                // cek 
+                if (!deleteThumbnail.success) {
+                    return res.status(400).json({
+                        success: false,
+                        message: deleteThumbnail.message
+                    })
+                }
+            }
+
+            // lanjut
+            console.log('lanjut');
+
+            // generate base 
+            const baseUrl = `${req.protocol}://${req.get("host")}`;
+
+            // generate url 
+            const url_thumbnail = `${baseUrl}/uploads/file/${req.file?.filename}`;
+
+            // get service 
+            const response = await CourseService.update(
+                {
+                    id,
+                    manager,
+                    fileName: req.file ? req.file.filename : '',
+                    url_thumbnail: req.file ? url_thumbnail : ''
+                },
+                body.data);
+
+            // cek response 
+            if (!response.success) {
+                return res.status(400).json(response)
+            }
+
+
+
+
             // return
-            return res.status(200).json(course)
+            return res.status(200).json(response)
         } catch (error) {
             // error handle 
             console.log(error);
-            next(error)
+            next(error);
         }
     }
 
@@ -179,6 +257,8 @@ export class CourseController {
             next(error)
         }
     }
+
+
 
     // get detail 
     static async getCourseDetail(req: Request<{ id: string }>, res: Response<ResponseData<CourseResponse>>, next: NextFunction) {
