@@ -146,6 +146,35 @@ export class CourseService {
         }
     }
 
+
+    // get detail
+    static async geCourseDetail(idCourse: string): Promise<ResponseData<CourseResponse>> {
+
+        // get course 
+        const response = await Course.findOne({
+            _id: idCourse
+        })
+            .populate('category', '-courses')
+            .lean<CourseResponse>();
+
+        // cek 
+        if (!response) {
+            return {
+                success: false,
+                message: 'Course not found'
+            }
+        }
+
+        // return 
+        return {
+            success: true,
+            data: response
+        }
+
+
+    }
+
+
     // delete course 
     static async delete(id: string, manager: string): Promise<ResponseMessage> {
 

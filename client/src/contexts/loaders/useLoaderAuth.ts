@@ -12,7 +12,6 @@ const loaderAuth = async (role: 'MANAGER' | 'STUDENT' | 'ALL'): Promise<Response
         // get response 
         const response = await AuthService.getAuth(role);
 
-        console.log(response);
 
 
         // cek response 

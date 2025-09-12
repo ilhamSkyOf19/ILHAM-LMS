@@ -14,7 +14,7 @@ import ButtonDelete from '../ButtonDelete';
 import deleteAlert from '../SweetAlertDelete';
 
 type Props = {
-    idCourse: number;
+    idCourse: string;
     number: string;
     content: any;
 }

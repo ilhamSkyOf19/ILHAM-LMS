@@ -158,4 +158,33 @@ export class CourseController {
         }
     }
 
+    // get detail 
+    static async getCourseDetail(req: Request<{ id: string }>, res: Response<ResponseData<CourseResponse>>, next: NextFunction) {
+        try {
+
+
+            // get params id 
+            const id = req.params.id;
+
+
+            // get service 
+            const response = await CourseService.geCourseDetail(id);
+
+
+            // cek response 
+            if (!response.success) {
+                return res.status(400).json(response)
+            }
+
+            // return 
+            return res.status(200).json(response)
+
+
+        } catch (error) {
+            // erro handle 
+            console.log(error);
+            next(error)
+        }
+    }
+
 }

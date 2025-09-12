@@ -1,6 +1,6 @@
 import { useState, type FC } from 'react'
 import { useLoaderData } from 'react-router-dom'
-import type { LinkType } from '../../../../types/types';
+import type { LinkType, ResponseData } from '../../../../types/types';
 import LinkNavigation from '../../../../components/LinkNavigation';
 import TitleContentDashboard from '../../../../fragments/TitleContentDashboard';
 import LinkButtonBorder from '../../../../components/LinkButtonBorder';
@@ -16,6 +16,7 @@ import notePurple from '../../../../assets/images/icons/note-favorite-purple.svg
 import cupPurple from '../../../../assets/images/icons/cup-purple.svg'
 import CourseContentCard from '../../../../components/CourseContentCard';
 import ButtonPagination from '../../../../components/ButtonPagination';
+import type { CourseModel } from '../../../../models/course-model';
 
 
 
@@ -25,7 +26,17 @@ import ButtonPagination from '../../../../components/ButtonPagination';
 const CourseDetail: FC = () => {
 
     // loader 
-    const course = useLoaderData();
+    const data = useLoaderData<ResponseData<CourseModel>>();
+
+
+    if (!data.success) {
+        console.log(data.message);
+    }
+
+
+    const course: CourseModel | null = data.success ? data.data : null;
+
+    console.log(course)
 
     // state active 
     const [active, setActive] = useState<number>(1);
@@ -47,7 +58,7 @@ const CourseDetail: FC = () => {
             label: 'courses'
         },
         {
-            link: `/dashboard/courses/course-detail/${course.id}`,
+            link: `/dashboard/courses/course-detail/${course?._id}`,
             label: 'course detail'
         }
     ]
@@ -59,12 +70,12 @@ const CourseDetail: FC = () => {
 
 
             {/* header content */}
-            <TitleContentDashboard title='Mastering React TypeScript 7 Website Development' >
+            <TitleContentDashboard title={course?.name ?? ''} >
                 {/* button edit */}
-                <LinkButtonBorder link={`/dashboard/courses/detail-course/${course.id}/edit-course`} label='edit course' />
+                <LinkButtonBorder link={`/dashboard/courses/detail-course/${course?._id}/edit-course`} label='edit course' />
 
                 {/* button review */}
-                <LinkButtonBlue link={`/dashboard/courses/detail-course/${course.id}/preview`} label='preview' />
+                <LinkButtonBlue link={`/dashboard/courses/detail-course/${course?._id}/preview`} label='preview' />
             </TitleContentDashboard>
 
 
@@ -80,16 +91,16 @@ const CourseDetail: FC = () => {
                     {/* statistik 1 */}
                     <div className='w-full h-full flex flex-row justify-between items-center gap-8 pl-12'>
                         {/* card statistik */}
-                        <DataCourseCard icon={iconUser} label={`${(course.total_students).toLocaleString('en-US')} students`} />
+                        <DataCourseCard icon={iconUser} label={`${(0).toLocaleString('en-US')} students`} />
                         {/* card statistik */}
-                        <DataCourseCard icon={crownPurple} label={course.category} />
+                        <DataCourseCard icon={crownPurple} label={course?.category?.name ?? ''} />
                     </div>
                     {/* statistik 2 */}
                     <div className='w-full h-full flex flex-row justify-between items-center gap-8 pl-12'>
                         {/* card statistik */}
-                        <DataCourseCard icon={notePurple} label={`${(course.content.length).toLocaleString('en-US')} Content`} />
+                        <DataCourseCard icon={notePurple} label={`${(course?.contents.length ?? []).toLocaleString('en-US')} Content`} />
                         {/* card statistik */}
-                        <DataCourseCard icon={cupPurple} label={`${course.certificate ? 'certificate' : 'Not Certified'}`} />
+                        <DataCourseCard icon={cupPurple} label={`${true ? 'certificate' : 'Not Certified'}`} />
                     </div>
                 </div>
             </div>
@@ -102,25 +113,39 @@ const CourseDetail: FC = () => {
                     <h1 className='text-2xl text-black font-bold capitalize'>course content</h1>
 
                     {/* button add content */}
-                    <LinkButtonBlue link={`/dashboard/courses/detail-course/${course.id}/add-content`} label='add content' />
+                    <LinkButtonBlue link={`/dashboard/courses/detail-course/${course?._id}/add-content`} label='add content' />
 
                 </div>
                 {/* content */}
                 <div className='w-full flex flex-col justify-start items-start gap-8'>
                     {
-                        course.content.map((content: any, index: number) => (
-                            <CourseContentCard key={index} content={content} number={`${index + 1}`} idCourse={course.id} />
+                        course && (
+                            course.contents.length > 0 ? (
+                                course?.contents.map((content: any, index: number) => (
+                                    <CourseContentCard key={index} content={content} number={`${index + 1}`} idCourse={course?._id} />
 
-                        ))
+                                ))
+                            ) : (
+                                <div className='w-full flex flex-row justify-center items-center'>
+
+                                    <p className='text-slate-400 text-center text-lg'>No Content</p>
+                                </div>
+                            )
+                        )
                     }
                 </div>
 
                 {/* pagination */}
                 <div className='w-full flex flex-row justify-start items-center gap-3'>
                     {
-                        [1, 2, 3, 4, 5].map((_, index: number) => (
-                            <ButtonPagination key={index} number={index + 1} handleClick={() => handleActive(index)} active={active === index + 1} />
-                        ))
+                        course && (
+                            course.contents.length > 0 && (
+                                [1, 2, 3, 4, 5].map((_, index: number) => (
+                                    <ButtonPagination key={index} number={index + 1} handleClick={() => handleActive(index)} active={active === index + 1} />
+                                ))
+
+                            )
+                        )
                     }
                 </div>
             </div>

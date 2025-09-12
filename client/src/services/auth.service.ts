@@ -10,7 +10,6 @@ export class AuthService {
         // get response 
         const response = await AXIOS.get(`/auth/${role.toLocaleLowerCase()}`).then(res => res.data);
 
-        console.log(response);
         // return response 
         return response
     }

@@ -13,6 +13,10 @@ const courseRoute: Router = express.Router();
 // get course manager 
 courseRoute.get('/manager', tokenMiddleware("MANAGER"), CourseController.getCourseManager);
 
+
+// get detail course 
+courseRoute.get('/detail/:id', tokenMiddleware('ALL'), CourseController.getCourseDetail);
+
 // get all
 courseRoute.get('/all', CourseController.getAll);
 

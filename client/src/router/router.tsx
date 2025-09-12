@@ -21,6 +21,7 @@ import NewCourse from "../pages/dashboard/course/NewCourse";
 import FormStudent from "../pages/dashboard/student/FormStudent";
 import loaderAuth from "../contexts/loaders/useLoaderAuth";
 import loaderCourse from "../contexts/loaders/useLoaderCourse";
+import loaderCourseDetail from "../contexts/loaders/useLoaderCourseDetail";
 
 
 
@@ -86,7 +87,7 @@ const router = createBrowserRouter([
             {
                 path: '/dashboard/courses/course-detail/:id',
                 loader: ({ params }) => {
-                    return courses.find((course: any) => course.id == params.id);
+                    return loaderCourseDetail(params.id as string);
                 },
                 element: <CourseDetail />
             },
