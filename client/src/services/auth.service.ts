@@ -5,11 +5,12 @@ import type { ResponseData, ResponseMessage } from "../types/types";
 export class AuthService {
 
     // get auth 
-    static async getAuth(role: 'MANAGER' | 'STUDENT'): Promise<ResponseData<AuthResponseType>> {
+    static async getAuth(role: 'MANAGER' | 'STUDENT' | 'ALL'): Promise<ResponseData<AuthResponseType>> {
 
         // get response 
-        const response = await AXIOS.get(`/auth/${role}`).then(res => res.data);
+        const response = await AXIOS.get(`/auth/${role.toLocaleLowerCase()}`).then(res => res.data);
 
+        console.log(response);
         // return response 
         return response
     }

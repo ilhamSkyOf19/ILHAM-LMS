@@ -5,17 +5,23 @@ import ButtonPagination from "../../../../components/ButtonPagination"
 import { useLoaderData } from "react-router-dom"
 import LinkButtonBorder from "../../../../components/LinkButtonBorder"
 import LinkButtonBlue from "../../../../components/LinkButtonBlue"
+import type { ResponseData } from "../../../../types/types"
+import type { CourseModel } from "../../../../models/course-model"
 
 const DashboardCourses: FC = () => {
     // loader 
-    const courses = useLoaderData();
+    const courses = useLoaderData() as ResponseData<CourseModel[]>;
+
+    if (!courses.success) {
+        console.log(courses.message);
+    }
+
+
+
 
     // state active 
     const [active, setActive] = useState<number>(1);
-
-
     // handle active
-
     const handleActive = (number: number): void => {
         setActive(number);
     }
@@ -35,12 +41,16 @@ const DashboardCourses: FC = () => {
 
                 {/* manage card content */}
                 {
-                    (courses) ? (
-                        courses.map((course: any, i: number) => (
-                            <CourseCard key={i} course={course} />
-                        ))
+                    (courses.success) ? (
+                        courses.data && courses.data.length > 0 ? (
+                            courses.data.map((course: CourseModel, i: number) => (
+                                <CourseCard key={i} course={course} />
+                            ))
+                        ) : (
+                            <p>No course found</p>
+                        )
                     ) : (
-                        <p>No data</p>
+                        null
                     )
                 }
 

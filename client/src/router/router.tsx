@@ -20,6 +20,7 @@ import students from "../jsons/students.json";
 import NewCourse from "../pages/dashboard/course/NewCourse";
 import FormStudent from "../pages/dashboard/student/FormStudent";
 import loaderAuth from "../contexts/loaders/useLoaderAuth";
+import loaderCourse from "../contexts/loaders/useLoaderCourse";
 
 
 
@@ -64,7 +65,7 @@ const router = createBrowserRouter([
     {
         path: '/dashboard',
         loader: () => {
-            return loaderAuth('MANAGER');
+            return loaderAuth('ALL');
         },
         element: <LayoutDashboard />,
         children: [
@@ -78,7 +79,7 @@ const router = createBrowserRouter([
             {
                 path: '/dashboard/courses',
                 loader: () => {
-                    return courses;
+                    return loaderCourse();
                 },
                 element: <DashboardCourses />
             },

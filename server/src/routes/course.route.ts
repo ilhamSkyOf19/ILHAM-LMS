@@ -10,6 +10,9 @@ import tokenMiddleware from "../middlewares/token-middleware";
 const courseRoute: Router = express.Router();
 
 
+// get course manager 
+courseRoute.get('/manager', tokenMiddleware("MANAGER"), CourseController.getCourseManager);
+
 // get all
 courseRoute.get('/all', CourseController.getAll);
 

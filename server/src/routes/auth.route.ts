@@ -6,6 +6,9 @@ import { AuthController } from "../controllers/auth.controller";
 const authRoute: Router = Router();
 
 
+// get all 
+authRoute.get('/auth/all', tokenMiddleware("ALL"), AuthController.getAuth)
+
 // get auth manager
 authRoute.get('/auth/manager', tokenMiddleware("MANAGER"), AuthController.getAuth)
 

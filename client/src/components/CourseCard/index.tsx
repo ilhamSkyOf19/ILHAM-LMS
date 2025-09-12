@@ -12,11 +12,12 @@ import thumb from '../../assets/images/thumbnails/th-1.png'
 import user from '../../assets/images/icons/profile-2user-purple.svg'
 import crownPurple from '../../assets/images/icons/crown-purple.svg'
 import LinkButtonBorderHoverBlue from '../LinkButtonBorderHoverBlue'
+import type { CourseModel } from '../../models/course-model'
 
 
 
 type Props = {
-    course: any;
+    course: CourseModel;
 }
 const CourseCard: FC<Props> = ({ course }) => {
     return (
@@ -36,17 +37,17 @@ const CourseCard: FC<Props> = ({ course }) => {
                     <div className='flex flex-row justify-start items-start gap-4'>
 
                         {/* total student */}
-                        <DescCard icon={user} label={`${(course.total_students).toLocaleString('en-US')} students`} />
+                        <DescCard icon={user} label={`${(0).toLocaleString('en-US')} students`} />
 
                         {/* category */}
-                        <DescCard icon={crownPurple} label={`${course.category}`} />
+                        <DescCard icon={crownPurple} label={`${course.category.name}`} />
 
                     </div>
                 </div>
             </div>
 
             {/* button */}
-            <LinkButtonBorderHoverBlue link={`/dashboard/courses/course-detail/${course.id}`} label='manage' />
+            <LinkButtonBorderHoverBlue link={`/dashboard/courses/course-detail/${course._id}`} label='manage' />
         </div>
     )
 }

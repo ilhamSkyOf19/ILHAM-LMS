@@ -132,4 +132,30 @@ export class CourseController {
         }
     }
 
+
+    // get course by id manager 
+    static async getCourseManager(req: TokenRequest, res: Response<ResponseData<CourseResponse[]>>, next: NextFunction) {
+        try {
+
+            // get id manager 
+            const { id: manager } = req.data ?? { id: '' };
+
+            // get service 
+            const course = await CourseService.getByManager(manager);
+
+            // cek response 
+            if (!course.success) {
+                return res.status(400).json(course)
+            }
+
+            // return
+            return res.status(200).json(course)
+
+        } catch (error) {
+            // error handle 
+            console.log(error);
+            next(error)
+        }
+    }
+
 }

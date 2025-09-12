@@ -113,6 +113,39 @@ export class CourseService {
         }
     }
 
+
+    // get detail by manager 
+    static async getByManager(manager: string): Promise<ResponseData<CourseResponse[]>> {
+        try {
+
+            // get response
+            const response = await Course.find({ manager: manager })
+                .populate('category', '-courses')
+                .lean<CourseResponse[]>();
+
+            // cek
+            if (!response) {
+                return {
+                    success: false,
+                    message: 'course not found'
+                }
+            }
+
+            // return
+            return {
+                success: true,
+                data: response
+            }
+        } catch (error) {
+            // error handle
+            console.log(error);
+            return {
+                success: false,
+                message: 'course not found'
+            }
+        }
+    }
+
     // delete course 
     static async delete(id: string, manager: string): Promise<ResponseMessage> {
 

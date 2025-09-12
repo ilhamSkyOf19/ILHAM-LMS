@@ -36,11 +36,6 @@ const SignIn: FC<Props> = ({ type }) => {
     // use mutation 
     const { isPending, mutateAsync } = useMutation({
         mutationFn: (data: SignInRequestType) => AuthService.signIn(data, type),
-        onSuccess: (data) => {
-            // navigate 
-            navigate('/dashboard');
-            console.log(data)
-        },
         onError: (errors: unknown) => {
             if (errors instanceof AxiosError) {
                 console.log(errors.response?.data.message);
@@ -56,6 +51,11 @@ const SignIn: FC<Props> = ({ type }) => {
             } else {
                 console.log(errors)
             }
+        },
+        onSuccess: (data) => {
+            // navigate 
+            navigate('/dashboard');
+            console.log('login', data)
         }
     })
 

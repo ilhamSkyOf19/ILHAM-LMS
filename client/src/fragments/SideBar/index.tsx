@@ -11,6 +11,7 @@ import securityCardWhite from '../../assets/images/icons/security-card-white.svg
 import cupWhite from '../../assets/images/icons/cup-white.svg';
 import settingWhite from '../../assets/images/icons/setting-2-white.svg';
 import sidebarGlow from '../../assets/images/backgrounds/sidebar-glow.png';
+import type { AuthResponseType } from '../../models/auth-model';
 
 
 // type menu
@@ -21,11 +22,17 @@ type Menu = {
 }
 
 
+// props 
+type Props = {
+    user: AuthResponseType | null;
+}
 
-const SideBar: FC = () => {
+
+
+const SideBar: FC<Props> = ({ user }) => {
 
     // menu general 
-    const general: Menu[] = [
+    const generalManager: Menu[] = [
         {
             link: '/dashboard',
             label: 'Dashboard',
@@ -45,6 +52,20 @@ const SideBar: FC = () => {
             link: '/dashboard/students',
             label: 'Students',
             icon: profile2UserWhite
+        }
+    ]
+
+    // general student
+    const generalStudent: Menu[] = [
+        {
+            link: '/dashboard',
+            label: 'Dashboard',
+            icon: cube
+        },
+        {
+            link: '/dashboard/courses',
+            label: 'Courses',
+            icon: noteFavoriteWhite
         }
     ]
 
@@ -87,7 +108,7 @@ const SideBar: FC = () => {
 
                 {/* menu  general */}
                 <div className='w-full mb-8'>
-                    <MenuComponent title='general' menu={general} />
+                    <MenuComponent title='general' menu={user?.role === 'STUDENT' ? generalStudent : generalManager} />
                 </div>
 
                 {/* menu  others */}

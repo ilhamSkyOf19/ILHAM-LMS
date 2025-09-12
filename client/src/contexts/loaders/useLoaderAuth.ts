@@ -4,13 +4,15 @@ import type { ResponseData } from "../../types/types";
 import type { AuthResponseType } from "../../models/auth-model";
 
 // const
-const loaderAuth = async (role: 'MANAGER' | 'STUDENT'): Promise<Response | ResponseData<AuthResponseType>> => {
+const loaderAuth = async (role: 'MANAGER' | 'STUDENT' | 'ALL'): Promise<Response | ResponseData<AuthResponseType>> => {
     try {
 
 
 
         // get response 
         const response = await AuthService.getAuth(role);
+
+        console.log(response);
 
 
         // cek response 
@@ -23,12 +25,16 @@ const loaderAuth = async (role: 'MANAGER' | 'STUDENT'): Promise<Response | Respo
             return redirect('/student/sign-in');
         };
 
-        // cek role 
-        if (response.data.role !== role) {
-            return redirect('/student/sign-in');
-        };
 
-        // cek 
+        // cek response 
+        if (role === 'MANAGER' || role === 'STUDENT') {
+            if (response.data.role !== role) {
+                return redirect('/student/sign-in');
+            }
+        }
+
+
+
 
         // return 
         return {

@@ -19,11 +19,15 @@ const LayoutDashboard: FC = () => {
     // get user 
     const user = useLoaderData() as ResponseData<AuthResponseType>;
 
+
+
+
+
     return (
         <div className="w-full min-h-[100vh] flex flex-row justify-start items-start py-2 px-2 relative">
             {/* side bar */}
             <div className="w-[27rem] z-50">
-                <SideBar />
+                <SideBar user={user.success ? user.data : null} />
             </div>
 
             {/* content */}
