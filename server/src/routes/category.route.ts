@@ -13,4 +13,8 @@ const categoryRoute: Router = Router();
 // create 
 categoryRoute.post('/create', tokenMiddleware("ADMIN"), ValidationRequest<CategoryCreateRequest>(CategoryValidation.CREATE), CategoryController.create);
 
+
+// get all 
+categoryRoute.get('/all', CategoryController.getAll);
+
 export default categoryRoute

@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FC } from 'react'
 import icon from '../../assets/images/icons/gallery-add-black.svg'
 import ButtonTrash from '../ButtonTrash';
-import type { FieldError, UseFormClearErrors, UseFormRegisterReturn, UseFormSetValue } from 'react-hook-form';
+import type { FieldError, UseFormClearErrors, UseFormRegisterReturn, UseFormResetField, UseFormSetValue } from 'react-hook-form';
 import clsx from 'clsx';
 import ErrorMessage from '../ErrorMessage';
+import type { CreateCourseModel } from '../../models/course-model';
 type CourseForm = {
     name: string;
     thumbnail: File | null;
@@ -13,13 +14,14 @@ type CourseForm = {
 };
 
 type Props = {
-    setValue: UseFormSetValue<CourseForm>;
+    setValue: UseFormSetValue<CreateCourseModel>;
     error?: FieldError;
     register: UseFormRegisterReturn;
     clearErrors: UseFormClearErrors<CourseForm>;
     previewEdit?: string;
+    resetField: UseFormResetField<CreateCourseModel>;
 }
-const BoxInputThumbnail: FC<Props> = ({ previewEdit, setValue, error, register, clearErrors }) => {
+const BoxInputThumbnail: FC<Props> = ({ previewEdit, setValue, error, register, clearErrors, resetField }) => {
 
 
     // state preview
@@ -57,7 +59,7 @@ const BoxInputThumbnail: FC<Props> = ({ previewEdit, setValue, error, register, 
             // set preview
             setPreview(undefined);
             // set value
-            setValue('thumbnail', null);
+            resetField('thumbnail');
         }
     };
 

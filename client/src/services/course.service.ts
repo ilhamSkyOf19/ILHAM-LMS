@@ -5,6 +5,19 @@ import type { CourseModel } from "../models/course-model";
 
 export class CourseService {
 
+    // create 
+    static async create(data: FormData): Promise<ResponseData<CourseModel>> {
+        // response 
+        const response = await AXIOS.post('/course/create', data, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(res => res.data);
+
+
+        return response
+    }
+
     // get by role
     static async get<T>(
         role: 'STUDENT' | 'MANAGER'

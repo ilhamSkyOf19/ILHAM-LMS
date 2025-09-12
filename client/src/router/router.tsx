@@ -15,13 +15,13 @@ import DashboardStudents from "../pages/dashboard/student/DashboardStudents";
 
 // jsons
 import statistik from "../jsons/statistik.json";
-import courses from "../jsons/courses.json";
 import students from "../jsons/students.json";
 import NewCourse from "../pages/dashboard/course/NewCourse";
 import FormStudent from "../pages/dashboard/student/FormStudent";
 import loaderAuth from "../contexts/loaders/useLoaderAuth";
 import loaderCourse from "../contexts/loaders/useLoaderCourse";
 import loaderCourseDetail from "../contexts/loaders/useLoaderCourseDetail";
+import loaderCategory from "../contexts/loaders/useLoaderCategory";
 
 
 
@@ -93,12 +93,26 @@ const router = createBrowserRouter([
             },
             {
                 path: '/dashboard/courses/new-course',
+                loader: async () => {
+                    const categories = await loaderCategory();
+                    return { categories };
+                },
                 element: <NewCourse typeContent="new" />
             },
             {
                 path: '/dashboard/courses/detail-course/:id/edit-course',
-                loader: ({ params }) => {
-                    return courses.find((course: any) => course.id == params.id);
+                loader: async ({ params }) => {
+                    const [course, categories] = await Promise.all([
+                        loaderCourseDetail(params.id as string),
+                        loaderCategory()
+                    ]);
+
+
+
+                    return {
+                        course,
+                        categories
+                    };
                 },
                 element: <NewCourse typeContent="edit" />
             },

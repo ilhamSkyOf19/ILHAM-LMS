@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { CategoryCreateRequest, CategoryResponse } from "../models/category-model";
+import { CategoryCreateRequest, CategoryOriginalResponse, CategoryResponse } from "../models/category-model";
 import { ResponseData } from "../types/types";
 import { CategoryService } from "../services/category.service";
 
@@ -23,6 +23,23 @@ export class CategoryController {
                 success: true,
                 data: category
             })
+        } catch (error) {
+            console.log(error);
+            next(error)
+        }
+    }
+
+
+    // get all category 
+    static async getAll(req: Request, res: Response<ResponseData<CategoryOriginalResponse[]>>, next: NextFunction) {
+        try {
+            // get all category 
+            const category = await CategoryService.getAll();
+
+            // return 
+            return res.status(200).json(category)
+
+
         } catch (error) {
             console.log(error);
             next(error)

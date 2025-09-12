@@ -3,10 +3,10 @@
 // create course 
 export type CreateCourseModel = {
     name: string;
-    thumbnail: string;
+    thumbnail: File
     tagline: string;
     description: string;
-    price: number;
+    price: string;
     category: string
 }
 

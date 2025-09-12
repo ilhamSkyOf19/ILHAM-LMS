@@ -27,6 +27,21 @@ export type CategoryResponse = {
     courses: { _id: string }[]
 }
 
+// export name 
+export type CategoryOriginalResponse = {
+    _id: string,
+    name: string;
+}
+
+
+// to response
+export const toCategoryOriginalResponse = (category: CategoryOriginalResponse): CategoryOriginalResponse => {
+    return {
+        _id: category._id.toString(),
+        name: category.name
+    }
+}
+
 
 // to response
 export const toCategoryResponse = (category: CategoryResponse): CategoryResponse => {

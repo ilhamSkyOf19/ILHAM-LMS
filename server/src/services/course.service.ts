@@ -13,6 +13,10 @@ export class CourseService {
     // create 
     static async create(req: CourseCreateRequest, managerId: string, thumbnail: string, url_thumbnail: string): Promise<ResponseData<CourseResponse>> {
 
+
+        console.log(req);
+        console.log(managerId);
+
         // cek manager
         const manager = await Manager.findById(managerId).lean<ManagerResponse>();
 
@@ -24,7 +28,6 @@ export class CourseService {
             }
         };
 
-        console.log(manager);
 
         // cek transaction bundle 
         const bundle = await TransactionBundle.findOne({
@@ -32,7 +35,6 @@ export class CourseService {
             status: 'success'
         }).populate<{ bundle: BundleEntity }>('bundle').lean<{ bundle: BundleEntity }>();
 
-        console.log(bundle);
 
 
 

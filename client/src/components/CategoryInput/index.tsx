@@ -4,6 +4,8 @@ import type { FieldError, UseFormClearErrors, UseFormRegisterReturn, UseFormSetV
 
 import arrow from '../../assets/images/icons/arrow-down.svg'
 import ErrorMessage from '../ErrorMessage';
+import type { CreateCourseModel } from '../../models/course-model';
+import type { CategoryOriginalResponse } from '../../models/category-model';
 
 type CourseForm = {
     name: string;
@@ -19,12 +21,13 @@ type Props = {
     label: string;
     icon: string;
     register: UseFormRegisterReturn;
-    setValue: UseFormSetValue<CourseForm>;
+    setValue: UseFormSetValue<CreateCourseModel>;
     error?: FieldError;
     clearErrors: UseFormClearErrors<CourseForm>
+    category: CategoryOriginalResponse[]
 }
 
-const CategoryInput: FC<Props> = ({ type, name, placeholder, label, register, error, icon, setValue, clearErrors }) => {
+const CategoryInput: FC<Props> = ({ type, name, placeholder, label, register, error, icon, setValue, clearErrors, category }) => {
 
     // state modal choose
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -63,20 +66,10 @@ const CategoryInput: FC<Props> = ({ type, name, placeholder, label, register, er
 
 
     // data choose
-    const choose: { label: string, value: string }[] = [
-        {
-            label: 'programming',
-            value: 'programming'
-        },
-        {
-            label: 'design',
-            value: 'design'
-        },
-        {
-            label: 'business',
-            value: 'business'
-        }
-    ]
+    const choose: { label: string, value: string }[] = category.map(item => ({
+        label: item.name,
+        value: item._id
+    }));
 
 
 
