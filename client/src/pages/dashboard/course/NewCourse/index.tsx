@@ -101,10 +101,8 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
     // handle on submit 
     const onSubmit = async (data: CreateCourseModel | UpdateCourseModel) => {
         try {
-            console.log(data)
 
-            if (!data) {
-                console.log('data empty');
+            if (typeContent === 'new' && !data) {
                 return;
             };
 
@@ -122,7 +120,6 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
 
             formData.append('price', (data.price || '').toString());
 
-            console.log(formData)
 
             // request 
             await mutateAsync(formData);

@@ -19,13 +19,13 @@ export class CourseValidation {
 
     // update 
     static readonly UPDATE = z.object({
-        name: z.string().min(1, 'name is required').optional(),
-        tagline: z.string().min(1, 'tagline is required').optional(),
-        description: z.string().min(1, 'description is required').optional(),
+        name: z.string().optional(),
+        tagline: z.string().optional(),
+        description: z.string().optional(),
         price: z
             .string()
             .refine((val) => !isNaN(Number(val)), { message: "Price must be a valid number" }).optional(),
-        category: z.string().min(1, 'category is required').optional(),
+        category: z.string().optional(),
         thumbnail: z.any().refine((file) => file?.name, { message: 'thumbnail is required' }).optional(),
     }).strict() satisfies z.ZodType<UpdateCourseModel>
 

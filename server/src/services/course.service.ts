@@ -8,7 +8,6 @@ import Manager from "../schema/manager-schema";
 import TransactionBundle from "../schema/transaction-bundle-schema";
 import { ResponseData, ResponseMessage } from "../types/types";
 import { FileService } from "./file.service";
-import { TransactionCourseService } from "./transaction-course.service";
 import TransactionCourse from "../schema/transaction-course-schema";
 
 export class CourseService {
