@@ -8,14 +8,13 @@ import Manager from "../schema/manager-schema";
 import TransactionBundle from "../schema/transaction-bundle-schema";
 import { ResponseData, ResponseMessage } from "../types/types";
 import { FileService } from "./file.service";
+import { TransactionCourseService } from "./transaction-course.service";
+import TransactionCourse from "../schema/transaction-course-schema";
 
 export class CourseService {
     // create 
     static async create(req: CourseCreateRequest, managerId: string, thumbnail: string, url_thumbnail: string): Promise<ResponseData<CourseResponse>> {
 
-
-        console.log(req);
-        console.log(managerId);
 
         // cek manager
         const manager = await Manager.findById(managerId).lean<ManagerResponse>();
@@ -87,6 +86,7 @@ export class CourseService {
                 ...response,
                 _id: response._id as string,
                 url_thumbnail: url_thumbnail,
+                total_student: 0,
                 manager: {
                     _id: response.manager._id.toString(),
                 },
@@ -108,6 +108,9 @@ export class CourseService {
             .populate('category', '-courses')
             .lean<CourseAllResponse[]>();
 
+
+
+        // cek total student
         if (!course) {
             return {
                 success: false,
@@ -115,9 +118,22 @@ export class CourseService {
             }
         }
 
+        // get total
+        const total_student = await TransactionCourse.countDocuments({
+            course: {
+                $in: course.map(course => course._id)
+            },
+            status: 'success'
+        });
+
+        // return
+
         return {
             success: true,
-            data: course.map(course => toAllCourseResponse(course))
+            data: course.map(course => toAllCourseResponse({
+                ...course,
+                total_student
+            }))
         }
     }
 
@@ -139,10 +155,24 @@ export class CourseService {
                 }
             }
 
+
+            // get student in the transaction course 
+            const total_student = await TransactionCourse.countDocuments({
+                course: {
+                    $in: response.map(course => course._id)
+                },
+                status: 'success'
+            });
+
+            console.log(total_student);
+
             // return
             return {
                 success: true,
-                data: response
+                data: response.map(course => toCourseResponse({
+                    ...course,
+                    total_student
+                }))
             }
         } catch (error) {
             // error handle

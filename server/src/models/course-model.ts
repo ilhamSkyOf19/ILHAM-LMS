@@ -37,6 +37,7 @@ export type CourseResponse = {
     tagline: string;
     description: string;
     price: number;
+    total_student: number;
     manager: {
         _id: string;
     };
@@ -62,6 +63,7 @@ export const toCourseResponse = (
         tagline: course.tagline,
         description: course.description,
         price: course.price,
+        total_student: course.total_student,
         manager: {
             _id: course.manager._id.toString(),
         },
@@ -84,6 +86,7 @@ export type CourseAllResponse = {
     url_thumbnail: string;
     tagline: string;
     description: string;
+    total_student: number;
     price: number;
     manager: {
         _id: string;
@@ -108,6 +111,7 @@ export const toAllCourseResponse = (
         thumbnail: course.thumbnail,
         url_thumbnail: course.url_thumbnail,
         tagline: course.tagline,
+        total_student: course.total_student,
         description: course.description,
         price: course.price,
         manager: {
