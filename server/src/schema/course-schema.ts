@@ -17,6 +17,10 @@ const courseSchema = new Schema<ICourse>(
             type: String,
             required: true
         },
+        url_thumbnail: {
+            type: String,
+            required: true
+        },
         tagline: {
             type: String,
             required: true
@@ -81,6 +85,7 @@ courseSchema.post('save', async (doc) => {
 // delete 
 courseSchema.post('findOneAndDelete', async function (doc) {
     try {
+
         // delete course in manager 
         await Manager.findByIdAndUpdate({
             _id: doc.manager
@@ -98,6 +103,8 @@ courseSchema.post('findOneAndDelete', async function (doc) {
             $pull: {
                 courses: doc._id
             }
+        }, {
+            new: true
         })
 
         // delete content by course 
@@ -111,6 +118,10 @@ courseSchema.post('findOneAndDelete', async function (doc) {
 // update category 
 courseSchema.post('findOneAndUpdate', async function (doc) {
     try {
+
+
+        if (!doc) return;
+        if (!doc.category) return;
 
         // update category
         await Category.findByIdAndUpdate({

@@ -10,6 +10,16 @@ export type CreateCourseModel = {
     category: string
 }
 
+// update course 
+export type UpdateCourseModel = {
+    name?: string;
+    thumbnail?: File
+    tagline?: string;
+    description?: string;
+    price?: string;
+    category?: string
+}
+
 
 
 // student course model 
@@ -39,6 +49,7 @@ export type CourseModel = {
     _id: string;
     name: string;
     thumbnail: string;
+    url_thumbnail: string;
     tagline: string;
     description: string;
     price: number;

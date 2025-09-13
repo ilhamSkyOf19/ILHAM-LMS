@@ -16,6 +16,10 @@ export class CourseService {
     static async create(req: CourseCreateRequest, managerId: string, thumbnail: string, url_thumbnail: string): Promise<ResponseData<CourseResponse>> {
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> edit-course
         // cek manager
         const manager = await Manager.findById(managerId).lean<ManagerResponse>();
 
@@ -71,7 +75,8 @@ export class CourseService {
         const doc = await Course.create({
             ...req,
             manager: managerId,
-            thumbnail: thumbnail
+            thumbnail: thumbnail,
+            url_thumbnail: url_thumbnail
         });
 
 
@@ -242,8 +247,11 @@ export class CourseService {
 
 
         // cek delete thumbnail
-        if (!deleteThumbnail.success) {
-            return deleteThumbnail
+        if (!deleteThumbnail) {
+            return {
+                success: false,
+                message: 'failed to delete thumbnail'
+            }
         }
 
         // delete data
@@ -266,24 +274,24 @@ export class CourseService {
     }
 
     // update course 
-    static async update(id: string, manager: string, req: CourseUpdateRequest): Promise<ResponseData<CourseResponse>> {
-
+    static async update(params: { id: string, manager: string, fileName: string, url_thumbnail: string }, req: CourseUpdateRequest): Promise<ResponseData<CourseResponse>> {
+        console.log(params);
+        console.log(req);
         // cek course 
-        if (req.category) {
-
-        }
-        const course = await Course.findById(id);
+        const course = await Course.findById({
+            _id: params.id
+        });
 
         // cek 
         if (!course) {
             return {
                 success: false,
-                message: 'course not found'
+                message: 'course not found service'
             }
         }
 
         // cek manager 
-        if (course.manager.toString() !== manager) {
+        if (course.manager.toString() !== params.manager) {
             return {
                 success: false,
                 message: 'unauthorized'
@@ -291,18 +299,21 @@ export class CourseService {
         }
 
         // cek the same category
-        if (course.category._id.toString() !== req.category) {
-            // delete category old in course 
-            await Category.findByIdAndUpdate({
-                _id: course.category
-            }, {
-                $pull: {
-                    courses: course._id
-                }
-            })
+        if (req.category) {
+            if (course.category._id.toString() !== req.category) {
+                // delete category old in course 
+                await Category.findByIdAndUpdate({
+                    _id: course.category
+                }, {
+                    $pull: {
+                        courses: course._id
+                    }
+                })
+            }
         }
 
-        if (req.category) {
+
+        if (req.category !== '' && req.category !== undefined) {
             // cek category 
             const category = await Category.findById(req.category);
 
@@ -310,20 +321,32 @@ export class CourseService {
             if (!category) {
                 return {
                     success: false,
-                    message: 'category not found'
+                    message: 'category not found service'
                 }
             }
         }
 
 
+
         // update data
-        const response = await Course.findOneAndUpdate({ _id: id }, req, { new: true }).lean<CourseResponse>();
+        const response = await Course.findOneAndUpdate({ _id: params.id }, {
+            thumbnail: params.fileName ? params.fileName : course.thumbnail,
+            url_thumbnail: params.url_thumbnail ? params.url_thumbnail : course.url_thumbnail,
+            name: req.name ? req.name : course.name,
+            tagline: req.tagline ? req.tagline : course.tagline,
+            description: req.description ? req.description : course.description,
+            price: req.price ? req.price : course.price,
+            category: req.category ? req.category : course.category
+        }).lean<CourseResponse>();
+
+
+        console.log(response);
 
         // cek response 
         if (!response) {
             return {
                 success: false,
-                message: 'course not found'
+                message: 'course not found service'
             }
         }
 
