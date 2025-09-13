@@ -16,10 +16,6 @@ export class CourseService {
     static async create(req: CourseCreateRequest, managerId: string, thumbnail: string, url_thumbnail: string): Promise<ResponseData<CourseResponse>> {
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> edit-course
         // cek manager
         const manager = await Manager.findById(managerId).lean<ManagerResponse>();
 
