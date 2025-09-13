@@ -16,6 +16,8 @@ const DashboardCourses: FC = () => {
         console.log(courses.message);
     }
 
+    console.log(courses);
+
 
 
 

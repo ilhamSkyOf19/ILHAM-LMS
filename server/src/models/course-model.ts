@@ -1,4 +1,5 @@
 import { Document, Types } from "mongoose";
+import Category from "../schema/category-schema";
 
 
 // entity
@@ -43,6 +44,7 @@ export type CourseResponse = {
     };
     category: {
         _id: string;
+        name?: string
     };
     contents: {
         _id: string;
@@ -69,12 +71,15 @@ export const toCourseResponse = (
         },
         category: {
             _id: course.category._id.toString(),
+            name: course.category.name
         },
         contents: course.contents ? course.contents.map(content => ({
             _id: content._id.toString()
         })) : [],
     }
 }
+
+
 
 
 

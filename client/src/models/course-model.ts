@@ -42,6 +42,7 @@ export type CourseModel = {
     tagline: string;
     description: string;
     price: number;
+    total_student: number;
     manager: {
         _id: string;
     };

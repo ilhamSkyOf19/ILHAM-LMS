@@ -37,7 +37,7 @@ const CourseCard: FC<Props> = ({ course }) => {
                     <div className='flex flex-row justify-start items-start gap-4'>
 
                         {/* total student */}
-                        <DescCard icon={user} label={`${(0).toLocaleString('en-US')} students`} />
+                        <DescCard icon={user} label={`${(course.total_student).toLocaleString('en-US')} students`} />
 
                         {/* category */}
                         <DescCard icon={crownPurple} label={`${course.category.name}`} />

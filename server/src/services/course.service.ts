@@ -92,6 +92,7 @@ export class CourseService {
                 },
                 category: {
                     _id: response.category._id.toString(),
+
                 },
                 contents: []
             })
