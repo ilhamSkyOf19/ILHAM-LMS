@@ -9,6 +9,8 @@ import { CreateContentRequest } from "../models/content-model";
 // initialize route
 const contentRoute: Router = Router({ mergeParams: true });
 
+// get all 
+contentRoute.get('/all', tokenMiddleware("MANAGER"), ContentController.getAll);
 
 // create 
 contentRoute.post('/create', tokenMiddleware("MANAGER"), ValidationRequest<CreateContentRequest>(ContentValidation.CREATE), ContentController.create);

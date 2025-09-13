@@ -49,3 +49,24 @@ export const toContentResponse = (content: ContentResponse): ContentResponse => 
         course: content.course
     }
 }
+
+
+export type ContentResponseAll = {
+    _id: string;
+    title: string;
+    type: "video" | "text";
+    videoId: string | null;
+    text: string | null;
+}
+
+
+// to content response 
+export const toContentResponseAll = (content: ContentResponseAll): ContentResponseAll => {
+    return {
+        _id: content._id.toString(),
+        title: content.title,
+        type: content.type,
+        videoId: content.videoId,
+        text: content.text,
+    }
+}

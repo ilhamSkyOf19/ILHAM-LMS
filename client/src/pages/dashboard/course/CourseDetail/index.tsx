@@ -17,6 +17,7 @@ import cupPurple from '../../../../assets/images/icons/cup-purple.svg'
 import CourseContentCard from '../../../../components/CourseContentCard';
 import ButtonPagination from '../../../../components/ButtonPagination';
 import type { CourseModel } from '../../../../models/course-model';
+import type { ContentResponse } from '../../../../models/content-model';
 
 
 
@@ -26,17 +27,20 @@ import type { CourseModel } from '../../../../models/course-model';
 const CourseDetail: FC = () => {
 
     // loader 
-    const data = useLoaderData<ResponseData<CourseModel>>();
+    const doc = useLoaderData() as {
+        course: ResponseData<CourseModel>,
+        contents: ResponseData<ContentResponse[]>;
+    };
+
+    // course
+    const course: CourseModel | null = doc.course.success ? doc.course.data : null;
+
+    // contents
+    const contents: ContentResponse[] | null = doc.contents.success ? doc.contents.data : null;
 
 
-    if (!data.success) {
-        console.log(data.message);
-    }
 
-
-    const course: CourseModel | null = data.success ? data.data : null;
-
-    console.log(course)
+    console.log(contents)
 
     // state active 
     const [active, setActive] = useState<number>(1);
@@ -72,10 +76,10 @@ const CourseDetail: FC = () => {
             {/* header content */}
             <TitleContentDashboard title={course?.name ?? ''} >
                 {/* button edit */}
-                <LinkButtonBorder link={`/dashboard/courses/detail-course/${course?._id}/edit-course`} label='edit course' />
+                <LinkButtonBorder link={`/dashboard/courses/course-detail/${course?._id}/edit-course`} label='edit course' />
 
                 {/* button review */}
-                <LinkButtonBlue link={`/dashboard/courses/detail-course/${course?._id}/preview`} label='preview' />
+                <LinkButtonBlue link={`/dashboard/courses/course-detail/${course?._id}/preview`} label='preview' />
             </TitleContentDashboard>
 
 
@@ -113,25 +117,24 @@ const CourseDetail: FC = () => {
                     <h1 className='text-2xl text-black font-bold capitalize'>course content</h1>
 
                     {/* button add content */}
-                    <LinkButtonBlue link={`/dashboard/courses/detail-course/${course?._id}/add-content`} label='add content' />
+                    <LinkButtonBlue link={`/dashboard/courses/course-detail/${course?._id}/new-content`} label='add content' />
 
                 </div>
                 {/* content */}
                 <div className='w-full flex flex-col justify-start items-start gap-8'>
                     {
-                        course && (
-                            course.contents.length > 0 ? (
-                                course?.contents.map((content: any, index: number) => (
-                                    <CourseContentCard key={index} content={content} number={`${index + 1}`} idCourse={course?._id} />
+                        contents && contents.length > 0 ? (
+                            contents.map((content: ContentResponse, index: number) => (
+                                <CourseContentCard key={index} content={content} number={`${index + 1}`} idCourse={course?._id ?? ''} />
 
-                                ))
-                            ) : (
-                                <div className='w-full flex flex-row justify-center items-center'>
+                            ))
+                        ) : (
+                            <div className='w-full flex flex-row justify-center items-center'>
 
-                                    <p className='text-slate-400 text-center text-lg'>No Content</p>
-                                </div>
-                            )
+                                <p className='text-slate-400 text-center text-lg'>No Content</p>
+                            </div>
                         )
+
                     }
                 </div>
 

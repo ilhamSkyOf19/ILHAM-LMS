@@ -6,14 +6,9 @@ import arrow from '../../assets/images/icons/arrow-down.svg'
 import ErrorMessage from '../ErrorMessage';
 import type { CreateCourseModel, UpdateCourseModel } from '../../models/course-model';
 import type { CategoryOriginalResponse } from '../../models/category-model';
+import ModalSelect from '../ModalSelect';
 
-type CourseForm = {
-    name: string;
-    thumbnail: File | null;
-    tagline: string;
-    category: string;
-    description: string;
-};
+
 type Props = {
     type: 'text' | 'password' | 'email';
     name: string;
@@ -23,7 +18,7 @@ type Props = {
     register: UseFormRegisterReturn;
     setValue: UseFormSetValue<CreateCourseModel | UpdateCourseModel>;
     error?: FieldError;
-    clearErrors: UseFormClearErrors<CourseForm>
+    clearErrors: UseFormClearErrors<CreateCourseModel | UpdateCourseModel>
     category: CategoryOriginalResponse[]
     previewValue?: string;
 }
@@ -124,19 +119,7 @@ const CategoryInput: FC<Props> = ({ type, name, placeholder, label, register, er
 
 
                 {/* choose */}
-                <div className={clsx(
-                    'absolute top-[110%] left-0 w-full flex flex-col justify-start items-center z-20 transition-all duration-200 origin-top',
-                    isOpen ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'
-                )}>
-                    <div className='w-[90%] h-full flex flex-col justify-start items-start bg-white z-20 border border-slate-200'>
-                        {/* choose */}
-                        {
-                            choose.map((item: { label: string, value: string }, i: number) => (
-                                <button key={i} type='button' className='w-full px-4 py-2 hover:bg-blue-primary hover:text-white transition-all duration-200 text-left font-semibold capitalize text-sm' onClick={() => { handleChoose(item.value), setValueChoose(item.label) }}>{item.label}</button>
-                            ))
-                        }
-                    </div>
-                </div>
+                <ModalSelect choose={choose} isOpen={isOpen} handleChoose={handleChoose} setValueChoose={setValueChoose} />
             </div>
 
             {/* error message */}

@@ -136,7 +136,7 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
     return (
         <div className='w-full flex flex-col justify-start items-start gap-4 pb-12'>
             {/* header */}
-            <TitleContentDashboard title='New Course' desc='Create new future for company'>
+            <TitleContentDashboard title={typeContent === 'edit' ? 'Edit course' : 'New course'} desc={typeContent === 'edit' ? 'Edit your course' : 'Create new course'}>
                 {null}
             </TitleContentDashboard>
 

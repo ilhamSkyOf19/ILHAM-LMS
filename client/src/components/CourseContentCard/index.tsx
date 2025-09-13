@@ -12,14 +12,14 @@ import notePurple from '../../assets/images/icons/note-purple.svg'
 import LinkButtonBorder from '../LinkButtonBorder';
 import ButtonDelete from '../ButtonDelete';
 import deleteAlert from '../SweetAlertDelete';
+import type { ContentResponse } from '../../models/content-model';
 
 type Props = {
     idCourse: string;
     number: string;
-    content: any;
+    content: ContentResponse;
 }
 const CourseContentCard: FC<Props> = ({ number, content, idCourse }) => {
-    console.log(content.type)
     return (
         <div className='w-full flex flex-row justify-between items-center relative'>
 
@@ -42,7 +42,7 @@ const CourseContentCard: FC<Props> = ({ number, content, idCourse }) => {
                 {/* label */}
                 <div className='flex flex-col justify-center items-start gap-1.5'>
                     {/* name */}
-                    <h2 className='text-black text-xl font-bold'>{content.name}</h2>
+                    <h2 className='text-black text-xl font-bold'>{content.title}</h2>
                     {/* description */}
                     <DescCard icon={content.type === 'video' ? videoPlayPurple : notePurple} label={content.type} />
                 </div>

@@ -1,9 +1,35 @@
-import { ContentResponse, CreateContentRequest, toContentResponse } from "../models/content-model";
+import { ContentResponse, ContentResponseAll, CreateContentRequest, toContentResponse, toContentResponseAll } from "../models/content-model";
 import Content from "../schema/content-schema";
 import Course from "../schema/course-schema";
 import { ResponseData } from "../types/types";
 
 export class ContentService {
+
+    // get content 
+    static async getAll(idCourse: string): Promise<ResponseData<ContentResponseAll[]>> {
+
+        // get content 
+        const content = await Content.find({
+            course: idCourse
+        }).lean<ContentResponseAll[]>();
+
+        // cek content 
+        if (!content) {
+            return {
+                success: false,
+                message: 'content not found'
+            }
+        }
+
+
+        // return 
+        return {
+            success: true,
+            data: content.map(content => toContentResponseAll(content))
+        }
+
+
+    }
     // create 
     static async create(idCourse: string, manager: string, req: CreateContentRequest): Promise<ResponseData<ContentResponse>> {
         // course 

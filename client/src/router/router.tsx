@@ -22,6 +22,8 @@ import loaderAuth from "../contexts/loaders/useLoaderAuth";
 import loaderCourse from "../contexts/loaders/useLoaderCourse";
 import loaderCourseDetail from "../contexts/loaders/useLoaderCourseDetail";
 import loaderCategory from "../contexts/loaders/useLoaderCategory";
+import NewContent from "../pages/dashboard/course/NewContent";
+import loaderContent from "../contexts/loaders/useLoaderContent";
 
 
 
@@ -86,8 +88,14 @@ const router = createBrowserRouter([
             },
             {
                 path: '/dashboard/courses/course-detail/:id',
-                loader: ({ params }) => {
-                    return loaderCourseDetail(params.id as string);
+                loader: async ({ params }) => {
+                    const [course, contents] = await Promise.all([
+                        loaderCourseDetail(params.id as string), loaderContent(params.id as string)
+                    ]);
+
+                    return { course, contents };
+
+
                 },
                 element: <CourseDetail />
             },
@@ -100,7 +108,7 @@ const router = createBrowserRouter([
                 element: <NewCourse typeContent="new" />
             },
             {
-                path: '/dashboard/courses/detail-course/:id/edit-course',
+                path: '/dashboard/courses/course-detail/:id/edit-course',
                 loader: async ({ params }) => {
                     const [course, categories] = await Promise.all([
                         loaderCourseDetail(params.id as string),
@@ -115,6 +123,10 @@ const router = createBrowserRouter([
                     };
                 },
                 element: <NewCourse typeContent="edit" />
+            },
+            {
+                path: '/dashboard/courses/course-detail/:id/new-content',
+                element: <NewContent />
             },
             {
                 path: '/dashboard/students',
@@ -133,7 +145,7 @@ const router = createBrowserRouter([
                     return students.find((student: any) => student.id == params.id);
                 },
                 element: <FormStudent />
-            }
+            },
         ]
     }
 ])
