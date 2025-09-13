@@ -14,12 +14,12 @@ type Props = {
     icon: string;
     error?: FieldError;
     control?: Control<CreateCourseModel | UpdateCourseModel>
-    value?: number
+    // value?: number
 }
 
 
 
-const BoxInputPrice: FC<Props> = ({ name, placeholder, label, error, icon, control, value }) => {
+const BoxInputPrice: FC<Props> = ({ name, placeholder, label, error, icon, control }) => {
 
 
     return (
@@ -50,9 +50,9 @@ const BoxInputPrice: FC<Props> = ({ name, placeholder, label, error, icon, contr
                         return (
                             <input
                                 type="text"
-                                value={value ? formatNumber(value.toString()) : field.value ? formatNumber(field.value.toString()) : ""}
+                                value={formatNumber(field.value?.toString() as string)}
                                 onChange={(e) => {
-                                    const raw = e.target.value.replace(/\D/g, ""); // simpan angka mentah
+                                    const raw = e.target.value.replace(/\D/g, "");
                                     field.onChange(raw);
                                 }}
                                 placeholder={placeholder}

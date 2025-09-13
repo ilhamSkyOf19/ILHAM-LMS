@@ -12,7 +12,6 @@ import BoxInputThumbnail from '../../../../components/BoxInputThumbnail'
 import CategoryInput from '../../../../components/CategoryInput'
 import BoxInputTextArea from '../../../../components/BoxInputTextArea'
 import { useLoaderData, useNavigate } from 'react-router-dom'
-import sweetAlertNotiifNotUpdate from '../../../../components/SweetAlertNotifNotUpdate'
 import type { ResponseData } from '../../../../types/types'
 import type { CourseModel, CreateCourseModel, UpdateCourseModel } from '../../../../models/course-model'
 import { useMutation } from '@tanstack/react-query'
@@ -58,7 +57,7 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
         defaultValues: {
             name: course?.name || '',
             tagline: course?.tagline || '',
-            category: course?.category.name.toLowerCase() || '',
+            category: course?.category._id.toLowerCase() || '',
             description: course?.description || '',
             price: course?.price.toString() || '',
         },
@@ -68,9 +67,10 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
 
     // mutate 
     const { isPending, mutateAsync } = useMutation({
-        mutationFn: (data: FormData) => CourseService.create(data),
+        mutationFn: (data: FormData) => CourseService.create(typeContent, course?._id || '', data),
         onSuccess: (response: ResponseData<CourseModel>) => {
             if (response.success) {
+                console.log(response.data);
 
                 // reset form 
                 resetField('name');
@@ -86,6 +86,7 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
             }
         },
         onError: (error: unknown) => {
+            console.log(error);
             // error axios 
             if (error instanceof AxiosError) {
                 console.log(error.response?.data);
@@ -100,33 +101,28 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
     // handle on submit 
     const onSubmit = async (data: CreateCourseModel | UpdateCourseModel) => {
         try {
-            if (typeContent === 'edit' && (!data.name && !data.tagline && (data.category === (course?.category.name || '').toLowerCase()) && !data.description)) {
-                sweetAlertNotiifNotUpdate();
-                return;
-            }
+            console.log(data)
 
-            if (!data) return;
+            if (!data) {
+                console.log('data empty');
+                return;
+            };
 
             //    form data
             const formData = new FormData();
 
-            // name 
-            formData.append('name', typeContent === 'edit' ? course?.name as UpdateCourseModel['name'] || '' : data.name as CreateCourseModel['name']);
+            formData.append('name', data.name || '');
+            formData.append('tagline', data.tagline || '');
+            formData.append('category', data.category || '');
+            formData.append('description', data.description || '');
 
-            // tagline 
-            formData.append('tagline', typeContent === 'edit' ? course?.tagline as UpdateCourseModel['tagline'] || '' : data.tagline as CreateCourseModel['tagline']);
+            if (data.thumbnail) {
+                formData.append('thumbnail', data.thumbnail);
+            }
 
-            // category 
-            formData.append('category', typeContent === 'edit' ? course?.category.name.toLowerCase() as UpdateCourseModel['category'] || '' : data.category as CreateCourseModel['category']);
+            formData.append('price', (data.price || '').toString());
 
-            // description 
-            formData.append('description', typeContent === 'edit' ? course?.description as UpdateCourseModel['description'] || '' : data.description as CreateCourseModel['description']);
-
-            // thumbnail
-            formData.append('thumbnail', typeContent === 'edit' ? course?.thumbnail as UpdateCourseModel['thumbnail'] || '' : data.thumbnail as CreateCourseModel['thumbnail']);
-
-            // price 
-            formData.append('price', typeContent === 'edit' ? course?.price.toString() as UpdateCourseModel['price'] || '' : data.price as CreateCourseModel['price']);
+            console.log(formData)
 
             // request 
             await mutateAsync(formData);
@@ -149,7 +145,12 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
 
 
             {/* form input */}
-            <form onSubmit={handleSubmit(onSubmit)} className='w-[60%] rounded-2xl bg-white-secondary p-8 flex flex-col justify-start items-start gap-1'>
+            <form onSubmit={handleSubmit(
+                onSubmit,
+                (err) => {
+                    console.log("Validation failed =>", err);
+                }
+            )} className='w-[60%] rounded-2xl bg-white-secondary p-8 flex flex-col justify-start items-start gap-1'>
                 {/* name */}
                 <BoxInputData
                     icon={noteFavorite}
@@ -207,7 +208,7 @@ const NewCourse: FC<Props> = ({ typeContent }) => {
                     control={control}
                     error={errors?.price}
                     icon={bill}
-                    value={typeContent === 'edit' ? course?.price : undefined}
+                // value={typeContent === 'edit' ? course?.price : undefined}
                 />
 
 

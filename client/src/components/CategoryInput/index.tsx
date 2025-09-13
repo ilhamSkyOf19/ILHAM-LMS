@@ -76,6 +76,13 @@ const CategoryInput: FC<Props> = ({ type, name, placeholder, label, register, er
         value: item._id
     }));
 
+    // handle preview value 
+    useEffect(() => {
+        if (previewValue) {
+            setValueChoose(previewValue);
+        }
+    }, [previewValue]);
+
 
 
     return (
@@ -102,7 +109,7 @@ const CategoryInput: FC<Props> = ({ type, name, placeholder, label, register, er
                         type={type}
                         name={name}
                         aria-invalid={!!error}
-                        value={previewValue ? previewValue : valueChoose}
+                        value={valueChoose}
                         readOnly
                         className='w-full outline-none text-black font-semibold placeholder:font-semibold placeholder:text-black cursor-pointer capitalize'
                         placeholder={placeholder}

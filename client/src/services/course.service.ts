@@ -6,16 +6,14 @@ import type { CourseModel } from "../models/course-model";
 export class CourseService {
 
     // create 
-    static async create(data: FormData): Promise<ResponseData<CourseModel>> {
+    static async create(type: 'edit' | 'new', id: string, data: FormData): Promise<ResponseData<CourseModel>> {
         // response 
-        const response = await AXIOS.post('/course/create', data, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }).then(res => res.data);
+        const response = (type === 'edit' && id)
+            ? await AXIOS.patch(`course/update/${id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+            : await AXIOS.post('course/create', data, { headers: { 'Content-Type': 'multipart/form-data' } });
 
 
-        return response
+        return response.data
     }
 
     // get by role

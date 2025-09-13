@@ -147,7 +147,10 @@ export class CourseController {
 
 
             // cek validation
-            const body = validationService<CourseUpdateRequest>(CourseValidation.UPDATE, req.body);
+            const body = validationService<CourseUpdateRequest>(CourseValidation.UPDATE, {
+                ...req.body,
+                price: Number(req.body.price)
+            });
 
             // cek body 
             if (!body.success) {
@@ -213,7 +216,7 @@ export class CourseController {
                     fileName: req.file ? req.file.filename : '',
                     url_thumbnail: req.file ? url_thumbnail : ''
                 },
-                body.data);
+                { ...body.data, price: Number(body.data.price) });
 
             // cek response 
             if (!response.success) {

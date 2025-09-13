@@ -289,7 +289,6 @@ export class CourseService {
             }
         }
 
-        console.log(params.fileName);
 
 
         // update data
