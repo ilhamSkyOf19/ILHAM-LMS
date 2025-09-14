@@ -10,14 +10,18 @@ import tickCircleWhite from '../../assets/images/icons/tick-circle-white.svg'
 import ButtonBorderInset from '../ButtonBorderInset';
 import type { BundleResponse } from '../../models/bundle-model';
 import LinkButtonBlueShadowPurple from '../LinkButtonBlueShadowPurple';
+import ButtonBlue from '../ButtonBlue';
 
 
 
 type Props = {
+    type?: 'buy' | 'preview';
     bundle: BundleResponse;
+    handleBuy?: (item: { id_item: string }) => void
+    disabled?: boolean
 }
 
-const BundleCard: FC<Props> = ({ bundle }) => {
+const BundleCard: FC<Props> = ({ bundle, type = 'preview', handleBuy, disabled }) => {
     return (
         <div className='w-[23rem] py-6 px-6 flex flex-col justify-start items-start gap-8 border-border-color-primary bg-blue-secondary rounded-2xl'>
             {/* icon */}
@@ -60,7 +64,10 @@ const BundleCard: FC<Props> = ({ bundle }) => {
             {/* button */}
             <div className='w-full flex flex-col justify-start items-start gap-4'>
                 {/* button choose */}
-                <LinkButtonBlueShadowPurple link='/manager/sign-in' label='choose this plan' />
+                {
+                    type === 'buy' ? (<ButtonBlue type='button' label='choose this plan' handleClick={() => handleBuy && handleBuy({ id_item: bundle._id })} disabled={disabled} />) : <LinkButtonBlueShadowPurple link='/manager/sign-in' label='choose this plan' />
+                }
+
 
                 {/* button contact */}
                 <ButtonBorderInset type='submit' label='contact our sales' />

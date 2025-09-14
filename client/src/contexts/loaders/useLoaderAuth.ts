@@ -13,7 +13,7 @@ const loaderAuth = async (role: 'MANAGER' | 'STUDENT' | 'ALL'): Promise<Response
         const response = await AuthService.getAuth(role);
 
 
-
+        console.log('response', response);
         // cek response 
         if (!response.success) {
             return redirect('/student/sign-in');

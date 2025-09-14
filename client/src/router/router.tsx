@@ -24,6 +24,11 @@ import loaderCourseDetail from "../contexts/loaders/useLoaderCourseDetail";
 import loaderCategory from "../contexts/loaders/useLoaderCategory";
 import NewContent from "../pages/dashboard/course/NewContent";
 import { loaderContent, loaderContentDetail } from "../contexts/loaders/useLoaderContent";
+import type { AuthResponseType } from "../models/auth-model";
+import type { ResponseData } from "../types/types";
+import { loaderDataManager } from "../contexts/loaders/useLoaderDataManager";
+import type { ManagerResponse } from "../models/manager-model";
+import TransactionBundle from "../pages/dashboard/bundle/TransactionBundle";
 
 
 
@@ -67,8 +72,19 @@ const router = createBrowserRouter([
     },
     {
         path: '/dashboard',
-        loader: () => {
-            return loaderAuth('ALL');
+        loader: async () => {
+            const response = await loaderAuth('ALL') as ResponseData<AuthResponseType>;
+
+            // cek role 
+            if (response.success) {
+                if (response.data.role === 'MANAGER') {
+                    const manager = await loaderDataManager() as ResponseData<ManagerResponse>;
+
+                    return { manager };
+                }
+            } else {
+                return response;
+            }
         },
         element: <LayoutDashboard />,
         children: [
@@ -78,6 +94,13 @@ const router = createBrowserRouter([
                     return statistik;
                 },
                 element: <DashboardHome />
+            },
+            {
+                path: '/dashboard/transaction-bundle',
+                loader: () => {
+                    return useLoaderBundle()
+                },
+                element: <TransactionBundle />
             },
             {
                 path: '/dashboard/courses',

@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState, type FC, type RefObject } from "react"
 import SideBar from "../../fragments/SideBar"
-import { Link, Outlet, useLoaderData } from "react-router-dom"
+import { Link, Navigate, Outlet, useLoaderData } from "react-router-dom"
 import BoxSearch from "../../components/BoxSearch"
 import avatar from "../../assets/images/photos/photo-2.png"
 import clsx from "clsx"
 import type { ResponseData } from "../../types/types"
 import type { AuthResponseType } from "../../models/auth-model"
+import type { ManagerResponse } from "../../models/manager-model"
 
 
 // type link
@@ -17,7 +18,12 @@ type typeLink = {
 const LayoutDashboard: FC = () => {
 
     // get user 
-    const user = useLoaderData() as ResponseData<AuthResponseType>;
+    const user = useLoaderData() as {
+        manager: ResponseData<ManagerResponse>
+    };
+
+    // get manager
+    const manager = user.manager?.success ? user.manager.data : null;
 
 
 
@@ -27,15 +33,35 @@ const LayoutDashboard: FC = () => {
         <div className="w-full min-h-[100vh] flex flex-row justify-start items-start py-2 px-2 relative">
             {/* side bar */}
             <div className="w-[27rem] z-50">
-                <SideBar user={user.success ? user.data : null} />
+                <SideBar manager={manager as ManagerResponse} />
             </div>
 
             {/* content */}
             <div className="w-full flex flex-col justify-start items-start pt-4 pr-8 gap-8">
-                {/* header */}
-                <HeaderComponent user={user.success ? user.data : null} />
+                {
+                    manager ? (
+                        manager?.bundle ? (
+                            <>
+                                {/* header */}
+                                <HeaderComponent manager={manager} />
+                                <Outlet />
 
-                <Outlet />
+                            </>
+                        ) : (
+                            <>
+                                <Navigate to='/dashboard/transaction-bundle' />
+                                <Outlet />
+                            </>
+                        )
+                    ) : (
+                        <>
+                            {/* header */}
+                            <HeaderComponent user={null} />
+                            <Outlet />
+                        </>
+                    )
+                }
+
             </div>
         </div>
     )
@@ -46,9 +72,10 @@ const LayoutDashboard: FC = () => {
 // header
 
 type PropsHeaderComponent = {
-    user: AuthResponseType | null
+    user?: AuthResponseType | null;
+    manager?: ManagerResponse | null
 }
-const HeaderComponent: FC<PropsHeaderComponent> = ({ user }) => {
+const HeaderComponent: FC<PropsHeaderComponent> = ({ user, manager }) => {
 
     // state active
     const [active, setActive] = useState<boolean>(false);
@@ -96,8 +123,8 @@ const HeaderComponent: FC<PropsHeaderComponent> = ({ user }) => {
             {/* profile */}
             <div className="flex-1 flex flex-row justify-end items-center gap-2.5">
                 <div className="flex flex-col justify-center items-end">
-                    <h3 className="font-semibold text-md capitalize text-end">{user?.name}</h3>
-                    <p className="text-sm text-slate-400 text-end capitalize">{user?.role.toLocaleLowerCase()}</p>
+                    <h3 className="font-semibold text-md capitalize text-end">{manager ? manager.name : user?.name}</h3>
+                    <p className="text-sm text-slate-400 text-end capitalize">{manager ? manager.role : user?.role.toLocaleLowerCase()}</p>
                 </div>
 
                 <button ref={userRef} type="button" name="avatar" className="w-12 h-12" onClick={() => handleActive()}>

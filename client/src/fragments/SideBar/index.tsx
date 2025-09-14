@@ -12,6 +12,7 @@ import cupWhite from '../../assets/images/icons/cup-white.svg';
 import settingWhite from '../../assets/images/icons/setting-2-white.svg';
 import sidebarGlow from '../../assets/images/backgrounds/sidebar-glow.png';
 import type { AuthResponseType } from '../../models/auth-model';
+import type { ManagerResponse } from '../../models/manager-model';
 
 
 // type menu
@@ -24,12 +25,13 @@ type Menu = {
 
 // props 
 type Props = {
-    user: AuthResponseType | null;
+    user?: AuthResponseType;
+    manager?: ManagerResponse
 }
 
 
 
-const SideBar: FC<Props> = ({ user }) => {
+const SideBar: FC<Props> = ({ user, manager }) => {
 
     // menu general 
     const generalManager: Menu[] = [
@@ -105,14 +107,36 @@ const SideBar: FC<Props> = ({ user }) => {
                     Ilham | LMS
                 </h1>
 
+                {
+                    manager ? (
+                        manager.bundle ? (
+                            <>
+                                {/* menu  general */}
+                                <div className='w-full mb-8'>
+                                    <MenuComponent title='general' menu={generalManager} />
+                                </div>
 
-                {/* menu  general */}
-                <div className='w-full mb-8'>
-                    <MenuComponent title='general' menu={user?.role === 'STUDENT' ? generalStudent : generalManager} />
-                </div>
+                                {/* menu  others */}
+                                <MenuComponent title='others' menu={others} />
+                            </>
+                        ) : (
+                            <div className='w-full flex flex-row justify-center items-center'>
+                                <h2 className='text-white text-2xl font-bold text-center'>Please buy bundle first</h2>
+                            </div>
+                        )
+                    ) : (
+                        <>
+                            {/* menu  general */}
+                            <div className='w-full mb-8'>
+                                <MenuComponent title='general' menu={generalStudent} />
+                            </div>
 
-                {/* menu  others */}
-                <MenuComponent title='others' menu={others} />
+                            {/* menu  others */}
+                            <MenuComponent title='others' menu={others} />
+                        </>
+                    )
+                }
+
             </div>
 
         </div>
