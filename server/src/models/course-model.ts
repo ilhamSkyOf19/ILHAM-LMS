@@ -49,6 +49,7 @@ export type CourseResponse = {
     };
     contents: {
         _id: string;
+        type: 'video' | 'text'
     }[]
 }
 
@@ -75,7 +76,8 @@ export const toCourseResponse = (
             name: course.category.name
         },
         contents: course.contents ? course.contents.map(content => ({
-            _id: content._id.toString()
+            _id: content._id.toString(),
+            type: content.type
         })) : [],
     }
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FC, type RefObject } from "react"
 import SideBar from "../../fragments/SideBar"
-import { Link, Navigate, Outlet, useLoaderData } from "react-router-dom"
+import { Link, Outlet, useLoaderData } from "react-router-dom"
 import BoxSearch from "../../components/BoxSearch"
 import avatar from "../../assets/images/photos/photo-2.png"
 import clsx from "clsx"
@@ -40,20 +40,11 @@ const LayoutDashboard: FC = () => {
             <div className="w-full flex flex-col justify-start items-start pt-4 pr-8 gap-8">
                 {
                     manager ? (
-                        manager?.bundle ? (
-                            <>
-                                {/* header */}
-                                <HeaderComponent manager={manager} />
-                                <Outlet />
-
-                            </>
-                        ) : (
-                            <>
-                                <Navigate to='/dashboard/transaction-bundle' />
-                                <Outlet />
-                                <HeaderComponent manager={manager} />
-                            </>
-                        )
+                        <>
+                            {/* header */}
+                            <HeaderComponent manager={manager} />
+                            <Outlet />
+                        </>
                     ) : (
                         <>
                             {/* header */}

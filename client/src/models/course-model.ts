@@ -63,5 +63,6 @@ export type CourseModel = {
     };
     contents: {
         _id: string;
+        type: 'video' | 'text';
     }[]
 }

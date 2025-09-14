@@ -4,6 +4,7 @@ import { type FC } from 'react'
 // icons
 import crownPurple from '../../assets/images/icons/crown-purple.svg'
 import DescCard from '../DescCard';
+import { Link } from 'react-router-dom';
 
 
 
@@ -11,11 +12,16 @@ import DescCard from '../DescCard';
 type Props = {
     thumbnail: string
     title: string;
-    category: 'programming' | 'design';
+    category: string;
+    id?: string
 }
-const CourseLatestCard: FC<Props> = ({ thumbnail, title, category }) => {
+const CourseLatestCard: FC<Props> = ({ thumbnail, title, category, id }) => {
+
+
+    // navigate 
+
     return (
-        <div className="w-full flex flex-row justify-start items-center gap-6 group">
+        <Link to={`/dashboard/courses/course-detail/${id}`} type='button' className="w-full flex flex-row justify-start items-center gap-6 group">
             {/* thumbnail */}
             <div className="w-[8rem] h-[5.5rem] rounded-2xl overflow-hidden">
                 <img src={thumbnail} alt="thumbnail" className="w-full h-full object-cover" loading="lazy" />
@@ -32,7 +38,7 @@ const CourseLatestCard: FC<Props> = ({ thumbnail, title, category }) => {
                 {/* category */}
                 <DescCard icon={crownPurple} label={category} />
             </div>
-        </div>
+        </Link>
     )
 }
 

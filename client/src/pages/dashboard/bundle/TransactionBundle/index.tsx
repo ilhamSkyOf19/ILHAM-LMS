@@ -53,7 +53,7 @@ const TransactionBundle: FC = () => {
                             {/* card bundle 1 */}
                             <BundleCard type='buy' bundle={bundle.data[0]} handleBuy={handleSubmit} disabled={isPending} />
                             {/* card bundle  */}
-                            <BundleCard type='buy' bundle={bundle.data[1]} />
+                            <BundleCard type='buy' bundle={bundle.data[1]} handleBuy={handleSubmit} disabled={isPending} />
 
                         </>
                     )

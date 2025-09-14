@@ -146,6 +146,7 @@ export class CourseService {
             // get response
             const response = await Course.find({ manager: manager })
                 .populate('category', '-courses')
+                .populate('contents', '_id type')
                 .lean<CourseResponse[]>();
 
             // cek

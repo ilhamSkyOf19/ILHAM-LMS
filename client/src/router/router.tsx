@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, redirect } from "react-router-dom";
 import SignUp from "../pages/auth/SignUp";
 import Welcome from "../pages/Welcome";
 import LayoutGlobal from "../layouts/LayoutGlobal";
@@ -14,7 +14,6 @@ import DashboardStudents from "../pages/dashboard/student/DashboardStudents";
 
 
 // jsons
-import statistik from "../jsons/statistik.json";
 import students from "../jsons/students.json";
 import NewCourse from "../pages/dashboard/course/NewCourse";
 import FormStudent from "../pages/dashboard/student/FormStudent";
@@ -30,6 +29,8 @@ import { loaderDataManager } from "../contexts/loaders/useLoaderDataManager";
 import type { ManagerResponse } from "../models/manager-model";
 import TransactionBundle from "../pages/dashboard/bundle/TransactionBundle";
 import type { CourseModel } from "../models/course-model";
+import Success from "../pages/Successs";
+import { ManagerService } from "../services/manager.service";
 
 
 
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
     {
         path: '*',
         element: <NotFound />,
+    },
+    {
+        path: '/success',
+        element: <Success />,
     },
     {
         path: '/',
@@ -77,16 +82,18 @@ const router = createBrowserRouter([
             const response = await loaderAuth('ALL') as ResponseData<AuthResponseType>;
 
             // cek role 
-            if (response.success) {
-                if (response.data.role === 'MANAGER') {
-                    const manager = await loaderDataManager() as ResponseData<ManagerResponse>;
+            if (response.success && response.data.role === "MANAGER") {
+                const manager = await ManagerService.getManager();
 
-                    // response
-                    return { manager };
+                if (!manager.success) return manager;
+
+                if (!manager.data.bundle) {
+                    return redirect("/transaction-bundle");
                 }
-            } else {
-                return response;
+
+                return { manager };
             }
+            return response
         },
         element: <LayoutDashboard />,
         children: [
@@ -100,13 +107,7 @@ const router = createBrowserRouter([
                 },
                 element: <DashboardHome />
             },
-            {
-                path: '/dashboard/transaction-bundle',
-                loader: () => {
-                    return useLoaderBundle()
-                },
-                element: <TransactionBundle />
-            },
+
             {
                 path: '/dashboard/courses',
                 loader: () => {
@@ -183,7 +184,14 @@ const router = createBrowserRouter([
                 element: <FormStudent />
             },
         ]
-    }
+    },
+    {
+        path: '/transaction-bundle',
+        loader: () => {
+            return useLoaderBundle()
+        },
+        element: <TransactionBundle />
+    },
 ])
 
 export default router;

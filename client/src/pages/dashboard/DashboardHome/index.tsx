@@ -6,6 +6,10 @@ import { useLoaderData } from "react-router-dom"
 import { persentase } from "../../../helpers/persentase"
 import CourseLatestCard from "../../../components/CourseLatestCard"
 import StudentCard from "../../../components/StudentCard"
+import LinkButtonBorder from "../../../components/LinkButtonBorder"
+import LinkButtonBlue from "../../../components/LinkButtonBlue"
+import type { CourseModel } from "../../../models/course-model"
+import type { ResponseData } from "../../../types/types"
 
 
 
@@ -14,16 +18,11 @@ import user from "../../../assets/images/icons/profile-2user-purple.svg"
 import noteFavorite from "../../../assets/images/icons/note-favorite-purple.svg"
 import videoPlay from "../../../assets/images/icons/video-play-purple.svg"
 import note from '../../../assets/images/icons/note-purple.svg'
-import th1 from '../../../assets/images/thumbnails/th-1.png'
 
 
 
 // photo
 import avatar from '../../../assets/images/photos/photo-2.png'
-import LinkButtonBorder from "../../../components/LinkButtonBorder"
-import LinkButtonBlue from "../../../components/LinkButtonBlue"
-import type { CourseModel } from "../../../models/course-model"
-import type { ResponseData } from "../../../types/types"
 
 
 const DashboardHome: FC = () => {
@@ -43,12 +42,12 @@ const DashboardHome: FC = () => {
 
 
     // total video content 
-    const totalVideoContent = courses?.reduce((total, courses) => total + courses.contents.length, 0) || 0
+    const totalVideoContent = courses?.reduce((total, courses) => total + courses.contents.filter(content => content.type === 'video').length, 0) || 0
 
     // total video content 
-    const totalTextContent = courses?.reduce((total, courses) => total + courses.contents.length, 0) || 0
-    // get data 
-    const statistik = useLoaderData()[0];
+    const totalTextContent = courses?.reduce((total, courses) => total + courses.contents.filter(content => content.type === 'text').length, 0) || 0
+
+
 
 
 
@@ -57,8 +56,10 @@ const DashboardHome: FC = () => {
             {/* header content */}
             <TitleContentDashboard title=" dashboard" desc="Grow your company quickly">
                 <LinkButtonBorder link="/" label="customize" />
-                <LinkButtonBlue link="/" label="new course" />
+                <LinkButtonBlue link="/dashboard/courses/new-course" label="new course" />
             </TitleContentDashboard>
+
+
 
             {/* statistik  */}
             <div className="w-full h-[26rem] flex row justify-between items-center bg-white-secondary p-8 rounded-2xl gap-4">
@@ -68,7 +69,7 @@ const DashboardHome: FC = () => {
                     {/* statistik 1 */}
                     <div className="w-full flex flex-row justify-between items-center gap-5">
                         {/* total students */}
-                        <StatistikCard icon={user} number={totalStudent} label="total students" />
+                        <StatistikCard icon={user} number={totalStudent ?? 0} label="total students" />
                         {/* total course */}
                         <StatistikCard icon={noteFavorite} number={courses?.length || 0} label="total courses" />
                     </div>
@@ -91,9 +92,9 @@ const DashboardHome: FC = () => {
             </div>
 
 
-            <div className="w-full flex flex-row justify-between items-center gap-8">
+            <div className="w-full flex flex-row justify-between items-start gap-8">
                 {/* content latest */}
-                <ContentLatest title="latest courses" type="courses" />
+                <ContentLatest title="latest courses" type="courses" courses={courses || []} />
                 {/* content latest */}
                 <ContentLatest title="latest student" type="students" />
             </div>
@@ -108,9 +109,11 @@ const DashboardHome: FC = () => {
 type Props = {
     title: string;
     type: 'courses' | 'students'
+    courses?: CourseModel[]
+    students?: any
 }
 
-const ContentLatest: FC<Props> = ({ title, type }) => {
+const ContentLatest: FC<Props> = ({ title, type, courses, students = [] }) => {
     return (
         <div className="w-full flex flex-col justify-start items-start py-6 px-7 bg-white-secondary rounded-2xl">
             {/* title */}
@@ -123,13 +126,25 @@ const ContentLatest: FC<Props> = ({ title, type }) => {
                 {/* card */}
                 {
                     type === 'courses' ? (
-                        [1, 2, 3, 4, 5].map((_, index) => (
-                            <CourseLatestCard thumbnail={th1} title="Responsive Web Design" category="programming" key={index} />
-                        ))
+                        courses && courses.length > 0 ? (
+                            courses?.map((course: CourseModel, index) => (
+                                <CourseLatestCard thumbnail={course.url_thumbnail} title={course.name} category={course.category.name} key={index} id={course._id} />
+                            ))
+                        ) : (
+                            <div className="w-full h-full flex flex-col justify-center items-center capitalize">
+                                <p className="text-slate-500">students not found</p>
+                            </div>
+                        )
                     ) : (
-                        [1, 2, 3, 4, 5].map((_, index) => (
-                            <StudentCard avatar={avatar} name="John Doe" total_course={190} key={index} />
-                        ))
+                        students && students.length > 0 ? (
+                            [1, 2, 3, 4, 5].map((_, index) => (
+                                <StudentCard avatar={avatar} name="John Doe" total_course={190} key={index} />
+                            ))
+                        ) : (
+                            <div className="w-full h-full flex flex-col justify-center items-center capitalize">
+                                <p className="text-slate-500">students not found</p>
+                            </div>
+                        )
                     )
 
                 }

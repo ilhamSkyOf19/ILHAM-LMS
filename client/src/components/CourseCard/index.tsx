@@ -5,9 +5,6 @@ import DescCard from '../DescCard'
 
 
 
-// thumbnail
-import thumb from '../../assets/images/thumbnails/th-1.png'
-
 // icons
 import user from '../../assets/images/icons/profile-2user-purple.svg'
 import crownPurple from '../../assets/images/icons/crown-purple.svg'
@@ -25,7 +22,7 @@ const CourseCard: FC<Props> = ({ course }) => {
             {/* thumbnail */}
             <div className='flex flex-row justify-start items-center gap-4'>
                 <div className='w-[9rem] h-[7rem] rounded-2xl overflow-hidden'>
-                    <img src={thumb} alt='thumbnail' className='w-full h-full object-cover' />
+                    <img src={course?.url_thumbnail} alt='thumbnail' className='w-full h-full object-cover' />
                 </div>
 
                 {/* label */}

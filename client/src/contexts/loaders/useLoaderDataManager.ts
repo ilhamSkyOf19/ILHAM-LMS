@@ -1,8 +1,9 @@
+import { redirect } from "react-router-dom";
 import type { ManagerResponse } from "../../models/manager-model";
 import { ManagerService } from "../../services/manager.service";
 import type { ResponseData } from "../../types/types";
 
-export const loaderDataManager = async (): Promise<ResponseData<ManagerResponse>> => {
+export const loaderDataManager = async (): Promise<ResponseData<ManagerResponse> | Response> => {
     try {
         // get service 
         const response = await ManagerService.getManager();
@@ -10,6 +11,7 @@ export const loaderDataManager = async (): Promise<ResponseData<ManagerResponse>
 
         // cek 
         if (!response.success) return response;
+
 
         // return 
         return response
