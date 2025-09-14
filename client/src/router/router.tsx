@@ -25,8 +25,6 @@ import NewContent from "../pages/dashboard/course/NewContent";
 import { loaderContent, loaderContentDetail } from "../contexts/loaders/useLoaderContent";
 import type { AuthResponseType } from "../models/auth-model";
 import type { ResponseData } from "../types/types";
-import { loaderDataManager } from "../contexts/loaders/useLoaderDataManager";
-import type { ManagerResponse } from "../models/manager-model";
 import TransactionBundle from "../pages/dashboard/bundle/TransactionBundle";
 import type { CourseModel } from "../models/course-model";
 import Success from "../pages/Successs";
