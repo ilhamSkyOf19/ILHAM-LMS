@@ -51,6 +51,7 @@ const LayoutDashboard: FC = () => {
                             <>
                                 <Navigate to='/dashboard/transaction-bundle' />
                                 <Outlet />
+                                <HeaderComponent manager={manager} />
                             </>
                         )
                     ) : (

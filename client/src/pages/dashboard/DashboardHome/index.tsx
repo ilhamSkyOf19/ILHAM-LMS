@@ -22,11 +22,31 @@ import th1 from '../../../assets/images/thumbnails/th-1.png'
 import avatar from '../../../assets/images/photos/photo-2.png'
 import LinkButtonBorder from "../../../components/LinkButtonBorder"
 import LinkButtonBlue from "../../../components/LinkButtonBlue"
+import type { CourseModel } from "../../../models/course-model"
+import type { ResponseData } from "../../../types/types"
 
 
 const DashboardHome: FC = () => {
 
+    // get loader 
+    const data = useLoaderData() as {
+        courses: ResponseData<CourseModel[]>
+    }
 
+    // get course 
+    const courses = data.courses.success ? data.courses.data : null;
+
+    console.log(courses);
+
+    // total student 
+    const totalStudent: number = courses?.reduce((total, course) => total + course.total_student, 0) || 0;
+
+
+    // total video content 
+    const totalVideoContent = courses?.reduce((total, courses) => total + courses.contents.length, 0) || 0
+
+    // total video content 
+    const totalTextContent = courses?.reduce((total, courses) => total + courses.contents.length, 0) || 0
     // get data 
     const statistik = useLoaderData()[0];
 
@@ -48,18 +68,18 @@ const DashboardHome: FC = () => {
                     {/* statistik 1 */}
                     <div className="w-full flex flex-row justify-between items-center gap-5">
                         {/* total students */}
-                        <StatistikCard icon={user} number={statistik.total_students} label="total students" />
+                        <StatistikCard icon={user} number={totalStudent} label="total students" />
                         {/* total course */}
-                        <StatistikCard icon={noteFavorite} number={statistik.total_courses} label="total courses" />
+                        <StatistikCard icon={noteFavorite} number={courses?.length || 0} label="total courses" />
                     </div>
 
 
                     {/* statistik 2 */}
                     <div className="w-full flex flex-row justify-between items-center gap-5">
                         {/* total video content */}
-                        <StatistikCard icon={videoPlay} number={statistik.total_video_content} label="total video content" />
+                        <StatistikCard icon={videoPlay} number={totalVideoContent} label="total video content" />
                         {/* total course */}
-                        <StatistikCard icon={note} number={statistik.total_text_content} label="total text content" />
+                        <StatistikCard icon={note} number={totalTextContent} label="total text content" />
                     </div>
 
                 </div>

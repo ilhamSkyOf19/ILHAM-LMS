@@ -29,6 +29,7 @@ import type { ResponseData } from "../types/types";
 import { loaderDataManager } from "../contexts/loaders/useLoaderDataManager";
 import type { ManagerResponse } from "../models/manager-model";
 import TransactionBundle from "../pages/dashboard/bundle/TransactionBundle";
+import type { CourseModel } from "../models/course-model";
 
 
 
@@ -80,6 +81,7 @@ const router = createBrowserRouter([
                 if (response.data.role === 'MANAGER') {
                     const manager = await loaderDataManager() as ResponseData<ManagerResponse>;
 
+                    // response
                     return { manager };
                 }
             } else {
@@ -90,8 +92,11 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                loader: () => {
-                    return statistik;
+                loader: async () => {
+                    const [courses] = await Promise.all([
+                        loaderCourse() as Promise<ResponseData<CourseModel[]>>]);
+
+                    return { courses };
                 },
                 element: <DashboardHome />
             },
