@@ -11,7 +11,7 @@ export type ContentEntity = {
 
 
 // model db
-export interface IContent extends ContentEntity, Document { };
+export interface IContent extends ContentEntity, Document<Types.ObjectId> { };
 
 
 // create request 
@@ -19,12 +19,7 @@ export type CreateContentRequest = Omit<ContentEntity, "_id" | "course">
 
 
 // update request 
-export type UpdateContentRequest = {
-    title?: string;
-    type: "video" | "text";
-    videoId: string | null;
-    text: string | null;
-}
+export type UpdateContentRequest = Partial<CreateContentRequest>
 
 
 // response 

@@ -1,5 +1,5 @@
 import z, { ZodType } from "zod";
-import { CreateContentRequest } from "../models/content-model";
+import { CreateContentRequest, UpdateContentRequest } from "../models/content-model";
 
 export class ContentValidation {
     // create 
@@ -9,4 +9,13 @@ export class ContentValidation {
         videoId: z.string().optional(),
         text: z.string().optional()
     }).strict() as ZodType<CreateContentRequest>
+
+
+    // update 
+    static readonly UPDATE = z.object({
+        title: z.string().optional(),
+        type: z.enum(["video", "text"]).optional(),
+        videoId: z.string().optional(),
+        text: z.string().optional()
+    }).strict() as ZodType<UpdateContentRequest>
 }

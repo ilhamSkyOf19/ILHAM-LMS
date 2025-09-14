@@ -1,4 +1,4 @@
-import { ContentResponse, ContentResponseAll, CreateContentRequest, toContentResponse, toContentResponseAll } from "../models/content-model";
+import { ContentResponse, ContentResponseAll, CreateContentRequest, toContentResponse, toContentResponseAll, UpdateContentRequest } from "../models/content-model";
 import Content from "../schema/content-schema";
 import Course from "../schema/course-schema";
 import { ResponseData } from "../types/types";
@@ -67,10 +67,52 @@ export class ContentService {
             success: true,
             data: toContentResponse({
                 ...response,
-                _id: response._id as string,
+                _id: response._id.toString(),
                 course: response.course.toString()
             })
         };
+    }
+
+    // edit content 
+    static async edit(idContent: string, req: UpdateContentRequest): Promise<ResponseData<ContentResponse>> {
+
+        // get content 
+        const contennt = await Content.findById(idContent);
+
+
+        // cek 
+        if (!contennt) {
+            return {
+                success: false,
+                message: 'content not found'
+            }
+        }
+
+
+        // get response 
+        const doc = await Content.findByIdAndUpdate(idContent, req, {
+            new: true
+        })
+
+        // cek doc 
+        if (!doc) {
+            return {
+                success: false,
+                message: 'content not found'
+            }
+        }
+
+
+
+
+        return {
+            success: true,
+            data: toContentResponse({
+                ...doc.toObject(),
+                _id: doc._id.toString(),
+                course: doc.course.toString()
+            })
+        }
 
     }
 }

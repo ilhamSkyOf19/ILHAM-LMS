@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { ContentResponse, ContentResponseAll, CreateContentRequest } from '../models/content-model';
+import { ContentResponse, ContentResponseAll, CreateContentRequest, UpdateContentRequest } from '../models/content-model';
 import { ResponseData } from '../types/types';
 import { ContentService } from '../services/content.service';
 import { TokenRequest } from '../models/jwt-model';
@@ -81,6 +81,64 @@ export class ContentController {
             return res.status(201).json(content);
 
         } catch (error) {
+            console.log(error);
+            next(error)
+        }
+    }
+
+
+    // update content
+    static async edit(req: Request<{ idContent: string }, {}, UpdateContentRequest>, res: Response<ResponseData<UpdateContentRequest>>, next: NextFunction) {
+        try {
+            // get params content 
+            const idContent = req.params.idContent;
+
+
+            // get body 
+            const body = req.body;
+
+            // cek type body
+            if (body.type) {
+                if (body.type === 'video') {
+                    if (!body.videoId) {
+                        return res.status(400).json({
+                            success: false,
+                            message: "Type video must have videoId"
+                        })
+                    }
+                } else {
+                    if (!body.text) {
+                        return res.status(400).json({
+                            success: false,
+                            message: "Type text must have text"
+                        })
+                    }
+                }
+            }
+
+            // cek body text 
+            if (body.text) {
+                body.videoId = null
+            } else {
+                body.text = null
+            }
+
+
+            // get service
+            const content = await ContentService.edit(idContent, body);
+
+
+            // cek response 
+            if (!content.success) {
+                return res.status(400).json(content)
+            }
+
+            // return 
+            return res.status(200).json(content);
+
+
+        } catch (error) {
+            // error handler
             console.log(error);
             next(error)
         }

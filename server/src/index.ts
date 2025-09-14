@@ -77,7 +77,7 @@ const startServer = async () => {
     app.use('/api/category', categoryRoute);
 
     // content route
-    app.use('/api/:idCourse/content', contentRoute);
+    app.use('/api', contentRoute);
 
     // bundle route
     app.use('/api/bundle', bundleRoute);

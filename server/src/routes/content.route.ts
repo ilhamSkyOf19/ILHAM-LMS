@@ -3,18 +3,21 @@ import tokenMiddleware from "../middlewares/token-middleware";
 import { ContentValidation } from "../validation/content-validation";
 import ValidationRequest from "../middlewares/validation-request";
 import { ContentController } from "../controllers/content.controller";
-import { CreateContentRequest } from "../models/content-model";
+import { CreateContentRequest, UpdateContentRequest } from "../models/content-model";
 
 
 // initialize route
-const contentRoute: Router = Router({ mergeParams: true });
+const contentRoute: Router = Router();
 
 // get all 
 contentRoute.get('/all', tokenMiddleware("MANAGER"), ContentController.getAll);
 
 // create 
-contentRoute.post('/create', tokenMiddleware("MANAGER"), ValidationRequest<CreateContentRequest>(ContentValidation.CREATE), ContentController.create);
+contentRoute.post('/:idCourse/content/create', tokenMiddleware("MANAGER"), ValidationRequest<CreateContentRequest>(ContentValidation.CREATE), ContentController.create);
 
+
+// update 
+contentRoute.patch('/content/update/:idContent', tokenMiddleware("MANAGER"), ValidationRequest<UpdateContentRequest>(ContentValidation.UPDATE), ContentController.edit);
 
 
 // export default 
