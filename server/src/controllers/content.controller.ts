@@ -32,6 +32,34 @@ export class ContentController {
         }
     }
 
+
+    // get detail content 
+    static async getDetail(req: Request<{ idContent: string }>, res: Response<ResponseData<ContentResponseAll>>, next: NextFunction) {
+        try {
+
+            // get params 
+            const idContent = req.params.idContent;
+
+
+            // get service 
+            const response = await ContentService.getDetail(idContent);
+
+            // cek response
+            if (!response.success) {
+                return res.status(400).json(response)
+            }
+
+
+            // return 
+            return res.status(200).json(response)
+
+        } catch (error) {
+            // error handle
+            console.log(error);
+            next(error)
+        }
+    }
+
     // create 
     static async create(req: TokenRequest<{ idCourse: string }, {}, CreateContentRequest>, res: Response<ResponseData<ContentResponse>>, next: NextFunction) {
         try {

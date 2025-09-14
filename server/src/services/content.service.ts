@@ -30,6 +30,27 @@ export class ContentService {
 
 
     }
+
+    // get detail content 
+    static async getDetail(idContent: string): Promise<ResponseData<ContentResponseAll>> {
+
+        // get content
+        const content = await Content.findById(idContent).lean<ContentResponseAll>();
+
+        // cek content 
+        if (!content) {
+            return {
+                success: false,
+                message: 'content not found'
+            }
+        }
+
+        // return 
+        return {
+            success: true,
+            data: toContentResponseAll(content)
+        }
+    }
     // create 
     static async create(idCourse: string, manager: string, req: CreateContentRequest): Promise<ResponseData<ContentResponse>> {
         // course 

@@ -10,7 +10,12 @@ import { CreateContentRequest, UpdateContentRequest } from "../models/content-mo
 const contentRoute: Router = Router();
 
 // get all 
-contentRoute.get('/all', tokenMiddleware("MANAGER"), ContentController.getAll);
+contentRoute.get('/:idCourse/content/all', tokenMiddleware("MANAGER"), ContentController.getAll);
+
+
+// get detail
+contentRoute.get('/content/detail/:idContent', tokenMiddleware("MANAGER"), ContentController.getDetail);
+
 
 // create 
 contentRoute.post('/:idCourse/content/create', tokenMiddleware("MANAGER"), ValidationRequest<CreateContentRequest>(ContentValidation.CREATE), ContentController.create);
