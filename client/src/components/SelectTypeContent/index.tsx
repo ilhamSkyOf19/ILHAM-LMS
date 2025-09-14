@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FC } from 'react'
 import type { FieldError, UseFormClearErrors, UseFormRegisterReturn, UseFormSetValue } from 'react-hook-form'
-import type { CreateContentModel } from '../../models/content-model'
+import type { CreateContentModel, UpdateContentModel } from '../../models/content-model'
 import clsx from 'clsx'
 
 
@@ -16,19 +16,18 @@ type Props = {
     error?: FieldError
     name: string;
     setType: (value: 'video' | 'text') => void
-    setValue: UseFormSetValue<CreateContentModel>
-    clearErrors: UseFormClearErrors<CreateContentModel>
+    type: 'video' | 'text'
+    setValue: UseFormSetValue<CreateContentModel | UpdateContentModel>
+    clearErrors: UseFormClearErrors<CreateContentModel | UpdateContentModel>
 }
 
 
 
-const SelectTypeContent: FC<Props> = ({ label, register, error, name, setValue, clearErrors, setType }) => {
+const SelectTypeContent: FC<Props> = ({ label, register, error, name, setValue, clearErrors, setType, type }) => {
 
     // state model select
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
-    // set value select
-    const [valueSelect, setValueSelect] = useState<'video' | 'text'>('video');
 
 
     // req select & modal select 
@@ -43,7 +42,6 @@ const SelectTypeContent: FC<Props> = ({ label, register, error, name, setValue, 
         setType(value);
         clearErrors('type');
         setValue('type', value);
-        setValueSelect(value);
     }
 
     // handle click outside 
@@ -115,7 +113,7 @@ const SelectTypeContent: FC<Props> = ({ label, register, error, name, setValue, 
                         id={name}
                         name={name}
                         aria-invalid={!!error}
-                        value={valueSelect}
+                        value={type}
                         readOnly
                         className='w-full outline-none bg-transparent font-semibold placeholder:text-slate-400 placeholder:font-semibold placeholder:text-sm capitalize cursor-pointer'
                         placeholder='Select type content'
@@ -127,7 +125,7 @@ const SelectTypeContent: FC<Props> = ({ label, register, error, name, setValue, 
                     </button>
 
                     {/* modal select */}
-                    <ModalSelect choose={[{ label: 'video', value: 'video' }, { label: 'text', value: 'text' }]} isOpen={isOpen} handleSelect={handleSelect} setValueSelect={setValueSelect} select={selectTypeContent} />
+                    <ModalSelect choose={[{ label: 'video', value: 'video' }, { label: 'text', value: 'text' }]} isOpen={isOpen} handleSelect={handleSelect} setValueSelect={setType} select={selectTypeContent} />
                 </div>
             </div>
 

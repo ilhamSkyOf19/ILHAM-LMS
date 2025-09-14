@@ -2,10 +2,10 @@
 
 import { useState, type FC } from 'react'
 import LinkNavigation from '../../../../components/LinkNavigation'
-import type { LinkType } from '../../../../types/types'
-import { useNavigate, useParams } from 'react-router-dom'
+import type { LinkType, ResponseData } from '../../../../types/types'
+import { useLoaderData, useNavigate, useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import type { CreateContentModel } from '../../../../models/content-model'
+import type { ContentResponse, CreateContentModel, UpdateContentModel } from '../../../../models/content-model'
 
 
 // icons 
@@ -17,8 +17,23 @@ import { useMutation } from '@tanstack/react-query'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ContentValidation } from '../../../../validations/content-validation'
 import { ContentService } from '../../../../services/content.service'
+import { AxiosError } from 'axios'
 
-const NewContent: FC = () => {
+
+type Props = {
+    typeContent: 'edit' | 'new'
+}
+
+
+const NewContent: FC<Props> = ({ typeContent }) => {
+
+    // use loader 
+    const doc = useLoaderData() as { content: ResponseData<ContentResponse> };
+
+
+    // initial doc 
+    const content = doc && doc.content.success ? doc.content.data : null;
+
 
     // navigate 
     const navigate = useNavigate();
@@ -27,25 +42,62 @@ const NewContent: FC = () => {
     const { id: id_course } = useParams() as { id: string };
 
     // type 
-    const [type, setType] = useState<CreateContentModel['type']>('video');
+    const [type, setType] = useState<CreateContentModel['type']>(content?.type ?? 'video');
+
+
 
 
     // use hook form 
-    const { register, handleSubmit, formState: { errors }, clearErrors, setValue } = useForm<CreateContentModel>({
-        defaultValues: {
-            type: 'video',
-        },
-        resolver: zodResolver(ContentValidation.CREATE),
-    })
+    const { register, handleSubmit, formState: { errors }, clearErrors, setValue, setError } = useForm<
+        CreateContentModel | UpdateContentModel
+    >({
+        defaultValues: typeContent === "edit" && content
+            ? {
+                // 🔹 ini untuk UPDATE
+                title: content.title ?? "",
+                type: content.type ?? "video",
+                text: content.text ?? "",
+                videoId: content.videoId ?? "",
+            }
+            : {
+                // 🔹 ini untuk CREATE
+                title: "",
+                type: "video",
+                text: "",
+                videoId: "",
+            },
+        resolver: zodResolver(
+            typeContent === "edit"
+                ? ContentValidation.UPDATE
+                : ContentValidation.CREATE
+        ),
+    });
+
+
 
 
     // mutate
     const { isPending, mutateAsync } = useMutation({
-        mutationFn: (data: CreateContentModel) => ContentService.create(id_course, data),
+        mutationFn: async (data: CreateContentModel | UpdateContentModel) => {
+            if (typeContent === "new" && !content) {
+                return await ContentService.create(id_course, data as CreateContentModel);
+            } else {
+                return await ContentService.update(content?._id ?? "", data as UpdateContentModel);
+            }
+        },
         onError: (error) => {
             // error axios
-            if (error instanceof Error) {
-                console.log(error);
+            if (error instanceof AxiosError) {
+                console.log('error', error.response?.data);
+                // set error type 
+                setError('type', { message: error.response?.data.message });
+
+                // set error text or video
+                if (type === 'text') {
+                    setError('text', { message: error.response?.data.message });
+                } else {
+                    setError('videoId', { message: error.response?.data.message });
+                }
             } else {
                 console.log(error);
             }
@@ -59,15 +111,37 @@ const NewContent: FC = () => {
 
 
     // handle on submit
-    const onSubmit = async (data: CreateContentModel) => {
+    const onSubmit = async (data: CreateContentModel | UpdateContentModel) => {
         try {
             // cek data 
-            if (!data) {
+            if (typeContent === 'new' && !data) {
                 return
             }
 
+            // cek match type and video or text 
+            // if (data.type !== content?.type) {
+            //     if (data.type === 'video' && !data.videoId && content?.type === 'text') {
+            //         return setError('videoId', { message: 'video id is required' });
+
+            //     } else if (data.type === 'text' && !data.text && content?.type === 'video') {
+            //         return setError('text', { message: 'text is required' });
+            //     }
+            // } else {
+            //     if (data.type === 'video' && !data.videoId) {
+            //         data?.videoId === content?.videoId
+            //     } else {
+            //         data?.text === content?.text
+            //     }
+            // }
+
+
+
+
+
             // mutate
-            await mutateAsync(data);
+            (typeContent === 'new' && !content) ? await mutateAsync(data as CreateContentModel) : await mutateAsync(data as UpdateContentModel);
+
+
         } catch (error) {
             console.log(error);
         }
@@ -136,6 +210,7 @@ const NewContent: FC = () => {
                         setValue={setValue}
                         clearErrors={clearErrors}
                         setType={setType}
+                        type={type}
                     />
 
                     {

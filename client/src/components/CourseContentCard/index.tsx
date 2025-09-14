@@ -51,7 +51,7 @@ const CourseContentCard: FC<Props> = ({ number, content, idCourse }) => {
             {/* button */}
             <div className='flex-1 flex flex-row justify-end items-center gap-3'>
                 {/* edit content */}
-                <LinkButtonBorder link={`/dashboard/courses/course-detail/${idCourse}/edit-content/${content.id}`} label='edit content' />
+                <LinkButtonBorder link={`/dashboard/courses/course-detail/${idCourse}/edit-content/${content._id}`} label='edit content' />
 
                 {/* delete content */}
                 <ButtonDelete type='button' label='delete' handleDelete={deleteAlert} />

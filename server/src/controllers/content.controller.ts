@@ -133,6 +133,8 @@ export class ContentController {
                             success: false,
                             message: "Type video must have videoId"
                         })
+                    } else {
+                        body.text = null
                     }
                 } else {
                     if (!body.text) {
@@ -140,16 +142,12 @@ export class ContentController {
                             success: false,
                             message: "Type text must have text"
                         })
+                    } else {
+                        body.videoId = null
                     }
                 }
             }
 
-            // cek body text 
-            if (body.text) {
-                body.videoId = null
-            } else {
-                body.text = null
-            }
 
 
             // get service

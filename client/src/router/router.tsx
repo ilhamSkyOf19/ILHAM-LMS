@@ -23,7 +23,7 @@ import loaderCourse from "../contexts/loaders/useLoaderCourse";
 import loaderCourseDetail from "../contexts/loaders/useLoaderCourseDetail";
 import loaderCategory from "../contexts/loaders/useLoaderCategory";
 import NewContent from "../pages/dashboard/course/NewContent";
-import loaderContent from "../contexts/loaders/useLoaderContent";
+import { loaderContent, loaderContentDetail } from "../contexts/loaders/useLoaderContent";
 
 
 
@@ -126,7 +126,15 @@ const router = createBrowserRouter([
             },
             {
                 path: '/dashboard/courses/course-detail/:id/new-content',
-                element: <NewContent />
+                element: <NewContent typeContent="new" />
+            },
+            {
+                path: '/dashboard/courses/course-detail/:id/edit-content/:idContent',
+                loader: async ({ params }) => {
+                    const content = await loaderContentDetail(params.idContent as string);
+                    return { content };
+                },
+                element: <NewContent typeContent="edit" />
             },
             {
                 path: '/dashboard/students',

@@ -6,6 +6,11 @@ export type CreateContentModel = {
 }
 
 
+// update 
+export type UpdateContentModel = Partial<CreateContentModel>
+
 
 // response 
-export type ContentResponse = CreateContentModel & { id: string }
+export type ContentResponse = CreateContentModel & { _id: string }
+
+
