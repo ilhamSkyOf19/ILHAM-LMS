@@ -21,7 +21,7 @@ import loaderCourse from "../contexts/loaders/useLoaderCourse";
 import loaderCourseDetail from "../contexts/loaders/useLoaderCourseDetail";
 import loaderCategory from "../contexts/loaders/useLoaderCategory";
 import NewContent from "../pages/dashboard/course/NewContent";
-import { loaderContent, loaderContentDetail } from "../contexts/loaders/useLoaderContent";
+import { loaderContentDetail } from "../contexts/loaders/useLoaderContent";
 import type { AuthResponseType } from "../models/auth-model";
 import type { ResponseData } from "../types/types";
 import TransactionBundle from "../pages/dashboard/bundle/TransactionBundle";
@@ -32,7 +32,6 @@ import PreviewContent from "../pages/dashboard/PreviewContent";
 
 
 import students from "../jsons/students.json";
-import courses from "../jsons/courses.json";
 
 
 
@@ -45,13 +44,7 @@ const router = createBrowserRouter([
         path: '/success',
         element: <Success />,
     },
-    {
-        path: '/preview',
-        loader: async () => {
-            return courses.find((course) => course._id === 20);
-        },
-        element: <PreviewContent />
-    },
+
     {
         path: '/',
         element: <LayoutGlobal />,
@@ -127,11 +120,11 @@ const router = createBrowserRouter([
             {
                 path: '/dashboard/courses/course-detail/:id',
                 loader: async ({ params }) => {
-                    const [course, contents] = await Promise.all([
-                        loaderCourseDetail(params.id as string), loaderContent(params.id as string)
+                    const [course] = await Promise.all([
+                        loaderCourseDetail(params.id as string)
                     ]);
 
-                    return { course, contents };
+                    return { course };
 
 
                 },
@@ -173,6 +166,13 @@ const router = createBrowserRouter([
                     return { content };
                 },
                 element: <NewContent typeContent="edit" />
+            },
+            {
+                path: '/dashboard/courses/course-detail/:id/preview-content',
+                loader: async ({ params }) => {
+                    return loaderCourseDetail(params.id as string);
+                },
+                element: <PreviewContent />
             },
             {
                 path: '/dashboard/students',

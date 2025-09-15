@@ -1,7 +1,7 @@
 import path from "path";
 import { BundleEntity } from "../models/bundle-model";
 import { CourseAllResponse, CourseCreateRequest, CourseResponse, CourseUpdateRequest, toAllCourseResponse, toCourseResponse } from "../models/course-model";
-import { ManagerEntity, ManagerResponse } from "../models/manager-model";
+import { ManagerResponse } from "../models/manager-model";
 import Category from "../schema/category-schema";
 import Course from "../schema/course-schema";
 import Manager from "../schema/manager-schema";
@@ -146,7 +146,7 @@ export class CourseService {
             // get response
             const response = await Course.find({ manager: manager })
                 .populate('category', '-courses')
-                .populate('contents', '_id type')
+                .populate('contents', '_id type title videoId text')
                 .lean<CourseResponse[]>();
 
             // cek
@@ -195,6 +195,7 @@ export class CourseService {
             _id: idCourse
         })
             .populate('category', '-courses')
+            .populate('contents', '_id type title videoId text')
             .lean<CourseResponse>();
 
         // cek 

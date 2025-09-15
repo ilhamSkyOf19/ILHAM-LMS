@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FC, type RefObject } from "react"
 import SideBar from "../../fragments/SideBar"
-import { Link, Outlet, useLoaderData } from "react-router-dom"
+import { Link, Outlet, useLoaderData, useMatch } from "react-router-dom"
 import BoxSearch from "../../components/BoxSearch"
 import avatar from "../../assets/images/photos/photo-2.png"
 import clsx from "clsx"
@@ -26,35 +26,53 @@ const LayoutDashboard: FC = () => {
     const manager = user.manager?.success ? user.manager.data : null;
 
 
+    // match 
+    const match = useMatch('/dashboard/courses/course-detail/:id/preview-content');
+
+    // console.log('match', match);
+
+
 
 
 
     return (
         <div className="w-full min-h-[100vh] flex flex-row justify-start items-start py-2 px-2 relative">
-            {/* side bar */}
-            <div className="w-[27rem] z-50">
-                <SideBar manager={manager as ManagerResponse} />
-            </div>
+            {
+                !match ? (
+                    <>
+                        {/* side bar */}
+                        <div className="w-[27rem] z-50">
+                            <SideBar manager={manager as ManagerResponse} />
+                        </div>
+                        {/* content */}
+                        <div className="w-full flex flex-col justify-start items-start pt-4 pr-8 gap-8">
+                            {
 
-            {/* content */}
-            <div className="w-full flex flex-col justify-start items-start pt-4 pr-8 gap-8">
-                {
-                    manager ? (
-                        <>
-                            {/* header */}
-                            <HeaderComponent manager={manager} />
-                            <Outlet />
-                        </>
-                    ) : (
-                        <>
-                            {/* header */}
-                            <HeaderComponent user={null} />
-                            <Outlet />
-                        </>
-                    )
-                }
+                                manager ? (
+                                    <>
+                                        {/* header */}
+                                        <HeaderComponent manager={manager} />
+                                        <Outlet />
+                                    </>
+                                ) : (
+                                    <>
+                                        {/* header */}
+                                        <HeaderComponent user={null} />
+                                        <Outlet />
+                                    </>
+                                )
 
-            </div>
+                            }
+
+                        </div>
+                    </>
+
+                ) : (
+                    <Outlet />
+                )
+            }
+
+
         </div>
     )
 }

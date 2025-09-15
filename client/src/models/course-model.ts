@@ -1,3 +1,4 @@
+import type { ContentResponse } from "./content-model";
 
 
 // create course 
@@ -61,32 +62,5 @@ export type CourseModel = {
         _id: string;
         name: string
     };
-    contents: {
-        _id: string;
-        type: 'video' | 'text';
-    }[]
-}
-
-export type CourseModelTry = {
-    _id: string;
-    name: string;
-    thumbnail: string;
-    url_thumbnail: string;
-    tagline: string;
-    description: string;
-    price: number;
-    total_student: number;
-    manager: {
-        _id: string;
-    };
-    category: {
-        _id: string;
-        name: string
-    };
-    contents: {
-        _id: string;
-        type: 'video' | 'text';
-        videoId?: string;
-        text?: string
-    }[]
+    contents: ContentResponse[]
 }

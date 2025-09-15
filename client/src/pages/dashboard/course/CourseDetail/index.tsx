@@ -29,18 +29,16 @@ const CourseDetail: FC = () => {
     // loader 
     const doc = useLoaderData() as {
         course: ResponseData<CourseModel>,
-        contents: ResponseData<ContentResponse[]>;
     };
 
     // course
     const course: CourseModel | null = doc.course.success ? doc.course.data : null;
 
     // contents
-    const contents: ContentResponse[] | null = doc.contents.success ? doc.contents.data : null;
+    const contents: ContentResponse[] | null = doc.course.success ? doc.course.data.contents : null;
 
 
 
-    console.log(contents)
 
     // state active 
     const [active, setActive] = useState<number>(1);
@@ -79,7 +77,7 @@ const CourseDetail: FC = () => {
                 <LinkButtonBorder link={`/dashboard/courses/course-detail/${course?._id}/edit-course`} label='edit course' />
 
                 {/* button review */}
-                <LinkButtonBlue link={`/dashboard/courses/course-detail/${course?._id}/preview`} label='preview' />
+                <LinkButtonBlue link={`/dashboard/courses/course-detail/${course?._id}/preview-content`} label='preview' />
             </TitleContentDashboard>
 
 
@@ -87,7 +85,7 @@ const CourseDetail: FC = () => {
             <div className='w-full h-[16rem] flex flex-row justify-between items-start'>
                 {/* thumb overview */}
                 <div className='flex-1 h-full rounded-2xl overflow-hidden group'>
-                    <img src={thumb} alt='thumbnail' className='w-full h-full object-cover group-hover:scale-105 transition-all duration-500' loading='lazy' />
+                    <img src={course?.url_thumbnail ?? thumb} alt='thumbnail' className='w-full h-full object-cover group-hover:scale-105 transition-all duration-500' loading='lazy' />
                 </div>
 
                 {/* statistik */}

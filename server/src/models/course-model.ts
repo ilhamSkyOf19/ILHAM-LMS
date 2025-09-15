@@ -49,7 +49,10 @@ export type CourseResponse = {
     };
     contents: {
         _id: string;
-        type: 'video' | 'text'
+        title: string;
+        type: 'video' | 'text';
+        videoId: string | null;
+        text: string | null
     }[]
 }
 
@@ -77,7 +80,10 @@ export const toCourseResponse = (
         },
         contents: course.contents ? course.contents.map(content => ({
             _id: content._id.toString(),
-            type: content.type
+            type: content.type,
+            title: content.title,
+            videoId: content.videoId,
+            text: content.text
         })) : [],
     }
 }
