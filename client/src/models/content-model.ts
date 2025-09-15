@@ -5,6 +5,8 @@ export type CreateContentModel = {
     text?: string
 }
 
+// get 
+
 
 // update 
 export type UpdateContentModel = Partial<CreateContentModel>

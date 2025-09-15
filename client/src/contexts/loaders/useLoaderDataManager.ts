@@ -1,4 +1,3 @@
-import { redirect } from "react-router-dom";
 import type { ManagerResponse } from "../../models/manager-model";
 import { ManagerService } from "../../services/manager.service";
 import type { ResponseData } from "../../types/types";

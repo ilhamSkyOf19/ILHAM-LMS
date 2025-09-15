@@ -13,8 +13,7 @@ import DashboardCourses from "../pages/dashboard/course/DashboardCourses";
 import DashboardStudents from "../pages/dashboard/student/DashboardStudents";
 
 
-// jsons
-import students from "../jsons/students.json";
+
 import NewCourse from "../pages/dashboard/course/NewCourse";
 import FormStudent from "../pages/dashboard/student/FormStudent";
 import loaderAuth from "../contexts/loaders/useLoaderAuth";
@@ -29,6 +28,11 @@ import TransactionBundle from "../pages/dashboard/bundle/TransactionBundle";
 import type { CourseModel } from "../models/course-model";
 import Success from "../pages/Successs";
 import { ManagerService } from "../services/manager.service";
+import PreviewContent from "../pages/dashboard/PreviewContent";
+
+
+import students from "../jsons/students.json";
+import courses from "../jsons/courses.json";
 
 
 
@@ -40,6 +44,13 @@ const router = createBrowserRouter([
     {
         path: '/success',
         element: <Success />,
+    },
+    {
+        path: '/preview',
+        loader: async () => {
+            return courses.find((course) => course._id === 20);
+        },
+        element: <PreviewContent />
     },
     {
         path: '/',

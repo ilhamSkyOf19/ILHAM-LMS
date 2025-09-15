@@ -189,5 +189,48 @@
                 "type": "video"
             }
         ]
+    },
+    {
+        "_id": 20,
+        "name": "Belajar React untuk Pemula",
+        "thumbnail": "react-course.png",
+        "url_thumbnail": "/thumbnails/th-2.png",
+        "tagline": "Kuasi React dari dasar sampai mahir",
+        "description": "Kursus ini membahas dasar-dasar React mulai dari komponen, state, props hingga membuat aplikasi sederhana.",
+        "price": 250000,
+        "total_student": 120,
+        "manager": {
+            "_id": "manager001"
+        },
+        "category": {
+            "_id": "cat01",
+            "name": "Web Development"
+        },
+        "contents": [
+            {
+                "_id": "cont01",
+                "type": "video",
+                "title": "Pengenalan React",
+                "videoId": "abc123xyz"
+            },
+            {
+                "_id": "cont02",
+                "type": "text",
+                "title": "Apa itu React?",
+                "text": "React adalah library JavaScript untuk membangun antarmuka pengguna."
+            },
+            {
+                "_id": "cont03",
+                "type": "video",
+                "title": "Props dan State di React",
+                "videoId": "def456uvw"
+            },
+            {
+                "_id": "cont04",
+                "type": "text",
+                "title": "Menggunakan Props",
+                "text": "Props digunakan untuk mengirim data dari parent component ke child component."
+            }
+        ]
     }
 ]
